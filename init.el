@@ -1,8 +1,10 @@
 ;;; init.el --- Configuration of Emacs
 ;;
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/init.el
-;; Loads separate org-mode-file with the rest
+;; Loads separate org-mode-file with the rest of the configuration
+;; This loads everything that are needed for a clean install to work.
 
+;; Stuff that are needed for this to work and should be installed by default with emacs.
 (require 'package)
 (require 'org)
 (require 'ob-tangle)
@@ -29,19 +31,9 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;;(unless (package-installed-p 'org)
-;;  (package-refresh-contents)
-;;  (package-install 'org))
-
-;;(unless (package-installed-p 'ob-tangle)
-;;  (package-refresh-contents)
-;;  (package-install 'ob-tangle))
-
-;;(use-package 'org
-;;	     :ensure t)
-;;(use-package 'ob-tangle
-;;	     :ensure t)
-
+;; Read the rest from my org-babel enabled config-file
+;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
 (setq init-dir (file-name-directory (or load-file-name (buffer-file-name))))
 (org-babel-load-file (expand-file-name "emacs.org" init-dir))
 
+;;EOF

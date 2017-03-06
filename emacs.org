@@ -8,43 +8,27 @@
 
 * Introduction
 
-This is my version of an configuration file for GNU Emacs. I have been using GNU Emacs since 2000 when I was introduced to it by my mentor at Personify Inc. Sadly Personify Inc was victim to the dot com bust of 2001. I have been using GNU Emacs for everything since then though.
-
-You can find the latest version of this configuration at
-https://github.com/credmp/emacs-config or at https://gitlab.com/buildfunthings/emacs-config.
-
-I modelled this set of files based off of the emacs-starter-kit at https://github.com/eschulte/emacs24-starter-kit.
+This is my version of an configuration file for GNU Emacs.
 
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Stig Dahl")
 (setq user-mail-address "stig@charlottendal.net")
 
+;;Custom file for customize
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 #+END_SRC
 * Package handling
+TBD
 #+BEGIN_SRC emacs-lisp
-;;Load packages
-(prefer-coding-system 'utf-8)
-(require 'package)
-;;(setq package-check-signature nil)
-(setq package-archives nil)
-(add-to-list 'package-archives
-	'("melpa-stable"	. "https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-	'("melpa"	. "https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-	'("gnu"	. "https://elpa.gnu.org/packages/") t)
-;;(add-to-list 'package-archives
-;;	     '("org"	. "http://orgmode.org/elpa/") t)
-;;(add-to-list 'package-archives
-;;	     '("marmalade"	. "https://marmalade-repo.org/packages/"))
-(package-initialize)
-(unless (and (file-exists-p (concat user-emacs-directory "elpa/archives/gnu"))
-             (file-exists-p (concat user-emacs-directory "elpa/archives/melpa"))
-             (file-exists-p (concat user-emacs-directory "elpa/archives/melpa-stable")))
-;;	     (file-exists-p (concat user-emacs-directory "elpa/archives/org")))
-  (package-refresh-contents))
+#+END_SRC
+* Lisp
+My own Lisp-files
+#+BEGIN_SRC emacs-lisp
+;; Local lisp-directory
+(when (not (file-exists-p "lisp"))
+      (make-directory (concat user-emacs-directory "lisp") t))
+(add-to-list 'load-path (concat user-emacs-directory "lisp"))
 #+END_SRC
 * Theme
 #+BEGIN_SRC emacs-lisp
@@ -82,7 +66,10 @@ I modelled this set of files based off of the emacs-starter-kit at https://githu
 
 ;; Press y or n for yes or no
 (defalias 'yes-or-no-p 'y-or-n-p)
-
+#+END_SRC
+* Backup
+Backup and autosave options, + history
+#+BEGIN_SRC emacs-lisp
 ;; From https://github.com/magnars/.emacs.d
 ;; Write backup files to own directory
 (setq backup-directory-alist
@@ -111,3 +98,15 @@ I modelled this set of files based off of the emacs-starter-kit at https://githu
         regexp-search-ring))
 
 #+END_SRC
+* Links
+ [[http://orgmode.org/manual/] [Org mode manual]]
+ https://github.com/eschulte/emacs24-starter-kit.
+ https://github.com/credmp/emacs-config 
+ https://gitlab.com/buildfunthings/emacs-config.
+ https://github.com/magnars/.emacs.d
+ https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
+ http://pages.sachachua.com/.emacs.d/Sacha.html#org8fde6ab
+ https://www.emacswiki.org/emacs/LoadPath
+ http://ergoemacs.org/emacs/emacs_installing_packages.html
+ https://youtu.be/I28jFkpN5Zk
+ https://coldnew.github.io/coldnew-emacs/init.el.html
