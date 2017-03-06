@@ -1,8 +1,29 @@
+#+TITLE: My GNU Emacs configuration
+#+STARTUP: indent 
+#+OPTIONS: H:5 num:nil tags:nil toc:nil timestamps:t
+#+LAYOUT: post
+#+DESCRIPTION: Loading emacs configuration using org-babel
+#+TAGS: emacs
+#+CATEGORIES: editing
 
+* Introduction
+
+This is my version of an configuration file for GNU Emacs. I have been using GNU Emacs since 2000 when I was introduced to it by my mentor at Personify Inc. Sadly Personify Inc was victim to the dot com bust of 2001. I have been using GNU Emacs for everything since then though.
+
+You can find the latest version of this configuration at
+https://github.com/credmp/emacs-config or at https://gitlab.com/buildfunthings/emacs-config.
+
+I modelled this set of files based off of the emacs-starter-kit at https://github.com/eschulte/emacs24-starter-kit.
+
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Stig Dahl")
+(setq user-mail-address "stig@charlottendal.net")
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
-
+#+END_SRC
+* Package handling
+#+BEGIN_SRC emacs-lisp
 ;;Load packages
 (prefer-coding-system 'utf-8)
 (require 'package)
@@ -24,7 +45,9 @@
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa-stable")))
 ;;	     (file-exists-p (concat user-emacs-directory "elpa/archives/org")))
   (package-refresh-contents))
-
+#+END_SRC
+* Theme
+#+BEGIN_SRC emacs-lisp
 ;;Load theme
 (load-theme 'deeper-blue)
 
@@ -86,3 +109,5 @@
       '(kill-ring
         search-ring
         regexp-search-ring))
+
+#+END_SRC
