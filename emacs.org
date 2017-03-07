@@ -21,18 +21,24 @@ This is my version of an configuration file for GNU Emacs.
 * Package handling
 TBD
 #+BEGIN_SRC emacs-lisp
-;; Package handling trough paradox
-(unless (package-installed-p 'paradox)
-  (package-refresh-contents)
-  (package-install 'paradox))
+;; Emacs version above 24.4 needed for these apps
+(if (version< emacs-version "24.4")
+        (message "is before 24.4")
+        (message 'emacs-version)
+        ;; Package handling trough paradox
+        (unless (package-installed-p 'paradox)
+        (package-refresh-contents)
+        (package-install 'paradox))
+        ;; Magit for GIT support
+        (unless (package-installed-p 'magit)
+          (package-refresh-contents)
+          (package-install 'magit))
+)
+;; Works with emacs older than 24.4
 ;; Powershell mode
 (unless (package-installed-p 'powershell)
   (package-refresh-contents)
   (package-install 'powershell))
-;; Magit for GIT support
-(unless (package-installed-p 'magit)
-  (package-refresh-contents)
-  (package-install 'magit))
 ;; Hydra keymapping support
 (unless (package-installed-p 'hydra)
   (package-refresh-contents)
