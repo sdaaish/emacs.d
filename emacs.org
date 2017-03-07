@@ -33,13 +33,14 @@ TBD
 ;; Works with emacs older than 24.4
 ;; Powershell mode
 (use-package powershell)
-;; Hydra keymapping support
-(use-package hydra)
 #+END_SRC
 ** Package config
 *** Hydra
 #+BEGIN_SRC emacs-lisp
-(defhydra hydra-toggle (:color blue)
+;; Hydra keymapping support
+(use-package hydra
+        :config
+        (defhydra hydra-toggle (:color blue)
       "toggle"
       ("a" abbrev-mode "abbrev")
       ("d" toggle-debug-on-error "debug")
@@ -47,7 +48,7 @@ TBD
       ("t" toggle-truncate-lines "truncate")
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
-    (global-set-key (kbd "C-c C-v") 'hydra-toggle/body)
+    (global-set-key (kbd "C-c C-v") 'hydra-toggle/body))
 #+END_SRC
 * Lisp
 My own Lisp-files
@@ -61,7 +62,7 @@ My own Lisp-files
 ** Set-mark for lxss
 Set mark-command for Windows env
 #+BEGIN_SRC emacs-lisp
-(bind-key "M-SPC" 'set-mark)
+(bind-key "M-SPC" 'set-mark-command)
 
 #+END_SRC
 
