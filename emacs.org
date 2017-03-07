@@ -26,23 +26,15 @@ TBD
         (message "is before 24.4")
         (message "Emacs version is `%s'" (emacs-version))
         ;; Package handling trough paradox
-        (unless (package-installed-p 'paradox)
-        (package-refresh-contents)
-        (package-install 'paradox))
+        (use-package paradox)
         ;; Magit for GIT support
-        (unless (package-installed-p 'magit)
-          (package-refresh-contents)
-          (package-install 'magit))
-)
+        (use-package magit))
+
 ;; Works with emacs older than 24.4
 ;; Powershell mode
-(unless (package-installed-p 'powershell)
-  (package-refresh-contents)
-  (package-install 'powershell))
+(use-package powershell)
 ;; Hydra keymapping support
-(unless (package-installed-p 'hydra)
-  (package-refresh-contents)
-  (package-install 'hydra))
+(use-package hydra)
 #+END_SRC
 ** Package config
 *** Hydra
@@ -65,6 +57,14 @@ My own Lisp-files
       (make-directory (concat user-emacs-directory "lisp") t))
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 #+END_SRC
+* Keyboard settings
+** Set-mark for lxss
+Set mark-command for Windows env
+#+BEGIN_SRC emacs-lisp
+(bind-key "M-SPC" 'set-mark)
+
+#+END_SRC
+
 * Theme
 #+BEGIN_SRC emacs-lisp
 ;;Load theme
@@ -78,11 +78,17 @@ My own Lisp-files
 
 ;; No menubar or toolbar
 (menu-bar-mode -1)
-(tool-bar-mode -1)
-
+;; Only try this when in gui-mode (tool-bar exists)
+(if (functionp 'tool-bar-mode)
+ (tool-bar-mode -1))
+#+END_SRC
+** No beeps
+#+BEGIN_SRC emacs-lisp
 ;;No beep
 (setq visible-bell t)
-
+#+END_SRC
+** Customisations
+#+BEGIN_SRC emacs-lisp
 ;; Initial settings
 (setq-default major-mode 'text-mode)
 (line-number-mode t)
@@ -98,12 +104,21 @@ My own Lisp-files
 (setq mode-require-final-newline t)
 (setq next-line-add-newlines nil)
 (setq require-final-newline t)
-
+#+END_SRC
+** Change yes-or-no to y-n
+#+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
 (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
+** Winner-mode
+#+BEGIN_SRC emacs-lisp
+(use-package winner
+        :defer t)
+#+END_SRC
 * Backup
 Backup and autosave options, + history
+** Backup of files
+Saves backup of files in emacs-homedir. Keeps several versions of the files.
 #+BEGIN_SRC emacs-lisp
 ;; From https://github.com/magnars/.emacs.d
 ;; Write backup files to own directory
@@ -112,15 +127,21 @@ Backup and autosave options, + history
                  (concat user-emacs-directory "backups")))))
 
 ;; Make backups of files, even when they're in version control
-(setq delete-old-versions nil)
+(setq delete-old-versions -1)
 (setq version-control t)
 (setq vc-make-backup-files t)
-
+#+END_SRC
+** Save current position
+Go back to where you last were in the file.
+#+BEGIN_SRC emacs-lisp
 ;; Save point position between sessions
 (require 'saveplace)
 (setq-default save-place t)
 (setq save-place-file (expand-file-name ".places" user-emacs-directory))
-
+#+END_SRC
+** Save history
+Save a history of edited files.
+#+BEGIN_SRC emacs-lisp
 ;; Save history of files
 (setq savehist-file (expand-file-name ".savehist" user-emacs-directory))
 (savehist-mode 1)
@@ -133,10 +154,12 @@ Backup and autosave options, + history
         regexp-search-ring))
 
 #+END_SRC
+
 * Links
 ** Manuals
 + [[http://orgmode.org/manual/] [Org mode manual]]
 + https://www.emacswiki.org/emacs/LoadPath
++https://www.gnu.org/software/emacs/manual/html_node/
 ** Examples
 + https://github.com/eschulte/emacs24-starter-kit.
 + https://github.com/credmp/emacs-config 
@@ -147,5 +170,9 @@ Backup and autosave options, + history
 + https://coldnew.github.io/coldnew-emacs/init.el.html
 + http://endlessparentheses.com/new-in-package-el-in-emacs-25-1-user-selected-packages.html
 + http://ergoemacs.org/emacs/emacs_installing_packages.html
++ https://github.com/howardabrams/dot-files/blob/master/emacs.org
++ http://whattheemacsd.com/
++ https://github.com/technomancy/better-defaults
+
 ** Videos
 + https://youtu.be/I28jFkpN5Zk
