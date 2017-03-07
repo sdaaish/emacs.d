@@ -21,6 +21,35 @@ This is my version of an configuration file for GNU Emacs.
 * Package handling
 TBD
 #+BEGIN_SRC emacs-lisp
+;; Package handling trough paradox
+(unless (package-installed-p 'paradox)
+  (package-refresh-contents)
+  (package-install 'paradox))
+;; Powershell mode
+(unless (package-installed-p 'powershell)
+  (package-refresh-contents)
+  (package-install 'powershell))
+;; Magit for GIT support
+(unless (package-installed-p 'magit)
+  (package-refresh-contents)
+  (package-install 'magit))
+;; Hydra keymapping support
+(unless (package-installed-p 'hydra)
+  (package-refresh-contents)
+  (package-install 'hydra))
+#+END_SRC
+** Package config
+*** Hydra
+#+BEGIN_SRC emacs-lisp
+(defhydra hydra-toggle (:color blue)
+      "toggle"
+      ("a" abbrev-mode "abbrev")
+      ("d" toggle-debug-on-error "debug")
+      ("f" auto-fill-mode "fill")
+      ("t" toggle-truncate-lines "truncate")
+      ("w" whitespace-mode "whitespace")
+      ("q" nil "cancel"))
+    (global-set-key (kbd "C-c C-v") 'hydra-toggle/body)
 #+END_SRC
 * Lisp
 My own Lisp-files
@@ -99,14 +128,18 @@ Backup and autosave options, + history
 
 #+END_SRC
 * Links
- [[http://orgmode.org/manual/] [Org mode manual]]
- https://github.com/eschulte/emacs24-starter-kit.
- https://github.com/credmp/emacs-config 
- https://gitlab.com/buildfunthings/emacs-config.
- https://github.com/magnars/.emacs.d
- https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
- http://pages.sachachua.com/.emacs.d/Sacha.html#org8fde6ab
- https://www.emacswiki.org/emacs/LoadPath
- http://ergoemacs.org/emacs/emacs_installing_packages.html
- https://youtu.be/I28jFkpN5Zk
- https://coldnew.github.io/coldnew-emacs/init.el.html
+** Manuals
++ [[http://orgmode.org/manual/] [Org mode manual]]
++ https://www.emacswiki.org/emacs/LoadPath
+** Examples
++ https://github.com/eschulte/emacs24-starter-kit.
++ https://github.com/credmp/emacs-config 
++ https://gitlab.com/buildfunthings/emacs-config.
++ https://github.com/magnars/.emacs.d
++ https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
++ http://pages.sachachua.com/.emacs.d/Sacha.html#org8fde6ab
++ https://coldnew.github.io/coldnew-emacs/init.el.html
++ http://endlessparentheses.com/new-in-package-el-in-emacs-25-1-user-selected-packages.html
++ http://ergoemacs.org/emacs/emacs_installing_packages.html
+** Videos
++ https://youtu.be/I28jFkpN5Zk

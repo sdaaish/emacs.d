@@ -4,6 +4,8 @@
 ;; Loads separate org-mode-file with the rest of the configuration
 ;; This loads everything that are needed for a clean install to work.
 
+;; 2017-03-07/SDAA
+
 ;; Stuff that are needed for this to work and should be installed by default with emacs.
 (require 'package)
 (require 'org)
@@ -19,6 +21,11 @@
 	'("melpa"	. "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
 	'("gnu"	. "https://elpa.gnu.org/packages/") t)
+;; Installation order, higher priority first
+(setq package-archive-priorities
+      (quote (("melpa-stable" . 10)
+	      ("gnu" . 5)
+	      ("melpa" . 1))))
 (package-initialize)
 (unless (and (file-exists-p (concat user-emacs-directory "elpa/archives/gnu"))
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa"))
