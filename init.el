@@ -5,7 +5,7 @@
 ;; This loads everything that are needed for a clean install to work.
 
 ;; 2017-03-07/SDAA
-(message "Reading configuration file...")
+(message "Reading configuration from init.el...")
 
 ;; Stuff that are needed for this to work and should be installed by default with emacs.
 (require 'package)

@@ -8,7 +8,7 @@
 
 * Introduction
 
-This is my version of an configuration file for GNU Emacs.
+This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
 
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Stig Dahl")
@@ -26,19 +26,27 @@ TBD
         (message "is before 24.4")
         (message "Emacs version is `%s'" (emacs-version))
         ;; Package handling trough paradox
-        (use-package paradox)
+        (use-package paradox
+                :ensure t
+                :defer t)
         ;; Magit for GIT support
-        (use-package magit))
+        (use-package magit
+                :ensure t
+                :defer t))
 
 ;; Works with emacs older than 24.4
 ;; Powershell mode
-(use-package powershell)
+(use-package powershell
+                :ensure t
+                :defer t)
 #+END_SRC
 ** Package config
 *** Hydra
 #+BEGIN_SRC emacs-lisp
 ;; Hydra keymapping support
 (use-package hydra
+        :ensure t
+        :defer t
         :config
         (defhydra hydra-toggle (:color blue)
       "toggle"
@@ -114,7 +122,8 @@ Set mark-command for Windows env
 ** Winner-mode
 #+BEGIN_SRC emacs-lisp
 (use-package winner
-        :defer t)
+           :ensure t
+           :defer t)
 #+END_SRC
 * Backup
 Backup and autosave options, + history
@@ -158,9 +167,9 @@ Save a history of edited files.
 
 * Links
 ** Manuals
-+ [[http://orgmode.org/manual/] [Org mode manual]]
++ http://orgmode.org/manual/ Org mode manual
 + https://www.emacswiki.org/emacs/LoadPath
-+https://www.gnu.org/software/emacs/manual/html_node/
++ https://www.gnu.org/software/emacs/manual/html_node/
 ** Examples
 + https://github.com/eschulte/emacs24-starter-kit.
 + https://github.com/credmp/emacs-config 
@@ -174,6 +183,6 @@ Save a history of edited files.
 + https://github.com/howardabrams/dot-files/blob/master/emacs.org
 + http://whattheemacsd.com/
 + https://github.com/technomancy/better-defaults
-
++ http://wenshanren.org/?p=334 Org-mode example
 ** Videos
 + https://youtu.be/I28jFkpN5Zk
