@@ -17,16 +17,19 @@
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
-	'("melpa-stable"	. "https://stable.melpa.org/packages/") t)
+	'("melpa-stable" .	"https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
-	'("melpa"	. "https://melpa.org/packages/") t)
+	'("melpa" .		"https://melpa.org/packages/") t)
 (add-to-list 'package-archives
-	'("gnu"	. "https://elpa.gnu.org/packages/") t)
+	'("gnu"	.		"https://elpa.gnu.org/packages/") t)
 ;; Installation order, higher priority first
+;; See http://endlessparentheses.com/new-in-emacs-25-1-archive-priorities-and-downgrading-packages.html
+;; Works from version 25.1
 (setq package-archive-priorities
       (quote (("melpa-stable" . 10)
 	      ("gnu" . 5)
 	      ("melpa" . 1))))
+;; If there is no package-arcgives, download them. If they exist, dont.
 (package-initialize)
 (unless (and (file-exists-p (concat user-emacs-directory "elpa/archives/gnu"))
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa"))
