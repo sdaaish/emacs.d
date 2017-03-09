@@ -33,12 +33,6 @@
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa-stable")))
   (package-refresh-contents))
 
-;; Bootstrap `use-package'
-;; From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
 ;; Read the rest from my org-babel enabled config-file
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
 (setq init-dir (file-name-directory (or load-file-name (buffer-file-name))))

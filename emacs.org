@@ -19,7 +19,22 @@ This is my version of an configuration file for GNU Emacs. The config tries to l
 (load custom-file 'noerror)
 #+END_SRC
 * Package handling
-TBD
+Take care of packages needed to enhace emacs.
++ Use-package is useful to load packages from archives more easily. But you need to load that before it is used, and you must ensure that it is installed before you call it.
+** Use-package bootstrap
+Ensure that use-package is installed, otherwise install it.
+#+BEGIN_SRC emacs-lisp
+;; Bootstrap `use-package'
+;; From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+#+END_SRC
+
+** Version-dependent
+Paradox and magit is depending on 24.4, so load only them if that emacs-version or later is installed.
++ Paradox is package mgmt
++ Magit is a Git-tool
 #+BEGIN_SRC emacs-lisp
 ;; Emacs version above 24.4 needed for these apps
 (if (version< emacs-version "24.4")
@@ -27,18 +42,22 @@ TBD
         (message "Emacs version is `%s'" (emacs-version))
         ;; Package handling trough paradox
         (use-package paradox
-                :ensure t
-                :defer t)
+          :ensure t
+          :defer t)
         ;; Magit for GIT support
         (use-package magit
-                :ensure t
-                :defer t))
-
+          :ensure t
+          :bind ("C-x g" . magit-status)))
+#+END_SRC
+** Non-version dependent
+These packages works with emacs 24.1 or later, or are not dependent on a specific version.
++ Powershell-mode is useful.
+#+BEGIN_SRC 
 ;; Works with emacs older than 24.4
 ;; Powershell mode
 (use-package powershell
-                :ensure t
-                :defer t)
+  :ensure t
+  :defer t)
 #+END_SRC
 ** Package config
 *** Hydra
@@ -71,9 +90,7 @@ My own Lisp-files
 Set mark-command for Windows env
 #+BEGIN_SRC emacs-lisp
 (bind-key "M-SPC" 'set-mark-command)
-
 #+END_SRC
-
 * Theme
 #+BEGIN_SRC emacs-lisp
 ;;Load theme
@@ -170,6 +187,11 @@ Save a history of edited files.
 + http://orgmode.org/manual/ Org mode manual
 + https://www.emacswiki.org/emacs/LoadPath
 + https://www.gnu.org/software/emacs/manual/html_node/
+*** Magit manual
++ https://www.emacswiki.org/emacs/Magit
++ https://magit.vc/manual/magit/Getting-started.html
+*** Use-package
++ https://github.com/jwiegley/use-package
 ** Examples
 + https://github.com/eschulte/emacs24-starter-kit.
 + https://github.com/credmp/emacs-config 
