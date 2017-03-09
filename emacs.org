@@ -30,7 +30,14 @@ Ensure that use-package is installed, otherwise install it.
   (package-refresh-contents)
   (package-install 'use-package))
 #+END_SRC
-
+This setting avoids updates to local custom-file.
+From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_always_appear_after/
+#+BEGIN_SRC emacs-lisp
+(defun package--save-selected-packages (&optional value)
+  "Set and save `package-selected-packages' to VALUE."
+  (when value
+    (setq package-selected-packages value)))
+#+END_SRC
 ** Version-dependent
 Paradox and magit is depending on 24.4, so load only them if that emacs-version or later is installed.
 + Paradox is package mgmt
@@ -43,7 +50,9 @@ Paradox and magit is depending on 24.4, so load only them if that emacs-version 
         ;; Package handling trough paradox
         (use-package paradox
           :ensure t
-          :defer t)
+          :defer t
+          :init
+          (setq paradox-github-token t))
         ;; Magit for GIT support
         (use-package magit
           :ensure t
@@ -59,9 +68,7 @@ These packages works with emacs 24.1 or later, or are not dependent on a specifi
 (use-package powershell
   :ensure t
   :defer t)
-(use-package winner
-  :ensure t
-  :defer t)
+(require 'winner)
 #+END_SRC
 ** Package config
 *** Hydra
