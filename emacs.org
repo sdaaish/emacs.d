@@ -8,6 +8,7 @@
 * TODO Change theme for linux in console
 * TODO Troubleshoot
 ** TODO magit on some Windows-clients
+** TODO windove keys dont work
 * Introduction
 This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
 
@@ -115,6 +116,9 @@ https://www.emacswiki.org/emacs/InteractivelyDoThings
 (require 'ido)
 (ido-mode t)
 #+END_SRC
+** Windmove
+(when (fboundp 'windmove-default-keybindings)
+(windmove-default-keybindings))
 ** Orgmode customizations
 Make windmove work in org-mode:
 #+BEGIN_SRC 
@@ -122,6 +126,7 @@ Make windmove work in org-mode:
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
+(setq org-support-shift-select t)
 #+END_SRC
 * Theme
 #+BEGIN_SRC emacs-lisp
