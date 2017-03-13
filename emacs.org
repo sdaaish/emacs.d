@@ -11,17 +11,20 @@
 ** TODO windove keys dont work
 * Introduction
 This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
-
+** Load private stuff
+This load a local file with private info.
 #+BEGIN_SRC emacs-lisp
-(setq user-full-name "Stig Dahl")
-(setq user-mail-address "stig@charlottendal.net")
-
-;;Custom file for customize
+(setq dropbox-dir (concat (getenv "HOME") "/Dropbox/org/"))
+(org-babel-load-file (expand-file-name "private.org" dropbox-dir))
+#+END_SRC
+** Custom file for customize
+Use a separate file for emacs "customize".
+#+BEGIN_SRC emacs-lisp
 (setq custom-file (expand-file-name "customize.el" user-emacs-directory))
 (load custom-file 'noerror)
 #+END_SRC
 * Package handling
-Take care of packages needed to enhace emacs.
+Take care of packages needed to enhance emacs.
 + Use-package is useful to load packages from archives more easily. But you need to load that before it is used, and you must ensure that it is installed before you call it.
 ** Use-package bootstrap
 Ensure that use-package is installed, otherwise install it.
@@ -30,6 +33,7 @@ From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+(require 'use-package)
 #+END_SRC
 This setting avoids updates to local custom-file.
 From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_always_appear_after/
@@ -71,7 +75,6 @@ These packages works with emacs 24.1 or later, or are not dependent on a specifi
 (use-package powershell
   :ensure t
   :defer t)
-(require 'winner)
 #+END_SRC
 ** Package config
 *** Hydra
@@ -145,7 +148,7 @@ Make windmove work in org-mode:
 (if (functionp 'tool-bar-mode)
  (tool-bar-mode -1))
 #+END_SRC
-** Buffersetup
+** Buffer setup
 *** Unique buffernames with uniquify
 #+BEGIN_SRC emacs-lisp
 (require 'uniquify)
@@ -156,19 +159,23 @@ Make windmove work in org-mode:
 (setq visible-bell t)
 #+END_SRC
 ** Customisations
+*** Initial settings
 #+BEGIN_SRC emacs-lisp
-;; Initial settings
 (setq-default major-mode 'text-mode)
 (line-number-mode t)
 (column-number-mode t)
 (transient-mark-mode t)
 (show-paren-mode 1)
 (setq-default line-spacing 1)
-(setq tab-width 2
-      tab-always-indent t)      ;;Use tabs as indents, 2ch width
-
-
-;; Newline settings
+#+END_SRC
+*** Indents and tabs
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil)
+(setq tab-width 2)
+(setq-default tab-always-indent 'complete)      ;;Use tabs as indents, 2ch width
+#+END_SRC
+*** Newline settings
+#+BEGIN_SRC emacs-lisp
 (setq mode-require-final-newline t)
 (setq next-line-add-newlines nil)
 (setq require-final-newline t)
@@ -180,9 +187,7 @@ Make windmove work in org-mode:
 #+END_SRC
 ** Winner-mode
 #+BEGIN_SRC emacs-lisp
-(use-package winner
-           :ensure t
-           :defer t)
+(require 'winner)
 #+END_SRC
 * Backup
 Backup and autosave options, + history
@@ -224,6 +229,15 @@ Save a history of edited files.
 
 #+END_SRC
 
+* Agenda-files
+#+BEGIN_SRC emacs-lisp
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
+(setq org-agenda-files '("~/Dropbox/org/"))
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+#+END_SRC
 * Links
 ** Manuals
 + http://orgmode.org/manual/ Org mode manual
@@ -249,5 +263,8 @@ Save a history of edited files.
 + https://github.com/technomancy/better-defaults
 + http://wenshanren.org/?p=334 Org-mode example
 + https://ogbe.net/emacsconfig.html Another emacs org-mode example
+** Information
++ https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html
++ http://orgmode.org/worg/org-tutorials/orgtutorial_dto.html
 ** Videos
 + https://youtu.be/I28jFkpN5Zk
