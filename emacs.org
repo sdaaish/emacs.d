@@ -11,21 +11,37 @@
 ** TODO windove keys dont work
 * Introduction
 This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
-** Load private stuff
-This load a local file with private info.
-#+BEGIN_SRC emacs-lisp
-(setq dropbox-dir (concat (getenv "HOME") "/Dropbox/org/"))
-(org-babel-load-file (expand-file-name "private.org" dropbox-dir))
-#+END_SRC
-** Custom file for customize
-Use a separate file for emacs "customize".
-#+BEGIN_SRC emacs-lisp
-(setq custom-file (expand-file-name "customize.el" user-emacs-directory))
-(load custom-file 'noerror)
-#+END_SRC
 * Package handling
 Take care of packages needed to enhance emacs.
-+ Use-package is useful to load packages from archives more easily. But you need to load that before it is used, and you must ensure that it is installed before you call it.
++ Use-package is uxseful to load packages from archives more easily. But you need to load that before it is used, and you must ensure that it is installed before you call it.
+** Package-archives
+Load packages
+#+BEGIN_SRC emacs-lisp
+(prefer-coding-system 'utf-8)
+(setq package-archives nil)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	'("melpa-stable" .	"https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
+	'("melpa" .		"https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+	'("gnu"	.		"https://elpa.gnu.org/packages/") t)
+#+END_SRC
+*** Installation order, higher priority first
+See http://endlessparentheses.com/new-in-emacs-25-1-archive-priorities-and-downgrading-packages.html
+Works from version 25.1
+#+BEGIN_SRC emacs-lisp
+(setq package-archive-priorities
+      (quote (("melpa-stable" . 10)
+	      ("gnu" . 5)
+	      ("melpa" . 1))))
+;; If there is no package-arcgives, download them. If they exist, dont.
+(package-initialize)
+(unless (and (file-exists-p (concat user-emacs-directory "elpa/archives/gnu"))
+             (file-exists-p (concat user-emacs-directory "elpa/archives/melpa"))
+             (file-exists-p (concat user-emacs-directory "elpa/archives/melpa-stable")))
+  (package-refresh-contents))
+#+END_SRC
 ** Use-package bootstrap
 Ensure that use-package is installed, otherwise install it.
 From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
@@ -35,6 +51,7 @@ From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
   (package-install 'use-package))
 (require 'use-package)
 #+END_SRC
+** Local custom file
 This setting avoids updates to local custom-file.
 From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_always_appear_after/
 #+BEGIN_SRC emacs-lisp
@@ -69,12 +86,15 @@ Fix for magit when you get with-editor errors (emacsclient). From https://github
 These packages works with emacs 24.1 or later, or are not dependent on a specific version.
 + Powershell-mode is useful.
 + Winner for navigating between buffers (C-<left> or C-<right>)
-#+BEGIN_SRC 
-;; Works with emacs older than 24.4
-;; Powershell mode
+*** Powershell mode
+#+BEGIN_SRC emacs-lisp
 (use-package powershell
   :ensure t
   :defer t)
+#+END_SRC
+*** Winner-mode
+#+BEGIN_SRC emacs-lisp
+(require 'winner)
 #+END_SRC
 ** Package config
 *** Hydra
@@ -93,6 +113,19 @@ These packages works with emacs 24.1 or later, or are not dependent on a specifi
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
     (global-set-key (kbd "C-c C-v") 'hydra-toggle/body))
+#+END_SRC
+* Private and local stuff
+** Load private stuff
+This load a local file with private info.
+#+BEGIN_SRC emacs-lisp
+(setq dropbox-dir (concat (getenv "HOME") "/Dropbox/org/"))
+(org-babel-load-file (expand-file-name "private.org" dropbox-dir))
+#+END_SRC
+** Custom file for customize
+Use a separate file for emacs "customize".
+#+BEGIN_SRC emacs-lisp
+(setq custom-file (expand-file-name "customize.el" user-emacs-directory))
+(load custom-file 'noerror)
 #+END_SRC
 * Lisp
 My own Lisp-files
@@ -120,11 +153,13 @@ https://www.emacswiki.org/emacs/InteractivelyDoThings
 (ido-mode t)
 #+END_SRC
 ** Windmove
+#+BEGIN_SRC emacs-lisp
 (when (fboundp 'windmove-default-keybindings)
 (windmove-default-keybindings))
+#+END_SRC
 ** Orgmode customizations
 Make windmove work in org-mode:
-#+BEGIN_SRC 
+#+BEGIN_SRC emacs-lisp
 (add-hook 'org-shiftup-final-hook 'windmove-up)
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
@@ -184,10 +219,6 @@ Make windmove work in org-mode:
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
 (defalias 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-** Winner-mode
-#+BEGIN_SRC emacs-lisp
-(require 'winner)
 #+END_SRC
 * Backup
 Backup and autosave options, + history
