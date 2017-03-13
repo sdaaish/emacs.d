@@ -5,14 +5,11 @@
 ;; This loads everything that are needed for a clean install to work.
 
 ;; 2017-03-07/SDAA
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
 (message "Reading configuration from init.el...")
+
+;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
+(setq package-enable-at-startup nil)
+(package-initialize)
 
 ;; Stuff that are needed for this to work and should be installed by default with emacs.
 (require 'package)
