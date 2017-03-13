@@ -7,6 +7,9 @@
 ;; 2017-03-07/SDAA
 (message "Reading configuration from init.el...")
 
+;; Garbage collection, more info https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+(setq gc-cons-threshold 100000000)
+
 ;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
 (setq package-enable-at-startup nil)
 (package-initialize)
