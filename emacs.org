@@ -71,7 +71,7 @@ Paradox and magit is depending on 24.4, so load only them if that emacs-version 
 #+BEGIN_SRC emacs-lisp
 ;; Emacs version above 24.4 needed for these apps
 (if (version< emacs-version "24.4")
-        (message "is before 24.4")
+        (message "Emacs version is before 24.4")
         (message "Emacs version is `%s'" (emacs-version))
         ;; Package handling trough paradox
         (use-package paradox
@@ -99,6 +99,18 @@ These packages works with emacs 24.1 or later, or are not dependent on a specifi
 *** Winner-mode
 #+BEGIN_SRC emacs-lisp
 (require 'winner)
+#+END_SRC
+*** Markdown-mode
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+ :ensure t
+ :defer t)
+#+END_SRC
+*** Mediawiki
+#+BEGIN_SRC emacs-lisp
+(use-package mediawiki
+ :ensure t
+ :defer t)
 #+END_SRC
 ** Package config
 *** Hydra
@@ -138,6 +150,20 @@ My own Lisp-files
 (when (not (file-exists-p "lisp"))
       (make-directory (concat user-emacs-directory "lisp") t))
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
+#+END_SRC
+* Tuning
+** Garbage collection
+Tries to change the variable dynamic.
+From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+#+BEGIN_SRC emacs-lisp
+(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold 2000000))
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 #+END_SRC
 * Keyboard settings
 ** Set-mark for lxss

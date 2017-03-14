@@ -9,7 +9,7 @@
 
 ;; Garbage collection
 ;; More info https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
-(setq gc-cons-threshold 100000000)
+(let ((gc-cons-threshold most-positive-fixnum))
 
 ;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
 (setq package-archives nil)
@@ -25,5 +25,5 @@
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
 (setq init-dir (file-name-directory (or load-file-name (buffer-file-name))))
 (org-babel-load-file (expand-file-name "emacs.org" init-dir))
-
+)
 ;;EOF
