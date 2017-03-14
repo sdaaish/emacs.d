@@ -135,8 +135,11 @@ Only in windows.
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
+Must check for OS-version to find out where Dropbox is located.
 #+BEGIN_SRC emacs-lisp
-(setq dropbox-dir (concat (getenv "UserProfile") "/Dropbox/org/"))
+(if (eq system-type 'gnu/linux)
+ (setq dropbox-dir "~/Dropbox/org/") 
+  (setq dropbox-dir (concat (getenv "UserProfile") "/Dropbox/org/")))
 (org-babel-load-file (expand-file-name "private.org" dropbox-dir))
 #+END_SRC
 ** Custom file for customize
