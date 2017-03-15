@@ -136,11 +136,14 @@ Only in windows.
 ** Load private stuff
 This load a local file with private info.
 Must check for OS-version to find out where Dropbox is located.
+Also must check for existing file, sometimes the system dont have Dropbox.
+See also: http://dotemacs.de/multiemacs.html
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'gnu/linux)
  (setq dropbox-dir "~/Dropbox/org/") 
   (setq dropbox-dir (concat (getenv "UserProfile") "/Dropbox/org/")))
-(org-babel-load-file (expand-file-name "private.org" dropbox-dir))
+(if (file-exists-p (expand-file-name "private.org" dropbox-dir))
+ (org-babel-load-file (expand-file-name "private.org" dropbox-dir)))
 #+END_SRC
 ** Custom file for customize
 Use a separate file for emacs "customize".
