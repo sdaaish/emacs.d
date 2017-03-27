@@ -310,15 +310,37 @@ Save a history of edited files.
 #+END_SRC
 
 * Agenda-files
+My org-files for Todo-list and agenda.
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
-(setq org-directory (concat my-dropbox-dir "Appar/MobileOrg/"))
+(setq org-directory (concat my-dropbox-dir "emacs/org/"))
 (setq org-agenda-files (list org-directory))
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 #+END_SRC
+
+** Org-Mobile
+This copys files to Dropbox dir where the MobileOrg app can read/write data.
+Does not work completely for now.
+#+BEGIN_SRC emacs-lisp
+(use-package org-mobile
+  :disabled t
+  :init
+  (progn
+    (autoload 'org-mobile-pull "org-mobile" nil t)
+    (autoload 'org-mobile-push "org-mobile" nil t))
+  :config
+  (progn
+    (setq org-mobile-directory (concat my-dropbox-dir "Appar/MobileOrg/"))
+    (setq org-mobile-inbox-for-pull (concat my-dropbox-dir "emacs/work.org"))
+    (setq default-buffer-file-coding-system 'utf-8)
+    (setq org-mobile-files (concat my-dropbox-dir "emacs/work.org"))
+    (setq org-mobile-agendas '("a"))))
+
+#+END_SRC
+
 * Links
 ** Manuals
 + http://orgmode.org/manual/ Org mode manual
