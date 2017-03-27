@@ -1,5 +1,6 @@
 #+TITLE: My GNU Emacs configuration
 #+STARTUP: indent 
+#+STARTUP: content
 #+OPTIONS: H:5 num:nil tags:nil toc:3 timestamps:t
 #+LAYOUT: post
 #+DESCRIPTION: Loading emacs configuration using org-babel
@@ -117,6 +118,22 @@ Only in windows.
  :ensure t
  :defer t)
 #+END_SRC
+*** Browse github
+#+BEGIN_SRC emacs-lisp
+(use-package browse-at-remote
+ :bind ("C-c g g" . browse-at-remote))
+#+END_SRC
+*** Search web
+#+BEGIN_SRC emacs-lisp
+(use-package search-web
+ :ensure eww
+ :defer t
+ :config
+  (setq search-web-default-browser "firefox"
+        search-web-in-emacs-browser "eww"
+        search-web-external-browser "firefox"))
+#+END_SRC
+
 ** Package config
 *** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -134,6 +151,14 @@ Only in windows.
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
     (global-set-key (kbd "C-c C-v") 'hydra-toggle/body))
+#+END_SRC
+*** Browsing
+Config for BrowseURL
+#+BEGIN_SRC emacs-lisp
+(require 'browse-url)
+(setq browse-url-browser-function 'browse-url-firefox
+          browse-url-new-window-flag  t
+          browse-url-firefox-new-window-is-tab t)
 #+END_SRC
 * Private and local stuff
 ** Load private stuff
