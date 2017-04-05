@@ -181,9 +181,10 @@ From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-thresh
 * Keyboard settings
 ** Windows keys (W32)
 #+BEGIN_SRC emacs-lisp
-(w32-register-hot-key [M-tab])
-(setq w32-capslock-is-shiftlock nil)
-(setq w32-enable-caps-lock nil)
+(when (eq system-type 'windows-nt)
+     (w32-register-hot-key [M-tab])
+     (setq w32-capslock-is-shiftlock nil)
+     (setq w32-enable-caps-lock nil))
 #+END_SRC
 ** TODO Set-mark for lxss
 Set mark-command for Windows env
