@@ -8,9 +8,12 @@
 * Todos
 Things that needs to be done.
 ** TODO Change theme for linux in console
-** TODO windove keys dont work
-** TODO Troubleshoot
-** TODO magit on some Windows-clients
+** DONE windove keys dont work
+CLOSED: [2017-04-07 fre 11:32]
+** DONE Troubleshoot
+CLOSED: [2017-04-07 fre 11:32]
+** DONE magit on some Windows-clients
+CLOSED: [2017-04-07 fre 11:32]
 ** TODO Configure local variables and files
 * Introduction
 This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
@@ -58,7 +61,7 @@ From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
   (package-install 'use-package))
 (require 'use-package)
 #+END_SRC
-** Local custom file
+** Local custom file fix
 This setting avoids updates to local custom-file.
 From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_always_appear_after/
 #+BEGIN_SRC emacs-lisp
@@ -107,8 +110,11 @@ Only in windows.
 (if (eq system-type 'windows-nt)
 (use-package dos
   :ensure t
-  :defer t)
-(add-to-list 'auto-mode-list '("\\.cmd\\'" . dos-mode)))
+  :defer t
+  :config
+   (add-to-list 'auto-mode-list '("\\.cmd\\'" . dos-mode))
+   (add-to-list 'auto-mode-list '("\\.bat\\'" . dos-mode))
+))
 #+END_SRC
 *** Winner-mode
 #+BEGIN_SRC emacs-lisp
@@ -284,7 +290,8 @@ Toggle truncate lines
 (setq truncate-partial-width-windows nil)
 (global-set-key (kbd "C-c t") 'toggle-truncate-lines)
 #+END_SRC
-* Theme
+* Theme and settings
+** Theme
 #+BEGIN_SRC emacs-lisp
 ;;Load theme
 (load-theme 'deeper-blue)
@@ -379,6 +386,7 @@ Save a history of edited files.
 #+END_SRC
 
 * Agenda-files
+** Org-files
 My org-files for Todo-list and agenda.
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
