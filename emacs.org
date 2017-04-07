@@ -132,7 +132,7 @@ Add mode for configuring .ssh/config and other related to SSH.
 (use-package ssh-config-mode
 :ensure t
 :defer t
-:config 
+:config
  (add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
  (add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
  (add-to-list 'auto-mode-alist '("/known_hosts\\'"       . ssh-known-hosts-mode))
@@ -252,14 +252,16 @@ Set mark-command for Windows env
 #+END_SRC
 ** Buffer Selection
 #+BEGIN_SRC emacs-lisp
-(require 'bs)
-(global-set-key (kbd "C-x C-b") 'bs-show)
+(use-package bs
+:config
+(global-set-key (kbd "C-x C-b") 'bs-show))
 #+END_SRC
 ** Interactively Do Things
 https://www.emacswiki.org/emacs/InteractivelyDoThings
 #+BEGIN_SRC emacs-lisp
-(require 'ido)
-(ido-mode t)
+(use-package ido
+:config
+  (ido-mode t))
 #+END_SRC
 ** Windmove
 #+BEGIN_SRC emacs-lisp
@@ -302,7 +304,7 @@ Toggle truncate lines
 ** Buffer setup
 *** Unique buffernames with uniquify
 #+BEGIN_SRC emacs-lisp
-(require 'uniquify)
+(use-package uniquify)
 #+END_SRC
 ** No beeps
 #+BEGIN_SRC emacs-lisp
@@ -356,9 +358,10 @@ Saves backup of files in emacs-homedir. Keeps several versions of the files.
 Go back to where you last were in the file.
 #+BEGIN_SRC emacs-lisp
 ;; Save point position between sessions
-(require 'saveplace)
-(setq-default save-place t)
-(setq save-place-file (expand-file-name ".places" user-emacs-directory))
+(use-package saveplace
+:config
+  (setq-default save-place t)
+  (setq save-place-file (expand-file-name ".places" user-emacs-directory)))
 #+END_SRC
 ** Save history
 Save a history of edited files.
@@ -373,7 +376,6 @@ Save a history of edited files.
       '(kill-ring
         search-ring
         regexp-search-ring))
-
 #+END_SRC
 
 * Agenda-files
