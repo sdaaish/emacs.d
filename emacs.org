@@ -134,14 +134,50 @@ Only in windows.
         :ensure t
         :defer t
         :config
-        (defhydra hydra-toggle (:color blue)
+
+(defhydra hydra-toggle (:color blue)
       "toggle"
       ("a" abbrev-mode "abbrev")
       ("d" toggle-debug-on-error "debug")
       ("f" auto-fill-mode "fill")
       ("t" toggle-truncate-lines "truncate")
       ("w" whitespace-mode "whitespace")
-      ("q" nil "cancel")))
+      ("q" nil "cancel"))
+(defhydra hydra-org-template (:color blue :hint nil)
+    "
+ _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
+ _l_atex   _E_xample   _p_erl          _i_ndex:
+ _a_scii   _v_erse     _P_erl tangled  _I_NCLUDE:
+ _s_rc     _n_ote      plant_u_ml      _H_TML:
+ _h_tml    ^ ^         ^ ^             _A_SCII:
+"
+    ("s" (hot-expand "<s"))
+    ("E" (hot-expand "<e"))
+    ("q" (hot-expand "<q"))
+    ("v" (hot-expand "<v"))
+    ("n" (let (text) ; org-reveal speaker notes
+           (when (region-active-p)
+             (setq text (buffer-substring (region-beginning) (region-end)))
+             (delete-region (region-beginning) (region-end)))
+           (insert "#+BEGIN_NOTES\n\n#+END_NOTES")
+           (forward-line -1)
+           (when text (insert text))))
+    ("c" (hot-expand "<c"))
+    ("l" (hot-expand "<l"))
+    ("h" (hot-expand "<h"))
+    ("a" (hot-expand "<a"))
+    ("L" (hot-expand "<L"))
+    ("i" (hot-expand "<i"))
+    ("e" (hot-expand "<s" "emacs-lisp"))
+    ("p" (hot-expand "<s" "perl"))
+    ("u" (hot-expand "<s" "plantuml :file CHANGE.png"))
+    ("P" (hot-expand "<s" "perl" ":results output :exports both :shebang \"#!/usr/bin/env perl\"\n"))
+    ("I" (hot-expand "<I"))
+    ("H" (hot-expand "<H"))
+    ("A" (hot-expand "<A"))
+    ("<" self-insert-command "ins")
+    ("o" nil "quit"))
+)
 (global-set-key (kbd "C-c C-v") 'hydra-toggle/body)
 #+END_SRC
 * Private and local stuff
