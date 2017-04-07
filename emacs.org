@@ -126,6 +126,20 @@ Only in windows.
  :ensure t
  :defer t)
 #+END_SRC
+*** SSH-config
+Add mode for configuring .ssh/config and other related to SSH.
+#+BEGIN_SRC emacs-lisp
+(use-package ssh-config-mode
+:ensure t
+:defer t
+:config 
+ (add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
+ (add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
+ (add-to-list 'auto-mode-alist '("/known_hosts\\'"       . ssh-known-hosts-mode))
+ (add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
+ (add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
+)
+#+END_SRC
 ** Package config
 *** Hydra
 #+BEGIN_SRC emacs-lisp
