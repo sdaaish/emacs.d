@@ -225,6 +225,27 @@ See also: http://dotemacs.de/multiemacs.html
 (if (file-exists-p (expand-file-name "private.org" my-emacs-dir))
  (org-babel-load-file (expand-file-name "private.org" my-emacs-dir)))
 #+END_SRC
+** Load secret stuff
+Load secret stuff from this encrypted org-file.
+*** EasyPG
+#+BEGIN_SRC emacs-lisp
+(use-package epa-file)
+#+END_SRC
+*** Org-crypt
+#+BEGIN_SRC emacs-lisp
+(use-package org-crypt
+:config
+(org-crypt-use-before-save-magic)
+(setq org-crypt-tag-matcher "encrypt")
+(add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
+(add-to-list 'org-tags-exclude-from-inheritance (quote "crypt")))
+#+END_SRC
+*** Load secrets from this file
+This part dont work yet.
+#+BEGIN_SRC emacs-lisp
+;;(if (file-exists-p (expand-file-name "secret.org.gpg" my-emacs-dir))
+;; (org-babel-load-in-session-maybe (expand-file-name "secret.org.gpg" my-emacs-dir)))
+#+END_SRC
 ** Custom file for customize
 Use a separate file for emacs "customize".
 #+BEGIN_SRC emacs-lisp
@@ -407,10 +428,8 @@ My org-files for Todo-list and agenda.
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 #+END_SRC
-
 ** Org-Mobile
 This copys files to Dropbox dir where the MobileOrg app can read/write data.
-Does not work completely for now.
 #+BEGIN_SRC emacs-lisp
 (use-package org-mobile
   :init
@@ -424,7 +443,6 @@ Does not work completely for now.
     (setq default-buffer-file-coding-system 'utf-8)
     (setq org-mobile-files '(concat my-dropbox-dir "emacs/org/work.org"))
     (setq org-mobile-agendas '("a"))))
-
 #+END_SRC
 
 * Links
@@ -456,6 +474,10 @@ Does not work completely for now.
 + http://wenshanren.org/?p=334 Org-mode example
 + https://ogbe.net/emacsconfig.html Another emacs org-mode example
 + http://dotemacs.de/multiemacs.html How to separate config on different systems
++ https://www.emacswiki.org/emacs/RobertAdesamConfig
++ https://caolan.org/emacs.html
++ https://mrblog.nl/emacs/config.html
++ http://bnbeckwith.com/bnb-emacs/
 ** Information
 + https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html
 + http://orgmode.org/worg/org-tutorials/orgtutorial_dto.html
