@@ -156,6 +156,13 @@ Add mode for configuring .ssh/config and other related to SSH.
  (add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
 )
 #+END_SRC
+*** Bind-key
+Use the bind-key package (used by use-package).
+#+BEGIN_SRC emacs-lisp
+(use-package bind-key
+  :ensure t
+  :bind ("C-h B" . describe-personal-keybindings))
+#+END_SRC
 ** Package config
 *** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -208,8 +215,8 @@ Add mode for configuring .ssh/config and other related to SSH.
     ("<" self-insert-command "ins")
     ("o" nil "quit"))
 )
-(global-set-key (kbd "C-c C-v") 'hydra-toggle/body)
-(global-set-key (kbd "C-c C-o") 'hydra-org-template/body)
+(bind-key "C-c C-v" 'hydra-toggle/body)
+(bind-key "C-c C-o" 'hydra-org-template/body)
 #+END_SRC
 * Private and local stuff
 ** Load private stuff
@@ -305,7 +312,7 @@ Set mark-command for Windows env
 #+BEGIN_SRC emacs-lisp
 (use-package bs
 :config
-(global-set-key (kbd "C-x C-b") 'bs-show))
+(bind-key "C-x C-b" 'bs-show))
 #+END_SRC
 ** Interactively Do Things
 https://www.emacswiki.org/emacs/InteractivelyDoThings
@@ -333,7 +340,7 @@ Toggle truncate lines
 #+BEGIN_SRC emacs-lisp
 (set-default 'truncate-lines nil)
 (setq truncate-partial-width-windows nil)
-(global-set-key (kbd "C-c t") 'toggle-truncate-lines)
+(bind-key "C-c t" 'toggle-truncate-lines)
 #+END_SRC
 * Theme and settings
 ** Theme
