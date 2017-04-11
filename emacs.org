@@ -412,14 +412,16 @@ Saves backup of files in emacs-homedir. Keeps several versions of the files.
 #+BEGIN_SRC emacs-lisp
 ;; From https://github.com/magnars/.emacs.d
 ;; Write backup files to own directory
+(defconst my/emacs-backup-dir
+        (expand-file-name (concat user-emacs-directory "backups/")))
 (setq backup-directory-alist
-      `(("." . ,(expand-file-name
-                 (concat user-emacs-directory "backups")))))
+      `((".*" . ,my/emacs-backup-dir)))
 
 ;; Make backups of files, even when they're in version control
 (setq delete-old-versions -1)
 (setq version-control t)
 (setq vc-make-backup-files t)
+(setq backup-by-copying t)
 #+END_SRC
 ** Save current position
 Go back to where you last were in the file.
