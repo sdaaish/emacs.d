@@ -268,6 +268,9 @@ Beräkna påskdagen för år YEAR."
                                  calendar-daylight-time-zone-name)
                               ""))))))
 
+;; Local holidays
+(setq local-holidays nil)
+
 ;; Listan med kalenderns helgdagar
 (setq calendar-holidays
       (append general-holidays local-holidays
