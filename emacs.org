@@ -231,10 +231,10 @@ Also must check for existing file, sometimes the system dont have Dropbox.
 See also: http://dotemacs.de/multiemacs.html
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'gnu/linux)
- (setq my-dropbox-dir "~/Dropbox/"))
+ (setq my/dropbox-dir "~/Dropbox/"))
 (if (eq system-type 'windows-nt)
-  (setq my-dropbox-dir (concat (getenv "UserProfile") "\\Dropbox\\")))
-(setq my-emacs-dir (concat my-dropbox-dir "emacs/"))
+  (setq my/dropbox-dir (concat (getenv "UserProfile") "\\Dropbox\\")))
+(setq my-emacs-dir (concat my/dropbox-dir "emacs/"))
 (if (file-exists-p (expand-file-name "private.org" my-emacs-dir))
  (org-babel-load-file (expand-file-name "private.org" my-emacs-dir)))
 #+END_SRC
@@ -441,13 +441,14 @@ Save a history of edited files.
 ;; Save history of files
 (setq savehist-file (expand-file-name ".savehist" user-emacs-directory))
 (savehist-mode 1)
-(setq history-length t)
-(setq history-delete-duplicates t)
-(setq savehist-save-minibuffer-history 1)
-(setq savehist-additional-variables
-      '(kill-ring
-        search-ring
-        regexp-search-ring))
+(setq
+        history-length t
+        history-delete-duplicates t
+        savehist-save-minibuffer-history 1
+        savehist-additional-variables
+         '(kill-ring
+          search-ring
+         regexp-search-ring))
 #+END_SRC
 
 * Agenda-files
@@ -456,7 +457,7 @@ My org-files for Todo-list and agenda.
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
-(setq org-directory (concat my-dropbox-dir "emacs/org/"))
+(setq org-directory (concat my/dropbox-dir "emacs/org/"))
 (setq org-agenda-files (list org-directory))
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
@@ -472,10 +473,10 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
     (autoload 'org-mobile-push "org-mobile" nil t))
   :config
   (progn
-    (setq org-mobile-directory (concat my-dropbox-dir "Appar/MobileOrg/"))
-    (setq org-mobile-inbox-for-pull (concat my-dropbox-dir "emacs/org/sync.org"))
+    (setq org-mobile-directory (concat my/dropbox-dir "Appar/MobileOrg/"))
+    (setq org-mobile-inbox-for-pull (concat my/dropbox-dir "emacs/org/sync.org"))
     (setq default-buffer-file-coding-system 'utf-8)
-    (setq org-mobile-files '(concat my-dropbox-dir "emacs/org/work.org"))
+    (setq org-mobile-files '(concat my/dropbox-dir "emacs/org/work.org"))
     (setq org-mobile-agendas '("a"))))
 #+END_SRC
 
