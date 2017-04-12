@@ -8,9 +8,9 @@
 (message "Reading configuration from init.el...")
 
 ;; Garbage collection
-;; More info https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
-(let ((gc-cons-threshold most-positive-fixnum))
-
+;; Increase the garbage collection threshold to 500 MB to ease startup
+(setq gc-cons-threshold (* 500 1024 1024))
+  
 ;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
@@ -25,5 +25,7 @@
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
 (setq init-dir (file-name-directory (or load-file-name (buffer-file-name))))
 (org-babel-load-file (expand-file-name "emacs.org" init-dir))
-)
+
+;; Garbage collector - decrease threshold to 5 MB
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
 ;;EOF
