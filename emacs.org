@@ -186,6 +186,7 @@ Use the bind-key package (used by use-package).
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
 
+;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 (defhydra hydra-org-template (:color blue :hint nil)
     "
  _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
@@ -221,6 +222,30 @@ Use the bind-key package (used by use-package).
     ("<" self-insert-command "ins")
     ("o" nil "quit"))
 )
+(defun hot-expand (str &optional mod header)
+    "Expand org template.
+
+STR is a structure template string recognised by org like <s. MOD is a
+string with additional parameters to add the begin line of the
+structure element. HEADER string includes more parameters that are
+prepended to the element after the #+HEADERS: tag."
+    (let (text)
+      (when (region-active-p)
+        (setq text (buffer-substring (region-beginning) (region-end)))
+        (delete-region (region-beginning) (region-end))
+        (deactivate-mark))
+      (when header (insert "#+HEADERS: " header))
+      (insert str)
+      (org-try-structure-completion)
+      (when mod (insert mod) (forward-line))
+      (when text (insert text))))
+
+      (define-key org-mode-map "<"
+      (lambda () (interactive)
+      (if (or (region-active-p) (looking-back "^"))
+      (hydra-org-template/body)
+      (self-insert-command 1))))
+
 (bind-key "C-c v" 'hydra-toggle/body)
 (bind-key "C-c o" 'hydra-org-template/body)
 #+END_SRC
