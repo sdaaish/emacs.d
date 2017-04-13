@@ -347,10 +347,25 @@ Toggle truncate lines
 (setq truncate-partial-width-windows nil)
 (bind-key "C-c t" 'toggle-truncate-lines)
 #+END_SRC
-** Find emacs-org
-Keyboard shortcut to find emacs.org
+** Find init-files
+Keyboard shortcut to find emacs.org, init.el and my custom-file.
 #+BEGIN_SRC emacs-lisp
-(bind-key "C-c e" (find-file "~/emacs.d/emacs.org"))
+(bind-key "C-c c"
+  (lambda ()
+    (interactive)
+      (find-file custom-file)))
+(bind-key "C-c e"
+  (lambda ()
+    (interactive)
+      (find-file my/init-org-file)))
+(bind-key "C-c i"
+  (lambda ()
+    (interactive)
+      (find-file user-init-file)))
+(bind-key "C-c r"
+  (lambda ()
+    (interactive)
+      (org-babel-load-file my/init-org-file)))
 #+END_SRC
 * Theme and settings
 ** Theme
@@ -534,3 +549,4 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
 + https://emacs.stackexchange.com/questions/2286/what-can-i-do-to-speed-up-my-start-up
 ** Videos
 + https://youtu.be/I28jFkpN5Zk
+  

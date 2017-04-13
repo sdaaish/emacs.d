@@ -23,8 +23,10 @@
 
 ;; Read the rest from my org-babel enabled config-file
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
-(setq init-dir (file-name-directory (or load-file-name (buffer-file-name))))
-(org-babel-load-file (expand-file-name "emacs.org" init-dir))
+(setq
+  my/init-dir (file-name-directory (or load-file-name (buffer-file-name)))
+  my/init-org-file (expand-file-name "emacs.org" my/init-dir))
+(org-babel-load-file my/init-org-file)
 
 ;; Garbage collector - decrease threshold to 5 MB
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
