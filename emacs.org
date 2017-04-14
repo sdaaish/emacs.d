@@ -59,8 +59,13 @@ From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(setq use-package-verbose t)
 (require 'use-package)
+(setq use-package-verbose t)
+#+END_SRC
+If we set the variable use-package-always-ensure, we need to set :ensure to nil for packages that are already included in emacs. I prefer to set this variable since I dont install packages manually.
+#+BEGIN_SRC emacs-lisp
+(setq use-package-always-ensure t)
+(setq use-package-always-defer t)
 #+END_SRC
 ** Local custom file fix
 This setting avoids updates to local custom-file.
@@ -184,6 +189,17 @@ Turn off line-numbers in minor mode.
 (add-hook 'emacs-lisp-mode-hook 'auto-indent-mode)
 (add-hook 'org-mode-hook 'auto-indent-mode))
 #+END_SRC
+*** which-key
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :config
+    (which-key-mode))
+#+END_SRC
+*** Company-mode
+Complete anything
+#+BEGIN_SRC emacs-lisp
+(use-package company)
+#+END_SRC
 ** Package config
 *** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -198,6 +214,7 @@ Turn off line-numbers in minor mode.
       ("a" abbrev-mode "abbrev")
       ("d" toggle-debug-on-error "debug")
       ("f" auto-fill-mode "fill")
+      ("l" linum-mode "linum")
       ("t" toggle-truncate-lines "truncate")
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
@@ -284,11 +301,13 @@ See also: http://dotemacs.de/multiemacs.html
 Load secret stuff from this encrypted org-file.
 *** EasyPG
 #+BEGIN_SRC emacs-lisp
-(use-package epa-file)
+(use-package epa-file
+:ensure nil)
 #+END_SRC
 *** Org-crypt
 #+BEGIN_SRC emacs-lisp
 (use-package org-crypt
+:ensure nil
 :config
 (org-crypt-use-before-save-magic)
 (setq org-crypt-tag-matcher "encrypt")
@@ -357,6 +376,7 @@ Set mark-command for Windows env
 ** Buffer Selection
 #+BEGIN_SRC emacs-lisp
 (use-package bs
+:ensure nil
 :config
 (bind-key "C-x C-b" 'bs-show))
 #+END_SRC
@@ -433,7 +453,8 @@ Keyboard shortcut to find emacs.org, init.el and my custom-file.
 ** Buffer setup
 *** Unique buffernames with uniquify
 #+BEGIN_SRC emacs-lisp
-(use-package uniquify)
+(use-package uniquify
+:ensure nil)
 #+END_SRC
 ** No beeps
 #+BEGIN_SRC emacs-lisp
@@ -540,6 +561,7 @@ Use swedish calendar, from [[http://bigwalter.net/daniel/elisp/sv-kalender.el][S
 This copys files to Dropbox dir where the MobileOrg app can read/write data.
 #+BEGIN_SRC emacs-lisp
 (use-package org-mobile
+  :ensure nil
   :init
   (progn
     (autoload 'org-mobile-pull "org-mobile" nil t)
