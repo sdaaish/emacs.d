@@ -437,8 +437,10 @@ Keyboard shortcut to find emacs.org, init.el and my custom-file.
 ** Theme
 Load themes
 #+BEGIN_SRC emacs-lisp
-(if window-system
-  ((use-package base16-theme
+(defun my/load-themes ()
+ "Loads my themes if in windows"
+
+  (use-package base16-theme
   :ensure t)
 
   (use-package inkpot-theme
@@ -455,7 +457,10 @@ Load themes
   (load-theme 'material t t)
 
   (load-theme 'material))
- (load-theme 'tango-dark))
+
+(unless (not window-system)
+ (load-theme 'tango-dark)
+ (my/load-themes))
 #+END_SRC
 ** Fonts
 Use Source Code Pro as font
