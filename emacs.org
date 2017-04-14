@@ -26,8 +26,6 @@ Take care of packages needed to enhance emacs.
 ** Package-archives
 *** Load packages from these archives.
 #+BEGIN_SRC emacs-lisp
-;;(setq package-archives nil)
-;;(setq package-enable-at-startup nil)
 (prefer-coding-system       'utf-8)
 (add-to-list 'package-archives
 	'("melpa-stable" .	"https://stable.melpa.org/packages/") t)
@@ -174,7 +172,7 @@ Use the bind-key package (used by use-package).
 (use-package gitconfig-mode)
 #+END_SRC
 *** line-numbers
-Use relatove linenumbers.
+Use relative linenumbers.
 #+BEGIN_SRC emacs-lisp
 (use-package linum-relative)
 #+END_SRC
@@ -198,7 +196,9 @@ Turn off line-numbers in minor mode.
 *** Company-mode
 Complete anything
 #+BEGIN_SRC emacs-lisp
-(use-package company)
+(use-package company
+:config
+  (add-hook 'after-init-hook 'global-company-mode))
 #+END_SRC
 ** Package config
 *** Hydra
@@ -215,6 +215,7 @@ Complete anything
       ("d" toggle-debug-on-error "debug")
       ("f" auto-fill-mode "fill")
       ("l" linum-mode "linum")
+      ("r" linum-relative-mode "linum-relative")
       ("t" toggle-truncate-lines "truncate")
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
@@ -282,6 +283,10 @@ prepended to the element after the #+HEADERS: tag."
 (bind-key "C-c v" 'hydra-toggle/body)
 (bind-key "C-c o" 'hydra-org-template/body)
 #+END_SRC
+
+#+RESULTS:
+: hydra-org-template/body
+
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
