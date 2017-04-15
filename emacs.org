@@ -386,7 +386,8 @@ https://www.emacswiki.org/emacs/InteractivelyDoThings
 #+BEGIN_SRC emacs-lisp
 (use-package ido
 :config
-  (ido-mode t))
+  (ido-mode t)
+  (setq-default ido-case-fold t))
 #+END_SRC
 ** Windmove
 #+BEGIN_SRC emacs-lisp
@@ -403,11 +404,20 @@ Make windmove work in org-mode:
 (setq org-support-shift-select t)
 #+END_SRC
 ** Own stuff
-Toggle truncate lines
+*** Toggle truncate lines
 #+BEGIN_SRC emacs-lisp
 (set-default 'truncate-lines nil)
 (setq truncate-partial-width-windows nil)
 (bind-key "C-c t" 'toggle-truncate-lines)
+#+END_SRC
+*** Wrap long lines
+Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
+#+BEGIN_SRC emacs-lisp
+(setq-default visual-line-mode t)
+#+END_SRC
+*** No case-sensitive for search
+#+BEGIN_SRC emacs-lisp
+(setq-default case-fold-search t)
 #+END_SRC
 ** Find init-files
 Keyboard shortcut to find emacs.org, init.el and my custom-file.
@@ -532,6 +542,10 @@ Use powerline in the message bar.
 #+BEGIN_SRC emacs-lisp
 (global-hl-line-mode t)
 #+END_SRC
+
+#+RESULTS:
+: t
+
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
