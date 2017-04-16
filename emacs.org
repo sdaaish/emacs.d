@@ -7,8 +7,8 @@
 #+CATEGORIES: editing
 * Todos
 Things that needs to be done.
-** TODO Change theme for linux in console
-** DONE windove keys dont work
+** TODO Change theme for linux when in console
+** DONE windmove keys dont work
 CLOSED: [2017-04-07 fre 11:32]
 ** DONE Troubleshoot
 CLOSED: [2017-04-07 fre 11:32]
@@ -98,9 +98,8 @@ Paradox and magit is depending on 24.4, so load only them if that emacs-version 
 Fix for magit when you get with-editor errors (emacsclient). From https://github.com/magit/magit/issues/2492
 ** Non-version dependent
 These packages works with emacs 24.1 or later, or are not dependent on a specific version.
-+ Powershell-mode is useful.
-+ Winner for navigating between buffers (C-<left> or C-<right>)
 *** Powershell mode
+Powershell-mode is useful.
 Only in windows.
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'windows-nt)
@@ -121,6 +120,7 @@ Only in windows.
 ))
 #+END_SRC
 *** Winner-mode
+Winner for navigating between buffers (C-<left> or C-<right>)
 #+BEGIN_SRC emacs-lisp
 (use-package winner)
 #+END_SRC
@@ -169,8 +169,14 @@ Use the bind-key package (used by use-package).
 #+END_SRC
 *** gitconfig
 #+BEGIN_SRC emacs-lisp
-(use-package gitconfig-mode)
+(use-package gitconfig-mode
+:config
+("/\\.gitconfig.local\\'" . gitconfig-mode))
 #+END_SRC
+
+#+RESULTS:
+: t
+
 *** line-numbers
 Use relative linenumbers.
 #+BEGIN_SRC emacs-lisp
@@ -468,9 +474,9 @@ Load themes
 
   (load-theme 'material))
 
-(unless (not window-system)
- (load-theme 'tango-dark)
- (my/load-themes))
+  (unless (not window-system)
+  (load-theme 'tango-dark)
+  (my/load-themes))
 #+END_SRC
 ** Fonts
 Use Source Code Pro as font
@@ -593,13 +599,13 @@ Save a history of edited files.
 (setq savehist-file (expand-file-name ".savehist" user-emacs-directory))
 (savehist-mode 1)
 (setq
-        history-length t
-        history-delete-duplicates t
-        savehist-save-minibuffer-history 1
-        savehist-additional-variables
-         '(kill-ring
-          search-ring
-         regexp-search-ring))
+  history-length t
+  history-delete-duplicates t
+  savehist-save-minibuffer-history 1
+  savehist-additional-variables
+  '(kill-ring
+  search-ring
+  regexp-search-ring))
 #+END_SRC
 
 * Agenda-files
@@ -610,8 +616,8 @@ My org-files for Todo-list and agenda.
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
 (setq org-directory (concat my/dropbox-dir "emacs/org/"))
 (setq org-agenda-files (list org-directory))
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-c l" 'org-store-link)
+(define-key global-map "\C-c a" 'org-agenda)
 (setq org-log-done t)
 #+END_SRC
 ** Localized calender
@@ -635,7 +641,7 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
     (setq org-mobile-inbox-for-pull (concat my/dropbox-dir "emacs/org/sync.org"))
     (setq default-buffer-file-coding-system 'utf-8)
     (setq org-mobile-files '(concat my/dropbox-dir "emacs/org/work.org"))
-    (setq org-mobile-agendas '("a"))))
+    (setq org-mobile-agendas '("all"))))
 #+END_SRC
 
 * Links
