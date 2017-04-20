@@ -237,6 +237,12 @@ Complete anything
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
 
+(defhydra hydra-zoom (global-map "<f2>")
+  "zoom"
+  ("g" text-scale-increase "in")
+  ("l" text-scale-decrease "out"))
+(setq text-scale-mode-step 1.1)
+
 ;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 (defhydra hydra-org-template (:color blue :hint nil)
     "
@@ -424,12 +430,13 @@ Make windmove work in org-mode:
 *** Toggle truncate lines
 #+BEGIN_SRC emacs-lisp
 (set-default 'truncate-lines nil)
-(setq truncate-partial-width-windows nil)
+(setq truncate-partial-width-windows 40)
 (bind-key "C-c t" 'toggle-truncate-lines)
 #+END_SRC
 *** Wrap long lines
 Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 #+BEGIN_SRC emacs-lisp
+(set-default 'word-wrap t)
 (setq-default visual-line-mode t)
 #+END_SRC
 *** No case-sensitive for search
