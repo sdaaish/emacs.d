@@ -228,20 +228,23 @@ Complete anything
 (defhydra hydra-toggle (:color blue)
       "toggle"
       ("a" abbrev-mode "abbrev")
+      ("b" describe-personal-keybindings "key-bindings")
       ("d" toggle-debug-on-error "debug")
       ("f" auto-fill-mode "fill")
+      ("g" goto-line "goto-line")
       ("k" kill-some-buffers "kill-some b")
       ("l" linum-mode "linum")
       ("r" linum-relative-mode "linum-relative")
       ("t" toggle-truncate-lines "truncate")
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
+      (bind-key "C-c v" 'hydra-toggle/body)
 
 (defhydra hydra-zoom (global-map "<f2>")
   "zoom"
-  ("g" text-scale-increase "in")
-  ("l" text-scale-decrease "out"))
-(setq text-scale-mode-step 1.1)
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out"))
+    (setq text-scale-mode-step 1.1)
 
 ;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 (defhydra hydra-org-template (:color blue :hint nil)
@@ -278,7 +281,7 @@ Complete anything
     ("A" (hot-expand "<A"))
     ("<" self-insert-command "ins")
     ("o" nil "quit"))
-)
+
 (defun hot-expand (str &optional mod header)
     "Expand org template.
 
@@ -302,8 +305,8 @@ prepended to the element after the #+HEADERS: tag."
       (if (or (region-active-p) (looking-back "^"))
       (hydra-org-template/body)
       (self-insert-command 1))))
+)
 
-(bind-key "C-c v" 'hydra-toggle/body)
 (bind-key "C-c o" 'hydra-org-template/body)
 #+END_SRC
 * Private and local stuff
