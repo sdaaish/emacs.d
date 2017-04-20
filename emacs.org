@@ -50,7 +50,6 @@ Works from version 25.1
 	      ("gnu" . 5)
 	      ("melpa" . 1))))
 ;; If there is no package-archives, download them. If they exist, dont.
-;;(package-initialize)
 (unless (and (file-exists-p (concat user-emacs-directory "elpa/archives/gnu"))
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa"))
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa-stable")))
@@ -285,7 +284,7 @@ To move buffers around
     ("v" (hot-expand "<v"))
     ("n" (let (text) ; org-reveal speaker notes
            (when (region-active-p)
-             (setq text (buffer-substring (region-beginning) (region-end)))
+           (setq text (buffer-substring (region-beginning) (region-end)))
              (delete-region (region-beginning) (region-end)))
            (insert "#+BEGIN_NOTES\n\n#+END_NOTES")
            (forward-line -1)
