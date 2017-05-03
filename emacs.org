@@ -546,6 +546,14 @@ Load themes
   (load-theme 'tango-dark)
   (my/load-themes))
 #+END_SRC
+*** Theme when emacs run as daemon.
+This loads theme when emacs starts up as emacsclient.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (select-frame frame)
+            (my/load-themes)))
+#+END_SRC
 ** Fonts
 Use Source Code Pro as font
 #+BEGIN_SRC emacs-lisp
