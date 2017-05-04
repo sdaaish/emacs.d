@@ -573,11 +573,12 @@ Things that we dont want during or after startup
       initial-scratch-message nil
       initial-major-mode 'org-mode)
 
-;; No menubar or toolbar
-(menu-bar-mode -1)
 ;; Only try this when in gui-mode (tool-bar exists)
+;; No menubar, toolbar or scrollbar
 (if (functionp 'tool-bar-mode)
- (tool-bar-mode -1))
+ (tool-bar-mode -1)
+ (menu-bar-mode -1)
+ (scroll-bar-mode nil))
 #+END_SRC
 
 
