@@ -365,25 +365,38 @@ See also: http://dotemacs.de/multiemacs.html
 ** Load secret stuff
 Load secret stuff from this encrypted org-file.
 *** EasyPG
+Since we use "use-package" to load builtin function, add ":ensure nil".
 #+BEGIN_SRC emacs-lisp
 (use-package epa-file
-:ensure nil)
+  :ensure nil
+  :config
+  (setq epa-file-select-keys nil)
+  (setq epa-file-encrypt-to "8A114B0F26AA73E8")
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t))
 #+END_SRC
 *** Org-crypt
+enable encryption of org-files.
 #+BEGIN_SRC emacs-lisp
 (use-package org-crypt
-:ensure nil
-:config
-(org-crypt-use-before-save-magic)
-(setq org-crypt-tag-matcher "encrypt")
-(add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
-(add-to-list 'org-tags-exclude-from-inheritance (quote "crypt")))
+  :ensure nil
+  :config
+  (org-crypt-use-before-save-magic)
+  (setq org-crypt-tag-matcher "encrypt")
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt")))
 #+END_SRC
 *** Load secrets from this file
 This part dont work yet.
 #+BEGIN_SRC emacs-lisp
 ;;(if (file-exists-p (expand-file-name "secret.org.gpg" my-emacs-dir))
 ;; (org-babel-load-in-session-maybe (expand-file-name "secret.org.gpg" my-emacs-dir)))
+#+END_SRC
+*** Authinfo file
+Define path for .authinfo-file
+#+BEGIN_SRC emacs-lisp
+(setq auth-source-debug t)
+(setq auth-sources
+    '((:source (concat my/dropbox-dir "emacs/.authinfo.gpg"))))
 #+END_SRC
 ** Custom file for customize
 Use a separate file for emacs "customize".
