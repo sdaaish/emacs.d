@@ -333,7 +333,6 @@ Mode that supports editing of Yara-files.
       "toggle"
       ("a" abbrev-mode "abbrev")
       ("b" describe-personal-keybindings "key-bindings")
-      ("c" wiki-summary "wiki-summary")
       ("d" toggle-debug-on-error "debug")
       ("f" auto-fill-mode "fill")
       ("g" goto-line "goto-line")
@@ -346,13 +345,23 @@ Mode that supports editing of Yara-files.
       ("t" toggle-truncate-lines "truncate")
       ("w" whitespace-mode "whitespace")
       ("q" nil "cancel"))
-      (bind-key "C-c v" 'hydra-toggle/body)
+   (bind-key "C-c v" 'hydra-toggle/body)
 
 (defhydra hydra-zoom (global-map "<f2>")
   "zoom"
     ("g" text-scale-increase "in")
     ("l" text-scale-decrease "out"))
-    (setq text-scale-mode-step 1.1)
+ (setq text-scale-mode-step 1.1)
+
+(defhydra hydra-launcher (:color blue)
+   "Launch"
+   ("h" man "man")
+   ("c" wiki-summary "wiki-summary")
+   ("r" (browse-url "http://www.reddit.com/r/emacs/") "reddit")
+   ("w" (browse-url "http://www.emacswiki.org/") "emacswiki")
+   ("s" shell "shell")
+   ("q" nil "cancel"))
+  (bind-key "C-c b" 'hydra-launcher/body)
 
 ;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 (defhydra hydra-org-template (:color blue :hint nil)
