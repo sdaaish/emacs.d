@@ -27,6 +27,63 @@ Increase message-buffer
 #+BEGIN_SRC emacs-lisp
 (setq message-log-max (* 16 1024))
 #+END_SRC
+* Private and local stuff
+** Load private stuff
+This load a local file with private info.
+Must check for OS-version to find out where Dropbox is located.
+Also must check for existing file, sometimes the system dont have Dropbox.
+See also: http://dotemacs.de/multiemacs.html
+#+BEGIN_SRC emacs-lisp
+(if (eq system-type 'gnu/linux)
+ (setq my/dropbox-dir "~/Dropbox/"))
+(if (eq system-type 'windows-nt)
+  (setq my/dropbox-dir (concat (getenv "UserProfile") "\\Dropbox\\")))
+(setq my-emacs-dir (concat my/dropbox-dir "emacs/"))
+(if (file-exists-p (expand-file-name "private.org" my-emacs-dir))
+ (org-babel-load-file (expand-file-name "private.org" my-emacs-dir)))
+#+END_SRC
+** Load secret stuff
+Load secret stuff from this encrypted org-file.
+*** EasyPG
+Since we use "use-package" to load builtin function, add ":ensure nil".
+#+BEGIN_SRC emacs-lisp
+(use-package epa-file
+  :ensure nil
+  :config
+  (setq epa-file-select-keys nil)
+  (setq epa-file-encrypt-to "8A114B0F26AA73E8")
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t))
+#+END_SRC
+*** Org-crypt
+enable encryption of org-files.
+#+BEGIN_SRC emacs-lisp
+(use-package org-crypt
+  :ensure nil
+  :config
+  (org-crypt-use-before-save-magic)
+  (setq org-crypt-tag-matcher "encrypt")
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt")))
+#+END_SRC
+*** Load secrets from this file
+This part dont work yet.
+#+BEGIN_SRC emacs-lisp
+;;(if (file-exists-p (expand-file-name "secret.org.gpg" my-emacs-dir))
+;; (org-babel-load-in-session-maybe (expand-file-name "secret.org.gpg" my-emacs-dir)))
+#+END_SRC
+*** Authinfo file
+Define path for .authinfo-file
+#+BEGIN_SRC emacs-lisp
+(setq auth-source-debug t)
+(setq auth-sources
+    (concat my/dropbox-dir "emacs/.authinfo.gpg"))
+#+END_SRC
+** Custom file for customize
+Use a separate file for emacs "customize".
+#+BEGIN_SRC emacs-lisp
+(setq custom-file (expand-file-name "customize.el" user-emacs-directory))
+(load custom-file 'noerror)
+#+END_SRC
 * Package handling
 Take care of packages needed to enhance emacs.
 + The "Use-package" is useful to load packages from archives more easily. But you need to load that before it is used, and you must ensure that it is installed before you call it.
@@ -360,63 +417,6 @@ prepended to the element after the #+HEADERS: tag."
 
 (bind-key "C-c o" 'hydra-org-template/body)
 #+END_SRC
-* Private and local stuff
-** Load private stuff
-This load a local file with private info.
-Must check for OS-version to find out where Dropbox is located.
-Also must check for existing file, sometimes the system dont have Dropbox.
-See also: http://dotemacs.de/multiemacs.html
-#+BEGIN_SRC emacs-lisp
-(if (eq system-type 'gnu/linux)
- (setq my/dropbox-dir "~/Dropbox/"))
-(if (eq system-type 'windows-nt)
-  (setq my/dropbox-dir (concat (getenv "UserProfile") "\\Dropbox\\")))
-(setq my-emacs-dir (concat my/dropbox-dir "emacs/"))
-(if (file-exists-p (expand-file-name "private.org" my-emacs-dir))
- (org-babel-load-file (expand-file-name "private.org" my-emacs-dir)))
-#+END_SRC
-** Load secret stuff
-Load secret stuff from this encrypted org-file.
-*** EasyPG
-Since we use "use-package" to load builtin function, add ":ensure nil".
-#+BEGIN_SRC emacs-lisp
-(use-package epa-file
-  :ensure nil
-  :config
-  (setq epa-file-select-keys nil)
-  (setq epa-file-encrypt-to "8A114B0F26AA73E8")
-  (setq epa-file-cache-passphrase-for-symmetric-encryption t))
-#+END_SRC
-*** Org-crypt
-enable encryption of org-files.
-#+BEGIN_SRC emacs-lisp
-(use-package org-crypt
-  :ensure nil
-  :config
-  (org-crypt-use-before-save-magic)
-  (setq org-crypt-tag-matcher "encrypt")
-  (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
-  (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt")))
-#+END_SRC
-*** Load secrets from this file
-This part dont work yet.
-#+BEGIN_SRC emacs-lisp
-;;(if (file-exists-p (expand-file-name "secret.org.gpg" my-emacs-dir))
-;; (org-babel-load-in-session-maybe (expand-file-name "secret.org.gpg" my-emacs-dir)))
-#+END_SRC
-*** Authinfo file
-Define path for .authinfo-file
-#+BEGIN_SRC emacs-lisp
-(setq auth-source-debug t)
-(setq auth-sources
-    (concat my/dropbox-dir "emacs/.authinfo.gpg"))
-#+END_SRC
-** Custom file for customize
-Use a separate file for emacs "customize".
-#+BEGIN_SRC emacs-lisp
-(setq custom-file (expand-file-name "customize.el" user-emacs-directory))
-(load custom-file 'noerror)
-#+END_SRC
 * Lisp
 My own Lisp-files
 #+BEGIN_SRC emacs-lisp
@@ -571,7 +571,7 @@ Load themes
 
   (load-theme 'material))
 
-  (unless (not window-system)
+  (unless (not display-graphic-p)
   (load-theme 'tango-dark)
   (my/load-themes))
 #+END_SRC
