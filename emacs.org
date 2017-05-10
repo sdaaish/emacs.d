@@ -16,6 +16,7 @@ CLOSED: [2017-04-07 fre 11:32]
 ** DONE magit on some Windows-clients
 CLOSED: [2017-04-07 fre 11:32]
 ** TODO Configure local variables and files
+** TODO Emacsclient dont load theme and settings
 * Introduction
 This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
 #+BEGIN_SRC emacs-lisp
@@ -585,9 +586,9 @@ Load themes
 
   (load-theme 'material))
 
-  (unless (not display-graphic-p)
-  (load-theme 'tango-dark)
-  (my/load-themes))
+  (unless (not (display-graphic-p))
+        (load-theme 'tango-dark)
+        (my/load-themes))
 #+END_SRC
 *** Theme when emacs run as daemon.
 This loads theme when emacs starts up as emacsclient.
