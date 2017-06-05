@@ -704,9 +704,18 @@ Record old openen files
 (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 ** Eshell
+Use axtended shell.
 #+BEGIN_SRC emacs-lisp
 (setenv "PAGER" "cat")
 (bind-key "C-c RET" 'eshell)
+#+END_SRC
+Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes][this discussion]] for details.
+#+BEGIN_SRC emacs-lisp
+(require 'em-tramp) ; to load eshell’s sudo
+(setq eshell-prefer-lisp-functions t)
+(setq eshell-prefer-lisp-variables t)
+(setq password-cache t) ; enable password caching
+(setq password-cache-expiry 3600) ; for one hour (time in secs)
 #+END_SRC
 * Backup
 Backup and autosave options, + history
