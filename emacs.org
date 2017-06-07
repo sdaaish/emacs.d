@@ -286,6 +286,12 @@ Mode that supports editing of Yara-files.
   :config
     (add-to-list 'auto-mode-alist '("\\.es$" . es-mode)))
 #+END_SRC
+*** Move text
+#+BEGIN_SRC emacs-lisp
+(use-package move-text
+  :config
+    (move-text-default-bindings))
+#+END_SRC
 ** Hydra config
 Hydras is keybord mapping through menus.
 *** Hydra
@@ -396,6 +402,11 @@ prepended to the element after the #+HEADERS: tag."
 )
 
 (bind-key "C-c o" 'hydra-org-template/body)
+
+(defhydra hydra-move-text ()
+  "Move text"
+  ("u" move-text-up "up")
+  ("d" move-text-down "down"))
 #+END_SRC
 
 #+RESULTS:
