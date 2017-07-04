@@ -10,7 +10,8 @@
  '(line-number-mode nil)
  '(package-selected-packages
    (quote
-    (git-commit zenburn-theme yara-mode wiki-summary which-key use-package switch-window super-save ssh-config-mode search-web powershell powerline paradox mediawiki material-theme markdown-preview-mode magit linum-relative linum-off inkpot-theme gitconfig-mode dos company buffer-move browse-at-remote base16-theme auto-org-md auto-indent-mode ahk-mode))))
+    (git-commit zenburn-theme yara-mode wiki-summary which-key use-package switch-window super-save ssh-config-mode search-web powershell powerline paradox mediawiki material-theme markdown-preview-mode magit linum-relative linum-off inkpot-theme gitconfig-mode dos company buffer-move browse-at-remote base16-theme auto-org-md auto-indent-mode ahk-mode)))
+ '(tls-checktrust t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
