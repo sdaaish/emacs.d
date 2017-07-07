@@ -27,7 +27,7 @@ This is my version of an configuration file for GNU Emacs. The config tries to l
 *** Message-buffer
 Increase message-buffer
 #+BEGIN_SRC emacs-lisp
-(setq message-log-max (* 16 1024))
+(setq message-log-max (* 256 1024))
 #+END_SRC
  Package handling
 Take care of packages needed to enhance emacs.
@@ -774,7 +774,9 @@ Map <F5> to revert-buffer. But only revert if the file is not modified.
 *** Bookmarks
 Save bookmarks all the time.
 #+BEGIN_SRC emacs-lisp
-(setq bookmark-save-flag 1)
+(setq bookmark-save-flag t)
+(setq bookmark-version-control t)
+(setq bookmark-default-file (concat my/dropbox-dir "emacs/bookmarks"))
 #+END_SRC
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
@@ -927,3 +929,8 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
 ** Videos
 + https://youtu.be/I28jFkpN5Zk
   
+* The end
+Just record a last message, to know that the whole file has been loaded.
+#+BEGIN_SRC emacs-lisp
+(message "This is the last line of the config. Startup time=%s" (emacs-init-time))
+#+END_SRC
