@@ -20,7 +20,7 @@ CLOSED: [2017-04-07 fre 11:32]
 * Introduction
 This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
 #+BEGIN_SRC emacs-lisp
-(message "Reading from emacs.org")
+(message "*** Reading from emacs.org ***")
 #+END_SRC
 * Config
 ** Initializing
@@ -56,7 +56,7 @@ Works from version 25.1
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa"))
              (file-exists-p (concat user-emacs-directory "elpa/archives/melpa-stable")))
   (package-refresh-contents)
-(message "Did refresh content"))
+(message "*** Did refresh content. ***"))
 #+END_SRC
 ** Use-package bootstrap
 Ensure that use-package is installed, otherwise install it.
@@ -90,8 +90,8 @@ Paradox and magit is depending on 24.4, so load only them if that emacs-version 
 #+BEGIN_SRC emacs-lisp
 ;; Emacs version above 24.4 needed for these apps
 (if (version< emacs-version "24.4")
-        (message "Emacs version is before 24.4")
-        (message "Emacs version is `%s'" (emacs-version))
+        (message "*** Emacs version is before 24.4 ***")
+        (message "*** Emacs version is `%s' ***" (emacs-version))
         ;; Package handling trough paradox
         (use-package paradox
           :ensure t
@@ -937,5 +937,5 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
 * The end
 Just record a last message, to know that the whole file has been loaded.
 #+BEGIN_SRC emacs-lisp
-(message "This is the last line of the config. Startup time=%s" (emacs-init-time))
+(message "*** This is the last line of the config. Startup time=%s ***" (emacs-init-time))
 #+END_SRC
