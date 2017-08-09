@@ -29,10 +29,10 @@ Increase message-buffer
 #+BEGIN_SRC emacs-lisp
 (setq message-log-max (* 256 1024))
 #+END_SRC
- Package handling
-Take care of packages needed to enhance emacs.
-+ The "Use-package" is useful to load packages from archives more easily. But you need to load that before it is used, and you must ensure that it is installed before you call it.
 ** Package-archives
+*** Package handling
+Take care of packages needed to enhance emacs.
+**** The "Use-package" is useful to load packages from archives more easily. But you need to load that before it is used, and you must ensure that it is installed before you call it.
 *** Load packages from these archives.
 #+BEGIN_SRC emacs-lisp
 (prefer-coding-system       'utf-8)
@@ -62,17 +62,18 @@ Works from version 25.1
 Ensure that use-package is installed, otherwise install it.
 From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
 #+BEGIN_SRC emacs-lisp
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
-(setq use-package-verbose t)
+(eval-when-compile
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (require 'use-package))
 #+END_SRC
 If we set the variable use-package-always-ensure, we need to set :ensure to nil for packages that are already included in emacs. I prefer to set this variable since I dont install packages manually.
 #+BEGIN_SRC emacs-lisp
 (setq use-package-always-ensure t)
 (setq use-package-always-defer 3)
 (setq use-package-always-defer-install nil)
+(setq use-package-verbose t)
 #+END_SRC
 ** Local custom file fix
 This setting avoids updates to local custom-file.
@@ -786,7 +787,11 @@ Save bookmarks all the time.
 *** Language
 Spellchecking. I use Hunspell.
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'ispell-local-dictionary-alist '("swedish-hunspell"
+(use-package ispell
+  :ensure nil
+  :config
+  (progn
+    (add-to-list 'ispell-local-dictionary-alist '("swedish-hunspell"
                                               "[[:alpha:]]"
                                               "[^[:alpha:]]"
                                               "[']"
@@ -795,7 +800,7 @@ Spellchecking. I use Hunspell.
                                               nil
                                               iso-8859-1))
 
-(add-to-list 'ispell-local-dictionary-alist '("english-hunspell"
+    (add-to-list 'ispell-local-dictionary-alist '("english-hunspell"
                                               "[[:alpha:]]"
                                               "[^[:alpha:]]"
                                               "[']"
@@ -803,8 +808,8 @@ Spellchecking. I use Hunspell.
                                               ("-d" "en_US")
                                               nil
                                               iso-8859-1))
-(setq ispell-program-name "hunspell"
-      ispell-dictionary "swedish-hunspell")
+  (setq ispell-program-name "hunspell"
+        ispell-dictionary "swedish-hunspell")))
 #+END_SRC
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
