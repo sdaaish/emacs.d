@@ -802,6 +802,20 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
 (setq password-cache t) ; enable password caching
 (setq password-cache-expiry 3600) ; for one hour (time in secs)
 #+END_SRC
+** Org-mode stuff
+#+BEGIN_SRC emacs-lisp
+(if (eq system-type 'gnu/linux)
+ (setq my/repo-dir "~/repos/"))
+(if (eq system-type 'windows-nt)
+  (setq my/repo-dir (concat (getenv "UserProfile") "\\Repos\\")))
+(setq org-publish-project-alist
+      '(("OL-event"
+         :base-directory (concat my/repodir "OL-Event")
+         :publishing-directory (concat my/repodir "OL-Event")
+         :publishing-function org-md-export-to-markdown
+         :with-sub-superscript nil
+         )))
+#+END_SRC
 * Backup
 Backup and autosave options, + history
 ** Backup of files
