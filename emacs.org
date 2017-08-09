@@ -783,6 +783,29 @@ Save bookmarks all the time.
 (setq bookmark-version-control t)
 (setq bookmark-default-file (concat my/dropbox-dir "emacs/bookmarks"))
 #+END_SRC
+*** Language
+Spellchecking. I use Hunspell.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'ispell-local-dictionary-alist '("swedish-hunspell"
+                                              "[[:alpha:]]"
+                                              "[^[:alpha:]]"
+                                              "[']"
+                                              t
+                                              ("-d" "sv_SE"); Dictionary file name
+                                              nil
+                                              iso-8859-1))
+
+(add-to-list 'ispell-local-dictionary-alist '("english-hunspell"
+                                              "[[:alpha:]]"
+                                              "[^[:alpha:]]"
+                                              "[']"
+                                              t
+                                              ("-d" "en_US")
+                                              nil
+                                              iso-8859-1))
+(setq ispell-program-name "hunspell"
+      ispell-dictionary "swedish-hunspell")
+#+END_SRC
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
