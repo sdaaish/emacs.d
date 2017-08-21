@@ -167,6 +167,7 @@ Github-flavoured markdown
 *** Mediawiki
 #+BEGIN_SRC emacs-lisp
 (use-package mediawiki
+  :pin melpa
   :config
    (setq mediawiki-site-alist
    (append
@@ -653,29 +654,23 @@ Load themes
 (defun my/load-themes ()
  "Loads my themes if in windows"
 
-  (use-package afternoon-theme
-  :config
-  (load-theme 'afternoon t t))
+  (use-package afternoon-theme)
+  (load-theme 'afternoon t t)
 
-  (use-package base16-theme
-  :config
-  (load-theme 'base16 t t))
+  (use-package base16-theme)
+  (load-theme 'base16 t t)
 
-  (use-package inkpot-theme
-  :config
-  (load-theme 'inkpot t t))
+  (use-package inkpot-theme)
+  (load-theme 'inkpot t t)
 
-  (use-package material-theme
-  :config
-  (load-theme 'material t t))
+  (use-package material-theme)
+  (load-theme 'material t t)
 
-  (use-package twilight-bright-theme
-  :config
-  (load-theme 'twilight-bright t t))
+  (use-package twilight-bright-theme)
+  (load-theme 'twilight-bright t t)
 
-  (use-package zenburn-theme
-  :config
-  (load-theme 'zenburn t t))
+  (use-package zenburn-theme)
+  (load-theme 'zenburn t t)
 
   (load-theme 'material))
 
@@ -720,12 +715,24 @@ Things that we dont want during or after startup
       initial-scratch-message nil
       initial-major-mode 'org-mode)
 
-;; Only try this when in gui-mode.
 ;; No menubar, toolbar or scrollbar
-(when (display-graphic-p)
- (tool-bar-mode -1)
- (menu-bar-mode -1)
- (set-scroll-bar-mode nil))
+(defun my/no-toolbars ()
+  "Dont load toolbars or menubars, if in gui-mode"
+  (when (display-graphic-p)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (set-scroll-bar-mode nil)))
+  
+;; Only try this when in gui-mode.
+;; Load this when started as server (daemon)
+(add-hook 'after-make-frame-functions
+  (lambda (frame)
+  (select-frame frame)
+  (my/no-toolbars)))
+
+;; Don't display toolbars when in gui-mode
+  (when (display-graphic-p)
+  (my/no-toolbars))
 #+END_SRC
 ** Powerline-mode
 Use powerline in the message bar.
