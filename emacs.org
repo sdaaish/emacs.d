@@ -649,7 +649,7 @@ Keyboard shortcut to find emacs.org, init.el and my custom-file.
 #+END_SRC
 * Theme and settings
 ** Theme
-Load themes
+*** Load themes
 #+BEGIN_SRC emacs-lisp
 (defun my/load-themes ()
  "Loads my themes if in windows"
@@ -673,13 +673,15 @@ Load themes
   (load-theme 'zenburn t t)
 
   (load-theme 'material))
-
+#+END_SRC
+***  Load different theme if in gui or terminal
+#+BEGIN_SRC emacs-lisp
 (unless (not (display-graphic-p))
-  (load-theme 'tango-dark)
-  (my/load-themes))
+(load-theme 'tango-dark)
+(my/load-themes))
 #+END_SRC
 *** Theme when emacs run as daemon.
-This loads theme when emacs starts up as emacsclient.
+This loads theme when emacs starts up as a daemon
 #+BEGIN_SRC emacs-lisp
 (add-hook 'after-make-frame-functions
           (lambda (frame)
@@ -723,7 +725,6 @@ Things that we dont want during or after startup
   (menu-bar-mode -1)
   (set-scroll-bar-mode nil)))
   
-;; Only try this when in gui-mode.
 ;; Load this when started as server (daemon)
 (add-hook 'after-make-frame-functions
   (lambda (frame)
@@ -731,7 +732,7 @@ Things that we dont want during or after startup
   (my/no-toolbars)))
 
 ;; Don't display toolbars when in gui-mode
-  (when (display-graphic-p)
+(when (display-graphic-p)
   (my/no-toolbars))
 #+END_SRC
 ** Powerline-mode
