@@ -85,20 +85,13 @@ From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_alwa
 ;;    (setq package-selected-packages value)))
 #+END_SRC
 ** Version-dependent
-Paradox and magit is depending on 24.4, so load only them if that emacs-version or later is installed.
-+ Paradox is package mgmt
+Magit is depending on 24.4, so load only them if that emacs-version or later is installed.
 + Magit is a Git-tool
 #+BEGIN_SRC emacs-lisp
 ;; Emacs version above 24.4 needed for these apps
 (if (version< emacs-version "24.4")
         (message "*** Emacs version is before 24.4 ***")
         (message "*** Emacs version is `%s' ***" (emacs-version))
-        ;; Package handling trough paradox
-        (use-package paradox
-          :ensure t
-          :defer t
-          :init
-          (setq paradox-github-token t))
         ;; Magit for GIT support
         (use-package magit
           :ensure t
