@@ -385,6 +385,12 @@ Hydras is keybord mapping through menus.
     ("q" nil "cancel"))
     (bind-key "<f8> i" 'hydra-config-files/body)
 
+(defhydra hydra-org-stuff (:color blue)
+  "Org mode stuff"
+    ("o" org-iswitchb "Switch org-buffer")
+    ("q" nil "cancel"))
+    (bind-key "<f8> o" 'hydra-org-stuff/body)
+
 (defhydra hydra-launcher (:color blue)
    "Launch"
    ("h" man "man")
@@ -927,8 +933,9 @@ My org-files for Todo-list and agenda.
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
 (setq org-directory (concat my/dropbox-dir "emacs/org/"))
 (setq org-agenda-files (list org-directory))
-(bind-key "\C-c l" 'org-store-link)
-(bind-key "\C-c a" 'org-agenda)
+(bind-key "C-c l" 'org-store-link)
+(bind-key "C-c a" 'org-agenda)
+(bind-key "C-c c" 'org-capture)
 (setq org-log-done t)
 (setq org-default-notes-file (concat org-directory "notes.org"))
 #+END_SRC

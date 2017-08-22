@@ -19,6 +19,7 @@
 
 (cheatsheet-add-group 'Hydras
                       '(:key "<f8> i" :description "Emacs config files")
-                      '(:key "C-c b" :description "Launch")
-                      '(:key "C-c v" :description "Hydra toggle")
+                      '(:key "<f8> " :description "Org-mode stuff")
+                      '(:key "C-c b" :description "Launch shells and software")
+                      '(:key "C-c v" :description "Hydra toggle functions")
                       '(:key "C-c o" :description "Org-inserts"))
