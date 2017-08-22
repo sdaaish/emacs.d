@@ -375,6 +375,16 @@ Hydras is keybord mapping through menus.
     ("l" text-scale-decrease "out"))
  (setq text-scale-mode-step 1.1)
 
+(defhydra hydra-config-files (:color blue)
+  "Emacs config files"
+    ("c" (find-file custom-file) "Customize")
+    ("e" (find-file my/init-org-file) "emacs.org")
+    ("i" (find-file user-init-file) "init.el")
+    ("r" (org-babel-load-file my/init-org-file) "Reload emacs")
+    ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "/lisp"))) "Cheat sheet")
+    ("q" nil "cancel"))
+    (bind-key "<f8> i" 'hydra-config-files/body)
+
 (defhydra hydra-launcher (:color blue)
    "Launch"
    ("h" man "man")
