@@ -14,7 +14,7 @@
  '(hl-sexp-background-color "#1c1f26")
  '(package-selected-packages
    (quote
-    (twilight-bright-theme afternoon-theme theme-looper git-commit zenburn-theme yara-mode wiki-summary which-key use-package switch-window super-save ssh-config-mode search-web powershell powerline paradox mediawiki material-theme markdown-preview-mode magit linum-relative linum-off inkpot-theme gitconfig-mode dos company buffer-move browse-at-remote base16-theme auto-org-md auto-indent-mode ahk-mode)))
+    (afternoon-theme ahk-mode auto-indent-mode auto-org-md base16-theme better-shell bind-key bs buffer-move company copy-as-format dired+ dos epa-file es-mode gitattributes-mode gitconfig-mode gitignore-mode hydra ido ido-completing-read+ inkpot-theme ispell linum-off linum-relative magit markdown-mode markdown-preview-mode material-theme mediawiki move-text org-bullets org-crypt org-mobile org2jekyll ox-gfm paradox powerline powershell saveplace ssh-config-mode super-save switch-window theme-looper twilight-bright-theme uniquify which-key wiki-summary windresize winner xkcd yara-mode zenburn-theme)))
  '(tls-checktrust t)
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
