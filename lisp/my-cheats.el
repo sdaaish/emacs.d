@@ -17,3 +17,8 @@
                       '(:key "C-c a t" :description "Start agenda Todo")
                       '(:key "C-x C-e" :description "export org-mode"))
 
+(cheatsheet-add-group 'Hydras
+                      '(:key "<f8> i" :description "Emacs config files")
+                      '(:key "C-c b" :description "Launch")
+                      '(:key "C-c v" :description "Hydra toggle")
+                      '(:key "C-c o" :description "Org-inserts"))
