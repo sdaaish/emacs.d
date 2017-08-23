@@ -23,3 +23,6 @@
                       '(:key "C-c b" :description "Launch shells and software")
                       '(:key "C-c v" :description "Hydra toggle functions")
                       '(:key "C-c o" :description "Org-inserts"))
+(cheatsheet-add-group 'Company
+                      '(:key "M-n" :description "Select next")
+                      '(:key "M-p" :description "Select previous"))
