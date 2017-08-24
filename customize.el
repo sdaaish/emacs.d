@@ -7,14 +7,21 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
+ '(ansi-term-color-vector
+   [unspecified "#FFFFFF" "#d15120" "#5f9411" "#d2ad00" "#6b82a7" "#a66bab" "#6b82a7" "#505050"])
  '(custom-safe-themes
    (quote
     ("5dc0ae2d193460de979a463b907b4b2c6d2c9c4657b2e9e66b8898d2592e3de5" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "fee4e306d9070a55dce4d8e9d92d28bd9efe92625d2ba9d4d654fc9cd8113b7f" "dd4628d6c2d1f84ad7908c859797b24cc6239dfe7d71b3363ccdd2b88963f336" "bb4733b81d2c2b5cdec9d89c111ef28a0a8462a167d411ced00a77cfd858def1" "bfdcbf0d33f3376a956707e746d10f3ef2d8d9caa1c214361c9c08f00a1c8409" "6145e62774a589c074a31a05dfa5efdf8789cf869104e905956f0cbd7eda9d0e" "6271fc9740379f8e2722f1510d481c1df1fcc43e48fa6641a5c19e954c21cc8f" default)))
+ '(fci-rule-character-color "#d9d9d9")
  '(fci-rule-color "#37474f")
  '(hl-sexp-background-color "#1c1f26")
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (afternoon-theme ahk-mode auto-indent-mode auto-org-md base16-theme better-shell bind-key bs buffer-move company copy-as-format dired+ dos epa-file es-mode gitattributes-mode gitconfig-mode gitignore-mode hydra ido ido-completing-read+ inkpot-theme ispell linum-off linum-relative magit markdown-mode markdown-preview-mode material-theme mediawiki move-text org-bullets org-crypt org-mobile org2jekyll ox-gfm paradox powerline powershell saveplace ssh-config-mode super-save switch-window theme-looper twilight-bright-theme uniquify which-key wiki-summary windresize winner xkcd yara-mode zenburn-theme)))
+    (cheatsheet twilight-bright-theme afternoon-theme theme-looper git-commit zenburn-theme yara-mode wiki-summary which-key use-package switch-window super-save ssh-config-mode search-web powershell powerline paradox mediawiki material-theme markdown-preview-mode magit linum-relative linum-off inkpot-theme gitconfig-mode company buffer-move browse-at-remote base16-theme auto-org-md auto-indent-mode ahk-mode)))
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(tls-checktrust t)
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
