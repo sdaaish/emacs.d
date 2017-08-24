@@ -18,6 +18,10 @@
                       '(:key "C-c a t" :description "Start agenda Todo")
                       '(:key "C-c C-e" :description "export org-mode")
                       '(:key "C-x C-e" :description "eval-last-sexp")
+                      '(:key "C-c C-w" :description "Org-refile")
+                      '(:key "C-c c" :description "Org-capture")
+                      '(:key "C-c C-d" :description "Org-deadline")
+                      '(:key "C-c C-s" :description "Org-schedule")
                       '(:key "<f8> o o" :description "Switch Org buffers"))
 
 (cheatsheet-add-group 'Hydras
