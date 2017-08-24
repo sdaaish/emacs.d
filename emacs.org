@@ -740,7 +740,6 @@ Use powerline in the message bar.
 #+BEGIN_SRC emacs-lisp
 ;;No beep
 (setq visible-bell t)
-(set-message-beep silent)
 #+END_SRC
 ** Customisations
 *** Initial settings
@@ -928,6 +927,21 @@ My org-files for Todo-list and agenda.
 (bind-key "C-c c" 'org-capture)
 (setq org-log-done t)
 (setq org-default-notes-file (concat org-directory "notes.org"))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
+(defvar my/notes-file (concat org-directory "notes.org"))
+#+END_SRC
+** Org-templates
+A few templates to speed up capture.
+#+BEGIN_SRC emacs-lisp
+(setq org-capture-templates
+        `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
+          "* TODO %?\n%T" :prepend t)
+          ("e" "Emacs idea" entry (file+headline my/notes-file "Emacs")
+          "* %?\n%T" :prepend t)
+          ("b" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
+          "* %?\n%T" :prepend t)
+          ("l" "Link" entry (file+headline my/notes-file "Links")
+          "* %? %^L %^g \n%T" :prepend t)))
 #+END_SRC
 ** Localized calender
 Use swedish calendar, from [[http://bigwalter.net/daniel/elisp/sv-kalender.el][Sv-kalender]]
