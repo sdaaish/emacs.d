@@ -17,6 +17,7 @@
 (cheatsheet-add-group 'Org-mode
                       '(:key "C-c a t" :description "Start agenda Todo")
                       '(:key "C-c C-e" :description "export org-mode")
+                      '(:key "C-c C-o" :description "Open link")
                       '(:key "C-x C-e" :description "eval-last-sexp")
                       '(:key "C-c C-w" :description "Org-refile")
                       '(:key "C-c c" :description "Org-capture")
