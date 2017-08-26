@@ -342,11 +342,11 @@ Hydras is keybord mapping through menus.
 *** Hydra
 #+BEGIN_SRC emacs-lisp
 ;; Hydra keymapping support
-(use-package hydra
-        :ensure t
-        :defer t
-        :config
-
+(use-package hydra)
+#+END_SRC
+**** Toggle stuff
+Use "C-c v" to toggle values.
+#+BEGIN_SRC emacs-lisp
 (defhydra hydra-toggle (:color blue)
       "toggle"
       ("a" abbrev-mode "abbrev")
@@ -366,18 +366,29 @@ Hydras is keybord mapping through menus.
       ("x" xkcd "xkcd")
       ("q" nil "cancel"))
    (bind-key "C-c v" 'hydra-toggle/body)
-
+#+END_SRC
+**** Zoom font
+Use <F2> to zoom in or out of fonts
+#+BEGIN_SRC emacs-lisp
 (defhydra hydra-zoom (global-map "<f2>")
   "zoom"
     ("g" text-scale-increase "in")
     ("l" text-scale-decrease "out"))
  (setq text-scale-mode-step 1.1)
 
+#+END_SRC
+**** Font size changes
+Change fonts with C-<f2>.
+#+BEGIN_SRC emacs-lisp
 (defhydra hydra-font (global-map "C-<f2>")
-  "zoom"
+  "Change fonts to next/previous"
     ("n" my/cycle-font-next "next font")
     ("p" my/cycle-font-previous "out"))
 
+#+END_SRC
+**** Emacs init files.
+Hydra for quick access to emacs files, "<f8> i".
+#+BEGIN_SRC emacs-lisp
 (defhydra hydra-config-files (:color blue)
   "Emacs config files"
     ("c" (find-file custom-file) "Customize")
@@ -386,14 +397,20 @@ Hydras is keybord mapping through menus.
     ("r" (org-babel-load-file my/init-org-file) "Reload emacs")
     ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "/lisp"))) "Cheat sheet")
     ("q" nil "cancel"))
-    (bind-key "<f8> i" 'hydra-config-files/body)
-
+(bind-key "<f8> i" 'hydra-config-files/body)
+#+END_SRC
+**** Hydra for org
+Switch between org-buffers, <f8>
+#+BEGIN_SRC emacs-lisp
 (defhydra hydra-org-stuff (:color blue)
   "Org mode stuff"
     ("o" org-iswitchb "Switch org-buffer")
     ("q" nil "cancel"))
-    (bind-key "<f8> o" 'hydra-org-stuff/body)
-
+(bind-key "<f8> o" 'hydra-org-stuff/body)
+#+END_SRC
+**** Launcher
+Launch various programs, "C-c b"
+#+BEGIN_SRC emacs-lisp
 (defhydra hydra-launcher (:color blue)
    "Launch"
    ("h" man "man")
@@ -406,9 +423,12 @@ Hydras is keybord mapping through menus.
    ("w" (browse-url "http://www.emacswiki.org/") "emacswiki")
    ("s" shell "shell")
    ("q" nil "cancel"))
-  (bind-key "C-c b" 'hydra-launcher/body)
-
+(bind-key "C-c b" 'hydra-launcher/body)
+#+END_SRC
+**** Expand text
+Expand text in org mode
 ;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
+#+BEGIN_SRC emacs-lisp
 (defhydra hydra-org-template (:color blue :hint nil)
     "
  _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
@@ -462,24 +482,24 @@ prepended to the element after the #+HEADERS: tag."
       (when mod (insert mod) (forward-line))
       (when text (insert text))))
 
-      (define-key org-mode-map "<"
-      (lambda () (interactive)
-      (if (or (region-active-p) (looking-back "^"))
-      (hydra-org-template/body)
-      (self-insert-command 1))))
-)
+(define-key org-mode-map "<"
+  (lambda () (interactive)
+  (if (or (region-active-p) (looking-back "^"))
+  (hydra-org-template/body)
+  (self-insert-command 1))))
 
 (bind-key "C-c o" 'hydra-org-template/body)
-
-(defhydra hydra-move-text ()
-  "Move text"
-  ("u" move-text-up "up")
-  ("d" move-text-down "down"))
 #+END_SRC
-
-#+RESULTS:
-: hydra-org-template/body
-
+*** Move text
+Use a hydra to move text. M-<up> or M-<down>.
+#+BEGIN_SRC emacs-lisp
+(use-package move-text
+  :config
+  (defhydra hydra-move-text ()
+    "Move text"
+    ("u" move-text-up "up")
+    ("d" move-text-down "down")))
+#+END_SRC
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
