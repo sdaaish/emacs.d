@@ -940,20 +940,6 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
 (setq password-cache t) ; enable password caching
 (setq password-cache-expiry 3600) ; for one hour (time in secs)
 #+END_SRC
-** Org-mode stuff
-#+BEGIN_SRC emacs-lisp
-(if (eq system-type 'gnu/linux)
- (setq my/repo-dir "~/repos/"))
-(if (eq system-type 'windows-nt)
-  (setq my/repo-dir (concat (getenv "UserProfile") "\\Repos\\")))
-(setq org-publish-project-alist
-      '(("OL-event"
-         :base-directory (concat my/repodir "OL-Event")
-         :publishing-directory (concat my/repodir "OL-Event")
-         :publishing-function org-md-export-to-markdown
-         :with-sub-superscript nil
-         )))
-#+END_SRC
 * Backup
 Backup and autosave options, + history
 ** Backup of files
@@ -1002,7 +988,14 @@ Save a history of edited files.
   regexp-search-ring))
 #+END_SRC
 
-* Agenda-files
+* Org-mode stuff
+** File-variables
+#+BEGIN_SRC emacs-lisp
+(if (eq system-type 'gnu/linux)
+ (setq my/repo-dir "~/repos/"))
+(if (eq system-type 'windows-nt)
+  (setq my/repo-dir (concat (getenv "UserProfile") "\\Repos\\")))
+#+END_SRC
 ** Org-files
 My org-files for Todo-list and agenda.
 #+BEGIN_SRC emacs-lisp
@@ -1060,6 +1053,38 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
 #+RESULTS:
 : t
 
+** Org-projects
+Publish my org-files to html-dir. [[http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html][Org-publish tutorial]]
+Use backtick "`" to use variable-expansion in the alist. See [[https://stackoverflow.com/questions/33353159/use-a-variable-to-define-an-optional-argument][StackoverFlow]]
+#+BEGIN_SRC emacs-lisp
+(require 'ox-publish)
+(setq org-publish-project-alist
+`(("org-notes"
+:base-directory ,org-directory
+:base-extension "org"
+:publishing-directory ,(concat my/dropbox-dir "emacs/html")
+:recursive t
+:publishing-function org-html-publish-to-html
+:headline-levels 4
+:auto-preamble t
+)
+("org-static"
+ :base-directory ,org-directory
+ :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+ :publishing-directory ,(concat my/dropbox-dir "emacs/html")
+ :recursive t
+ :publishing-function org-publish-attachment
+ )
+("org" :components ("org-notes" "org-static"))
+("OL-event"
+:base-directory ,(concat my/repo-dir "OL-Event/")
+:base-extension "org"
+:publishing-directory ,(concat my/repo-dir "OL-Event/")
+:publishing-function org-md-export-to-markdown
+:recursive t
+:with-sub-superscript nil
+)))
+#+END_SRC
 * Links
 ** Manuals
 + http://orgmode.org/manual/ Org mode manual
