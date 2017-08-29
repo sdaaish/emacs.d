@@ -394,13 +394,20 @@ Hydra for quick access to emacs files, "<f8> i".
     ("c" (find-file custom-file) "Customize")
     ("e" (find-file my/init-org-file) "emacs.org")
     ("i" (find-file user-init-file) "init.el")
+    ("k" my/server-shutdown "Save&kill")
     ("r" (org-babel-load-file my/init-org-file) "Reload emacs")
     ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "/lisp"))) "Cheat sheet")
     ("q" nil "cancel"))
 (bind-key "<f8> i" 'hydra-config-files/body)
+(defun my/server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs)
+  )
 #+END_SRC
 **** Hydra for org
-Switch between org-buffers, <f8>
+Switch between org-buffers, "<f8> o".
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-org-stuff (:color blue)
   "Org mode stuff"
