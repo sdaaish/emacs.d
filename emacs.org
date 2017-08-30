@@ -349,7 +349,7 @@ Hydras is keybord mapping through menus.
 ;; Hydra keymapping support
 (use-package hydra)
 #+END_SRC
-**** Toggle stuff
+*** Toggle stuff
 Use "C-c v" to toggle values.
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-toggle (:color blue)
@@ -372,7 +372,7 @@ Use "C-c v" to toggle values.
       ("q" nil "cancel"))
    (bind-key "C-c v" 'hydra-toggle/body)
 #+END_SRC
-**** Zoom font
+*** Zoom font
 Use <F2> to zoom in or out of fonts
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-zoom (global-map "<f2>")
@@ -382,7 +382,7 @@ Use <F2> to zoom in or out of fonts
  (setq text-scale-mode-step 1.1)
 
 #+END_SRC
-**** Font size changes
+*** Font size changes
 Change fonts with C-<f2>.
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-font (global-map "C-<f2>")
@@ -391,7 +391,7 @@ Change fonts with C-<f2>.
     ("p" my/cycle-font-previous "out"))
 
 #+END_SRC
-**** Emacs init files.
+*** Emacs init files.
 Hydra for quick access to emacs files, "<f8> i".
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-config-files (:color blue)
@@ -411,16 +411,18 @@ Hydra for quick access to emacs files, "<f8> i".
   (kill-emacs)
   )
 #+END_SRC
-**** Hydra for org
+*** Hydra for org
 Switch between org-buffers, "<f8> o".
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-org-stuff (:color blue)
   "Org mode stuff"
+    ("g" org-mobile-pull "Pull from mobile")
+    ("p" org-mobile-push "Push to mobile"e)
     ("o" org-iswitchb "Switch org-buffer")
     ("q" nil "cancel"))
 (bind-key "<f8> o" 'hydra-org-stuff/body)
 #+END_SRC
-**** Launcher
+*** Launcher
 Launch various programs, "C-c b"
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-launcher (:color blue)
@@ -437,14 +439,14 @@ Launch various programs, "C-c b"
    ("q" nil "cancel"))
 (bind-key "C-c b" 'hydra-launcher/body)
 #+END_SRC
-**** Expand text
+*** Expand text
 Expand text in org mode
 ;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-org-template (:color blue :hint nil)
     "
  _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
- _l_atex   _E_xample   _p_erl          _i_ndex:
+ _l_atex   _E_xample   _p_owershell    _i_ndex:
  _a_scii   _v_erse     _P_erl tangled  _I_NCLUDE:
  _s_rc     _n_ote      plant_u_ml      _H_TML:
  _h_tml    ^ ^         ^ ^             _A_SCII:
@@ -467,7 +469,7 @@ Expand text in org mode
     ("L" (hot-expand "<L"))
     ("i" (hot-expand "<i"))
     ("e" (hot-expand "<s" "emacs-lisp"))
-    ("p" (hot-expand "<s" "perl"))
+    ("p" (hot-expand "<s" "powershell"))
     ("u" (hot-expand "<s" "plantuml :file CHANGE.png"))
     ("P" (hot-expand "<s" "perl" ":results output :exports both :shebang \"#!/usr/bin/env perl\"\n"))
     ("I" (hot-expand "<I"))
