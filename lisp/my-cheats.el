@@ -40,6 +40,6 @@
                       '(:key "C-x ESC ESC" :description "Repeat last command"))
 
 (cheatsheet-add-group 'Emacs
-                      '(:key "> /dev/clip" :description "Redirect to clipboard")
-                      '(:key "> /dev/kill" :description "Redirect to kill ring")
-                      '(:key "> <#buffer-name>" :description "redirect to buffer-name"))
+                      '(:key "prog > /dev/clip" :description "Redirect to clipboard")
+                      '(:key "prog > /dev/kill" :description "Redirect to kill ring")
+                      '(:key "prog > #<buffer-name>" :description "redirect to buffer-name"))
