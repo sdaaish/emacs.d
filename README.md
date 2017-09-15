@@ -1,5 +1,9 @@
 # emacs.d
 My universal emacs configuration directory
+<./init.el>
+<./customize.el>
+<./.emacs.org>
+[README](./README.md "About this site")
 
 ## Linux info
 Clone git repo to a folder and make a symlink to that directory, or clone it directly to `~/.emacs.d`.
@@ -15,4 +19,4 @@ You probably need to run these commands as a privileged user.
 
 ```:: mklink /d %UserProfile%\.emacs.d path-to-git-repo\emacs.d```
 
-Todo: The `Makefile` in this directory dont work.
+**Todo:** The `Makefile` in this directory dont work.
