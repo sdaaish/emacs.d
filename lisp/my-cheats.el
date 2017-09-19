@@ -43,3 +43,12 @@
                       '(:key "prog > /dev/clip" :description "Redirect to clipboard")
                       '(:key "prog > /dev/kill" :description "Redirect to kill ring")
                       '(:key "prog > #<buffer-name>" :description "redirect to buffer-name"))
+
+(cheatsheet-add-group 'Hackernews
+                      '(:key "RET" :description "Open post in browser")
+                      '(:key "t" :description "Open post in textmode")
+                      '(:key "n" :description "Next post")
+                      '(:key "p" :description "Previous post")
+                      '(:key "tab/S-tab" :description "Next/Previous comment")
+                      '(:key "m" :description "load more posts")
+                      '(:key "q" :description "quit"))
