@@ -960,6 +960,26 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
 (setq password-cache t) ; enable password caching
 (setq password-cache-expiry 3600) ; for one hour (time in secs)
 #+END_SRC
+** TRAMP
+Use fakecygpty to login from Windows using openssh. See https://www.emacswiki.org/emacs/SshWithNTEmacs and https://github.com/d5884/fakecygpty.
+You must compile fakecygpty from Cygwin. Won't work in MSYS2, MINGW32/64. Copy ~fakecygpty.exe~ to ~f_ssh.exe~ and ~f_scp.exe~.
+#+BEGIN_SRC emacs-lisp
+(require 'tramp)
+(require 'fakecygpty)
+(when (eq window-system 'w32)
+  (eval-after-load "tramp"
+    '(progn
+      (fakecygpty-activate)
+       (add-to-list 'tramp-methods
+                    (mapcar
+                     (lambda (x)
+                       (cond
+                        ((equal x "sshx") "cygssh")
+                        ((eq (car x) 'tramp-login-program) (list 'tramp-login-program "f_ssh"))
+                        (t x)))
+                     (assoc "sshx" tramp-methods)))
+       (setq tramp-default-method "cygssh"))))
+#+END_SRC
 * Backup
 Backup and autosave options, + history
 ** Backup of files
