@@ -21,7 +21,11 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
+<<<<<<< HEAD
     (twittering-mode org-beutify-theme htmlize ox-publish try afternoon-theme ahk-mode auto-indent-mode auto-org-md base16-theme better-shell bind-key bs buffer-move company copy-as-format dired+ epa-file es-mode gitattributes-mode gitconfig-mode gitignore-mode hydra ido ido-completing-read+ inkpot-theme ispell linum-off linum-relative magit markdown-mode markdown-preview-mode material-theme mediawiki move-text org-bullets org-crypt org-mobile org2jekyll ox-gfm paradox powerline powershell saveplace ssh-config-mode super-save switch-window theme-looper twilight-bright-theme uniquify which-key wiki-summary windresize winner xkcd yara-mode zenburn-theme)))
+=======
+    (org-beautify-theme twittering-mode hackernews htmlize ox-publish try afternoon-theme ahk-mode auto-indent-mode auto-org-md base16-theme better-shell bind-key bs buffer-move company copy-as-format dired+ epa-file es-mode gitattributes-mode gitconfig-mode gitignore-mode hydra ido ido-completing-read+ inkpot-theme ispell linum-off linum-relative magit markdown-mode markdown-preview-mode material-theme mediawiki move-text org-bullets org-crypt org-mobile org2jekyll ox-gfm paradox powerline powershell saveplace ssh-config-mode super-save switch-window theme-looper twilight-bright-theme uniquify which-key wiki-summary windresize winner xkcd yara-mode zenburn-theme)))
+>>>>>>> 0d6fe4a8ceb81dce62d73dc3ec7cedfe8fc459ef
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(tls-checktrust t)
  '(vc-annotate-background nil)
