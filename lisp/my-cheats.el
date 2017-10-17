@@ -23,6 +23,7 @@
                       '(:key "C-c c" :description "Org-capture")
                       '(:key "C-c C-d" :description "Org-deadline")
                       '(:key "C-c C-s" :description "Org-schedule")
+                      '(:key "C-c C-x c" :description "org-clone-subtree-with-time-shift")
                       '(:key "<f8> o o" :description "Switch Org buffers"))
 
 (cheatsheet-add-group 'Hydras
