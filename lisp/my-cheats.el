@@ -5,6 +5,8 @@
 (cheatsheet-add-group 'Common
                       '(:key "C-x C-c" :description "leave Emacs")
                       '(:key "C-x C-f" :description "find file")
+                      '(:key "C-x t" :description "Treemacs")
+                      '(:key "C-x z" :description "ztree-dir")
                       '(:key "C-c s" :description "Show cheatsheet")
                       '(:key "C-h B" :description "Show my keybindings"))
 
