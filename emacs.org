@@ -237,6 +237,13 @@ Complete anything
 :config
   (global-company-mode t))
 #+END_SRC
+*** Company-shell
+Add more functions to company
+#+BEGIN_SRC emacs-lisp
+(use-package company-shell
+  :config
+  (add-to-list 'company-backends '(company-shell company-shell-env)))
+#+END_SRC
 *** Autohotkey-mode
 #+BEGIN_SRC emacs-lisp
 (use-package ahk-mode)
@@ -318,10 +325,16 @@ To make it possible to write in org and publish as jekyll.
 (use-package org2jekyll)
 #+END_SRC
 *** Copy-as-format
+Copy with formatting.
 #+BEGIN_SRC emacs-lisp
 (use-package copy-as-format
 :bind
-  ("C-c w g" . copy-as-format-github))
+  ("C-c w g" . copy-as-format-github)
+  ("C-c w j" . copy-as-format-jira)
+  ("C-c w h" . copy-as-format-html)
+  ("C-c w m" . copy-as-format-markdown)
+  ("C-c w o" . copy-as-format-org-mode)
+  ("C-c w w" . copy-as-format-mediawiki))
 #+END_SRC
 *** Cheatsheet
 My own cheatsheet.
@@ -376,7 +389,8 @@ Directory navigating explorer-style.
 *** ztree
 Cool directory package.
 #+BEGIN_SRC emacs-lisp
-(use-package ztree)
+(use-package ztree
+  :bind ("C-x z" . ztree-dir))
 #+END_SRC
 *** CSV
 Read csv-files.
@@ -705,6 +719,15 @@ ido-completeing-read+ has replaced ido-ubiquitous-mode.
 :config
   (ido-ubiquitous-mode 1))
 #+END_SRC
+** Smex
+Enhancement for M-x
+#+BEGIN_SRC emacs-lisp
+(use-package smex
+  :bind
+  (("M-x" . smex)
+  ("M-X" . smex-major-mode-commands)
+  ("C-c C-c M-x" . execute-extended-command))) ;;This is your old M-x.
+#+END_SRC
 ** Windmove
 #+BEGIN_SRC emacs-lisp
 (when (fboundp 'windmove-default-keybindings)
@@ -1018,6 +1041,7 @@ Use axtended shell.
 Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes][this discussion]] for details.
 #+BEGIN_SRC emacs-lisp
 (require 'em-tramp) ; to load eshell’s sudo
+(require 'password-cache) ;Load password-cache
 (setq eshell-prefer-lisp-functions t)
 (setq eshell-prefer-lisp-variables t)
 (setq password-cache t) ; enable password caching
