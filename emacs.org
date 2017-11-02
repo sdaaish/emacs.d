@@ -643,7 +643,8 @@ Define path for .authinfo-file
 Use a separate file for emacs "customize".
 #+BEGIN_SRC emacs-lisp
 (setq custom-file (expand-file-name "customize.el" user-emacs-directory))
-(load custom-file 'noerror)
+(when (file-exists-p custom-file)
+  (load custom-file 'noerror))
 #+END_SRC
 ** Lisp
 My own Lisp-files
