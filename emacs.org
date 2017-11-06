@@ -37,7 +37,7 @@ Increase message-buffer
 ** Package-archives
 *** Load packages from these archives.
 #+BEGIN_SRC emacs-lisp
-(prefer-coding-system       'utf-8)
+(prefer-coding-system 'utf-8)
 (add-to-list 'package-archives
 	'("melpa-stable" .	"https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
@@ -110,6 +110,7 @@ Only in windows.
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'windows-nt)
 (use-package powershell
+  :pin melpa
   :ensure t
   :defer t))
 #+END_SRC
@@ -155,11 +156,15 @@ Winner for navigating between buffers (C-<left> or C-<right>)
 Github-flavoured markdown
 #+BEGIN_SRC emacs-lisp
 (use-package ox-gfm)
+(eval-after-load "org"
+  '(require 'ox-gfm nil t))
 #+END_SRC
 *** Export Jira
 Export org as Jira.
 #+BEGIN_SRC emacs-lisp
 (use-package ox-jira)
+(eval-after-load "org"
+  '(require 'ox-jira nil t))
 #+END_SRC
 *** Mediawiki
 #+BEGIN_SRC emacs-lisp
@@ -648,7 +653,8 @@ Define path for .authinfo-file
 Use a separate file for emacs "customize".
 #+BEGIN_SRC emacs-lisp
 (setq custom-file (expand-file-name "customize.el" user-emacs-directory))
-(load custom-file 'noerror)
+(when (file-exists-p custom-file)
+  (load custom-file 'noerror))
 #+END_SRC
 ** Lisp
 My own Lisp-files
@@ -678,7 +684,7 @@ From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-thresh
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment   'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
+(setq buffer-file-coding-system 'utf-8)
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 ;; MS Windows clipboard is UTF-16LE
 (when (eq system-type 'windows-nt)
@@ -797,7 +803,8 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
   (use-package zenburn-theme)
   (load-theme 'zenburn t t)
 
-  (use-package org-beautify-theme)
+  (use-package org-beautify-theme
+    :pin melpa)
   (load-theme 'org-beautify t t)
 
   (load-theme 'material))
@@ -924,8 +931,9 @@ Use powerline in the message bar.
 (line-number-mode t)
 (column-number-mode t)
 (transient-mark-mode t)
-(show-paren-mode 1)
+(show-paren-mode t)
 (setq-default line-spacing 1)
+(setq-default show-trailing-whitespace t)
 #+END_SRC
 *** Indents and tabs
 #+BEGIN_SRC emacs-lisp
@@ -1186,7 +1194,6 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
   (progn
     (setq org-mobile-directory (concat my/dropbox-dir "Appar/MobileOrg/"))
     (setq org-mobile-inbox-for-pull (concat my/dropbox-dir "emacs/org/sync.org"))
-    (setq default-buffer-file-coding-system 'utf-8)
     (setq org-mobile-files (org-agenda-files))
     (setq org-mobile-agendas '("all"))))
 #+END_SRC
