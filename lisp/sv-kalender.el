@@ -153,6 +153,7 @@ Beräkna påskdagen för år YEAR."
             ( +50 "Annandag pingst"))))
 
         (holiday-fixed 5 1 "Första maj")
+        (holiday-fixed 6 6 "Sveriges nationaldag")
 
         (let ((midsommar-d (calendar-dayname-on-or-before
                             6 (calendar-absolute-from-gregorian
@@ -173,13 +174,15 @@ Beräkna påskdagen för år YEAR."
               6 (calendar-absolute-from-gregorian
                  (list 11 6 displayed-year))))
             "Alla helgons dag"))))
-         
+
+        (holiday-fixed 12 24 "Julafton")
         (holiday-fixed 12 25 "Juldagen")
-        (holiday-fixed 12 26 "Annandag jul")))
+        (holiday-fixed 12 26 "Annandag jul")
+        (holiday-fixed 12 31 "Nyårsafton")))
 
 ;; Andra högtider
 (setq other-holidays
-      '((holiday-fixed 1 13 "Tjogondag Knut")
+      '((holiday-fixed 1 13 "Tjugondag Knut")
         (unless sv-hide-some-holidays
           (holiday-fixed 1 28 "Konungens namnsdag"))
         (unless sv-hide-some-holidays
@@ -219,7 +222,6 @@ Beräkna påskdagen för år YEAR."
           (holiday-fixed 4 1 "Första april"))
         (holiday-fixed 4 30 "Valborgsmässoafton")
         (holiday-float 5 0 -1 "Mors dag")
-        (holiday-fixed 6 6 "Sveriges nationaldag")
         (unless sv-hide-some-holidays
           (holiday-fixed 7 14 "Kronprinsessans födelsedag"))
         (unless sv-hide-some-holidays
@@ -236,9 +238,7 @@ Beräkna påskdagen för år YEAR."
         (holiday-fixed 12 10 "Nobeldagen")
         (holiday-fixed 12 13 "Lucia")
         (unless sv-hide-some-holidays
-          (holiday-fixed 12 23 "Drottningens födelsedag"))
-        (holiday-fixed 12 24 "Julafton")
-        (holiday-fixed 12 31 "Nyårsafton")))
+          (holiday-fixed 12 23 "Drottningens födelsedag"))))
 
 ;; Solstånd, dagjämningar, vinter- och sommartid
 (setq solar-holidays
