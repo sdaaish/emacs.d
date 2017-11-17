@@ -423,7 +423,8 @@ Testing out yasnippet and some templates.
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
   :config (yas-global-mode 1))
-(use-package yasnippet-snippets)
+(use-package yasnippet-snippets
+  :config (yas-reload-all))
 #+END_SRC
 *** proportional
 Use proportional fonts everywhere.
@@ -815,11 +816,17 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
   (load-theme 'zenburn t t)
 
   (use-package org-beautify-theme
-    :pin melpa)
-  (load-theme 'org-beautify t t)
+    :pin melpa
+    :disabled
+    :config
+    (load-theme 'org-beautify t t))
 
   (load-theme 'material))
 #+END_SRC
+
+#+RESULTS:
+: my/load-themes
+
 ***  Load different theme if in gui or terminal
 #+BEGIN_SRC emacs-lisp
 (unless (not (display-graphic-p))
