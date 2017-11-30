@@ -1194,16 +1194,22 @@ My org-files for Todo-list and agenda.
 (defvar my/notes-file (concat org-directory "notes.org"))
 #+END_SRC
 *** Org custom agenda
+For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html][Org Agenda Custom Commands]].
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-custom-commands
-           '(("h" "Agenda and Home-related tasks"
+           '(("h" "Agenda and Home-related tasks" tags-todo "hemma|huset"
               ((agenda "")
-               (tags-todo "hemma")
-               (tags "garden")))
-             ("o" "Agenda and Office-related tasks"
+               (org-agenda-sorting-strategy '(priority-up effort-down))))
+             ("o" "Agenda and Office-related tasks" tags-todo "work|office"
               ((agenda "")
-               (tags-todo "work")
-               (tags "office")))))
+               (org-agenda-ndays 7)
+               (todo "TODO|IN-PROGRESS")
+               (org-agenda-sorting-strategy '(priority-up effort-down))))
+             ("p" . "Priorities")
+             ("pa" "A items" tags-todo "+Priority=\"A\"")
+             ("pb" "B items" tags-todo "+Priority=\"B\"")
+             ("pc" "C items" tags-todo "+Priority=\"C\"")
+             ))
 #+END_SRC
 ** Org-templates
 A few templates to speed up capture.
