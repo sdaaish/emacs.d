@@ -1197,8 +1197,21 @@ My org-files for Todo-list and agenda.
 For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html][Org Agenda Custom Commands]].
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-custom-commands
-           '(("h" "Agenda and Home-related tasks" tags-todo "hemma|huset"
+           '(("h" . "Hemma|Huset")
+             ("hh" "Agenda and Home-related tasks" tags-todo "Hemma|Huset"
               ((agenda "")
+               (org-agenda-sorting-strategy '(priority-up effort-down))))
+             ("hc" "Todo för cyklar" tags-todo "Cyklar"
+              ((agenda "")
+              (todo "TODO|IN-PROGRESS")
+               (org-agenda-sorting-strategy '(priority-up effort-down))))
+             ("hf" "Todo för cyklar" tags-todo "Fordon"
+              ((agenda "")
+               (todo "TODO|IN-PROGRESS")
+               (org-agenda-sorting-strategy '(priority-up effort-down))))
+             ("hu" "Todo för cyklar" tags-todo "Huset"
+              ((agenda "")
+               (todo "TODO|IN-PROGRESS")
                (org-agenda-sorting-strategy '(priority-up effort-down))))
              ("o" "Agenda and Office-related tasks" tags-todo "work|office"
               ((agenda "")
