@@ -1272,7 +1272,8 @@ Use backtick "`" to use variable-expansion in the alist. See [[https://stackover
 #+BEGIN_SRC emacs-lisp
 (require 'ox-publish)
 (setq org-publish-project-alist
-`(("org-notes"
+`(("org" :components ("org-notes" "org-static"))
+("org-notes"
 :base-directory ,org-directory
 :base-extension "org"
 :publishing-directory ,(concat my/dropbox-dir "emacs/html")
@@ -1288,7 +1289,6 @@ Use backtick "`" to use variable-expansion in the alist. See [[https://stackover
  :recursive t
  :publishing-function org-publish-attachment
  )
-("org" :components ("org-notes" "org-static"))
 ("OL-event"
 :base-directory ,(concat my/repo-dir "OL-Event/")
 :base-extension "org"
