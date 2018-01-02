@@ -1197,6 +1197,7 @@ My org-files for Todo-list and agenda.
 (setq org-default-notes-file (concat org-directory "notes.org"))
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 (defvar my/notes-file (concat org-directory "notes.org"))
+(defvar my/diary-file (concat org-directory "diary.org"))
 #+END_SRC
 *** Org custom agenda
 For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html][Org Agenda Custom Commands]].
@@ -1242,7 +1243,9 @@ A few templates to speed up capture.
           ("l" "Link" entry (file+headline my/notes-file "Links")
           "* %? %^L %^g \n%T" :prepend t)
           ("n" "Note" entry (file+headline my/notes-file "Notes")
-          "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)))
+          "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+          ("j" "Journal" entry (file+datetree my/diary-file)
+          "* %?\n%U\n" :clock-in t :clock-resume t)))
 #+END_SRC
 ** Localized calender
 Use swedish calendar, from [[http://bigwalter.net/daniel/elisp/sv-kalender.el][Sv-kalender]]
