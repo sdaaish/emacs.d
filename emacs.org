@@ -1234,23 +1234,33 @@ For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom
 A few templates to speed up capture.
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-        `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
+       `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
           "* TODO %?\n%T" :prepend t)
-          ("b" "Blog idea")
-          ("be" "Emacs idea" entry (file+headline my/notes-file "Emacs")
+
+         ;; Multiline for blog-notes
+         ("b" "Blog idea")
+         ("be" "Emacs idea" entry (file+headline my/notes-file "Emacs")
           "* %?\n%T" :prepend t)
-          ("bb" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
+         ("bb" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
           "* %?\n%T" :prepend t)
-          ("l" "Link" entry (file+headline my/notes-file "Links")
+
+         ;;Links
+         ("l" "Link" entry (file+headline my/notes-file "Links")
           "* %? %^L %^g \n%T" :prepend t)
-          ("n" "Note" entry (file+headline my/notes-file "Notes")
+
+         ;; Notes
+         ("n" "Note" entry (file+headline my/notes-file "Notes")
           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-          ("j" "Journal" entry (file+datetree my/diary-file)
+
+         ;; Journal
+         ("j" "Journal" entry (file+datetree my/diary-file)
           "* %?\n%U\n" :clock-in t :clock-resume t)
-          ("f" "Filmtips")
-          ("fm" "Movies" entry (file+headline my/notes-file "Film")
+
+         ;; Multiline for watching stuff
+         ("f" "Filmtips")
+         ("fm" "Movies" entry (file+headline my/notes-file "Film")
           "* %^{Titel} :Film:\nAdded on %T\n%?" :prepend t)
-          ("ft" "TV-tips" entry (file+headline my/notes-file "TV")
+         ("ft" "TV-tips" entry (file+headline my/notes-file "TV")
           "* %^{Titel} :TV:\nAdded on %T\n%^L\n%?" :prepend t)))
 #+END_SRC
 ** Localized calender
