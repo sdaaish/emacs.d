@@ -448,6 +448,13 @@ Check urls in an file.
 #+BEGIN_SRC emacs-lisp
 (use-package verify-url)
 #+END_SRC
+*** Rainbows
+Use different colors for delimeters to increase readability.
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+    :config
+    (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
+#+END_SRC
 ** Hydra config
 Hydras is keybord mapping through menus.
 *** Hydra
@@ -459,25 +466,26 @@ Hydras is keybord mapping through menus.
 Use "C-c v" to toggle values.
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-toggle (:color blue)
-      "toggle"
-      ("a" abbrev-mode "abbrev")
-      ("b" describe-personal-keybindings "key-bindings")
-      ("d" toggle-debug-on-error "debug")
-      ("f" auto-fill-mode "fill")
-      ("g" goto-line "goto-line")
-      ("h" hackernews "Hackernews")
-      ("k" kill-some-buffers "kill-some b")
-      ("m" message-recover "message-recover")
-      ("l" linum-mode "linum")
-      ("p" package-list-packages "package-list")
-      ("r" linum-relative-mode "linum-relative")
-      ("s" do-auto-save "auto-save")
-      ("t" toggle-truncate-lines "truncate")
-      ("v" windresize "windresize")
-      ("w" whitespace-mode "whitespace")
-      ("x" xkcd "xkcd")
-      ("q" nil "cancel"))
-   (bind-key "C-c v" 'hydra-toggle/body)
+        "toggle"
+        ("a" abbrev-mode "abbrev")
+        ("b" describe-personal-keybindings "key-bindings")
+        ("d" toggle-debug-on-error "debug")
+        ("f" auto-fill-mode "fill")
+        ("g" goto-line "goto-line")
+        ("h" hackernews "Hackernews")
+        ("k" kill-some-buffers "kill-some b")
+        ("m" message-recover "message-recover")
+        ("l" linum-mode "linum")
+        ("p" package-list-packages "package-list")
+        ("r" linum-relative-mode "linum-relative")
+        ("R" rainbow-delimiters-mode "rainbow-delimiters")
+        ("s" do-auto-save "auto-save")
+        ("t" toggle-truncate-lines "truncate")
+        ("v" windresize "windresize")
+        ("w" whitespace-mode "whitespace")
+        ("x" xkcd "xkcd")
+        ("q" nil "cancel"))
+     (bind-key "C-c v" 'hydra-toggle/body)
 #+END_SRC
 *** Zoom font
 Use <F2> to zoom in or out of fonts
@@ -501,7 +509,6 @@ Change fonts with C-<f2>.
   "Change fonts to next/previous"
     ("n" my/cycle-font-next "next font")
     ("p" my/cycle-font-previous "out"))
-
 #+END_SRC
 *** Emacs init files.
 Hydra for quick access to emacs files, "<f8> i".
