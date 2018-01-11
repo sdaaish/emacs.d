@@ -470,6 +470,11 @@ Check out stuff on https://cheat.sh/
 #+BEGIN_SRC emacs-lisp
 (use-package cheat-sh)
 #+END_SRC
+*** Free keys
+To list what keys are free in different modes. Very useful.
+#+BEGIN_SRC emacs-lisp
+(use-package free-keys)
+#+END_SRC
 ** Hydra config
 Hydras is keyboard mapping through menus.
 *** Hydra
@@ -560,20 +565,21 @@ Switch between org-buffers, "<f8> o".
 *** Launcher
 Launch various programs, "C-c b"
 #+BEGIN_SRC emacs-lisp
-(defhydra hydra-launcher (:color blue)
-   "Launch"
-   ("h" man "man")
-   ("b" better-shell-for-current-dir "better-shell")
-   ("c" cheat-sh "Cheat.sh")
-   ("C" wiki-summary "wiki-summary")
-   ("e" eshell "eshell")
-   ("g" (browse-url "https://git-scm.com/docs/") "Git ref")
-   ("p" (powershell) "powershell")
-   ("r" (browse-url "http://www.reddit.com/r/emacs/") "reddit")
-   ("w" (browse-url "http://www.emacswiki.org/") "emacswiki")
-   ("s" shell "shell")
-   ("q" nil "cancel"))
-(bind-key "C-c b" 'hydra-launcher/body)
+  (defhydra hydra-launcher (:color blue)
+     "Launch"
+     ("h" man "man")
+     ("b" better-shell-for-current-dir "better-shell")
+     ("c" cheat-sh "Cheat.sh")
+     ("C" wiki-summary "wiki-summary")
+     ("e" eshell "eshell")
+     ("f" free-keys "free-keys")
+     ("g" (browse-url "https://git-scm.com/docs/") "Git ref")
+     ("p" (powershell) "powershell")
+     ("r" (browse-url "http://www.reddit.com/r/emacs/") "reddit")
+     ("w" (browse-url "http://www.emacswiki.org/") "emacswiki")
+     ("s" shell "shell")
+     ("q" nil "cancel"))
+  (bind-key "C-c b" 'hydra-launcher/body)
 #+END_SRC
 *** Expand text
 Expand text in org mode
