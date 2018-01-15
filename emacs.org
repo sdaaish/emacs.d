@@ -219,13 +219,14 @@ Edit gitattributes-files.
 *** Git-gutter
 Displays symbols when lines are changed.
 #+BEGIN_SRC emacs-lisp
-        (use-package git-gutter-fringe
-          :diminish git-gutter-mode
-          :config
-          (global-git-gutter-mode t)
-          (set-face-foreground 'git-gutter-fr:modified "yellow")
-          (set-face-foreground 'git-gutter-fr:added    "blue")
-          (set-face-foreground 'git-gutter-fr:deleted  "white"))
+(use-package git-gutter-fringe
+  :disabled
+  :diminish git-gutter-mode
+  :config
+  (global-git-gutter-mode nil)
+  (set-face-foreground 'git-gutter-fr:modified "yellow")
+  (set-face-foreground 'git-gutter-fr:added    "blue")
+  (set-face-foreground 'git-gutter-fr:deleted  "white"))
 #+END_SRC
 *** line-numbers
 Use relative linenumbers.
@@ -1138,7 +1139,7 @@ You must compile fakecygpty from *Cygwin*. Won't work in MSYS2, MINGW32/64. Copy
                     (mapcar
                      (lambda (x)
                        (cond
-                        ((equal x "sshx") "cygssh")
+                       ((equal x "sshx") "cygssh")
                         ((eq (car x) 'tramp-login-program) (list 'tramp-login-program "f_ssh"))
                         (t x)))
                      (assoc "sshx" tramp-methods)))
