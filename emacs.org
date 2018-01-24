@@ -1119,11 +1119,11 @@ Use axtended shell.
 Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes][this discussion]] for details.
 #+BEGIN_SRC emacs-lisp
 (require 'em-tramp) ; to load eshell’s sudo
-(require 'password-cache) ;Load password-cache
-(setq eshell-prefer-lisp-functions t)
-(setq eshell-prefer-lisp-variables t)
-(setq password-cache t) ; enable password caching
-(setq password-cache-expiry 3600) ; for one hour (time in secs)
+  (require 'password-cache) ;Load password-cache
+  (setq eshell-prefer-lisp-functions t)
+  (setq eshell-prefer-lisp-variables t)
+  (setq password-cache t) ; enable password caching
+  (setq password-cache-expiry 3600) ; for one hour (time in secs)
 #+END_SRC
 ** TRAMP
 Use fakecygpty to login from Windows using openssh. See https://www.emacswiki.org/emacs/SshWithNTEmacs and https://github.com/d5884/fakecygpty.
@@ -1206,21 +1206,22 @@ Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Be
 *** Other variables
 Customize org-mode settings.
 #+BEGIN_SRC emacs-lisp
-(setq org-use-sub-superscripts '{})
-(setq org-export-with-sub-superscripts '{})
-(setq org-agenda-skip-deadline-prewarning-if-scheduled t)
-(setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-skip-scheduled-if-deadline-is-shown "repeated-after-deadline")
-(setq org-agenda-include-diary nil)
-(setq org-agenda-span 14)
-(setq org-log-done 'time)
-(setq org-log-redeadline 'time)
-(setq org-log-reschedule 'time)
-(setq org-log-refile 'time)
-(setq org-log-into-drawer t)
-(setq org-enforce-todo-checkbox-dependencies t)
-(setq org-enforce-todo-dependencies t)
-(setq org-agenda-dim-blocked-tasks t)
+  (setq org-use-sub-superscripts '{})
+  (setq org-export-with-sub-superscripts '{})
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
+  (setq org-agenda-skip-scheduled-if-done t)
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown "repeated-after-deadline")
+  (setq org-agenda-include-diary nil)
+  (setq org-agenda-span 14)
+  (setq org-log-done 'time)
+  (setq org-log-redeadline 'time)
+  (setq org-log-reschedule 'time)
+  (setq org-log-refile 'time)
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 2))))
+  (setq org-log-into-drawer t)
+  (setq org-enforce-todo-checkbox-dependencies t)
+  (setq org-enforce-todo-dependencies t)
+  (setq org-agenda-dim-blocked-tasks t)
 #+END_SRC
 ** Org-files
 My org-files for Todo-list and agenda.
@@ -1233,7 +1234,6 @@ My org-files for Todo-list and agenda.
 (bind-key "C-c a" 'org-agenda)
 (bind-key "C-c c" 'org-capture)
 (setq org-default-notes-file (concat org-directory "notes.org"))
-(setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 (defvar my/notes-file (concat org-directory "notes.org"))
 (defvar my/diary-file (concat org-directory "diary.org"))
 #+END_SRC
