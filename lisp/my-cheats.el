@@ -47,6 +47,10 @@
                       '(:key "prog > /dev/kill" :description "Redirect to kill ring")
                       '(:key "prog > #<buffer-name>" :description "redirect to buffer-name"))
 
+(cheatsheet-add-group 'Magit
+                      '(:key "C-p" :description "magit-git-flow")
+                      '(:key "C-c p" :description "magit-find-file-completing-read"))
+
 (cheatsheet-add-group 'Hackernews
                       '(:key "RET" :description "Open post in browser")
                       '(:key "t" :description "Open post in textmode")
