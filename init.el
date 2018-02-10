@@ -11,6 +11,10 @@
 ;; Increase the garbage collection threshold to 500 MB to ease startup
 (setq gc-cons-threshold (* 500 1024 1024))
   
+;; Enable narrowing
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page   'disabled nil)
+
 ;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
