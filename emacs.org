@@ -96,19 +96,23 @@ From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_alwa
 ;;    (setq package-selected-packages value)))
 #+END_SRC
 ** Version-dependent
+*** Magit
 Magit is depending on 24.4, so load only them if that emacs-version or later is installed.
 + Magit is a Git-tool
 #+BEGIN_SRC emacs-lisp
-;; Emacs version above 24.4 needed for these apps
-(if (version< emacs-version "24.4")
-        (message "*** Emacs version is before 24.4 ***")
-        (message "*** Emacs version is `%s' ***" (emacs-version))
-        ;; Magit for GIT support
-        (use-package magit
-          :ensure t
-          :bind ("C-x g" . magit-status))
-        (use-package magit-filenotify)
-        (setq-default with-editor-emacsclient-executable "emacsclient"))
+  ;; Emacs version above 24.4 needed for these apps
+  (if (version< emacs-version "24.4")
+      (message "*** Emacs version is before 24.4 ***")
+    (message "*** Emacs version is `%s' ***" (emacs-version))
+    ;; Magit for GIT support
+    (use-package magit
+      :pin melpa
+      :ensure t
+      :config
+      (setq magit-completing-read-function 'ivy-completing-read)
+      :bind ("C-x g" . magit-status))
+    (use-package magit-filenotify)
+    (setq-default with-editor-emacsclient-executable "emacsclient"))
 #+END_SRC
 Fix for magit when you get with-editor errors (emacsclient). From https://github.com/magit/magit/issues/2492
 ** Packages
