@@ -69,12 +69,14 @@ Ensure that *use-package* and *orgmode* is installed, otherwise install it.
 From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
 #+BEGIN_SRC emacs-lisp
 (eval-when-compile
-    (unless (package-installed-p 'use-package)
-      (package-refresh-contents)
-      (package-install 'use-package))
-    (require 'use-package)
-    (unless (package-installed-p 'org)
-      (package-install 'org)))
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (require 'use-package)
+  (require 'diminish)
+  (require 'bind-key)         
+  (unless (package-installed-p 'org)
+    (package-install 'org)))
 #+END_SRC
 *** Use-package default settings
 If we set the variable use-package-always-ensure, we need to set :ensure to nil for packages that are already included in emacs. I prefer to set this variable since I dont install packages manually.
