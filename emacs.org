@@ -816,16 +816,21 @@ Set mark-command for Windows env
 ** ivy, swiper and counsel
 These are really useful packages.
 #+BEGIN_SRC emacs-lisp
-(use-package ivy
-  :config
-  (ivy-mode 1)
-  (setq	ivy-use-virtual-buffers t
-	ivy-count-format "(%d/%d) ")
-  :bind (("C-x C-f" . counsel-find-file)
-	 ("C-c C-r" . counsel-recentf)
-	 ("C-s" . swiper)))
-(use-package swiper)
-(use-package counsel)
+  (use-package ivy
+    :config
+    (ivy-mode 1)
+    (setq	ivy-use-virtual-buffers t
+          ivy-count-format "(%d/%d) ")
+    :bind
+    ("C-x C-f" . counsel-find-file)
+    ("C-c C-r" . counsel-recentf)
+    ("C-s" . swiper)
+    ("C-r" . swiper))
+  (use-package swiper)
+  (use-package counsel
+    :config
+    (counsel-mode 1)
+    :bind ("M-x" . counsel-M-x))
 #+END_SRC
 ** Smex
 Enhancement for M-x
