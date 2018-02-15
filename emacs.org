@@ -813,24 +813,30 @@ Set mark-command for Windows env
 :config
 (bind-key "C-x C-b" 'bs-show))
 #+END_SRC
-** ivy, swiper and counsel
-These are really useful packages.
+** Interactively Do Things
+https://www.emacswiki.org/emacs/InteractivelyDoThings
 #+BEGIN_SRC emacs-lisp
-  (use-package ivy
-    :config
-    (ivy-mode 1)
-    (setq	ivy-use-virtual-buffers t
-          ivy-count-format "(%d/%d) ")
-    :bind
-    ("C-x C-f" . counsel-find-file)
-    ("C-c C-r" . counsel-recentf)
-    ("C-s" . swiper)
-    ("C-r" . swiper))
-  (use-package swiper)
-  (use-package counsel
-    :config
-    (counsel-mode 1)
-    :bind ("M-x" . counsel-M-x))
+(use-package ido
+:config
+  (ido-mode t)
+  (ido-everywhere t)
+  (setq-default ido-case-fold t))
+#+END_SRC
+** Ido everywhere
+ido-completeing-read+ has replaced ido-ubiquitous-mode.
+#+BEGIN_SRC emacs-lisp
+(use-package ido-completing-read+
+:config
+  (ido-ubiquitous-mode 1))
+#+END_SRC
+** Smex
+Enhancement for M-x
+#+BEGIN_SRC emacs-lisp
+(use-package smex
+  :bind
+  (("M-x" . smex)
+  ("M-X" . smex-major-mode-commands)
+  ("C-c C-c M-x" . execute-extended-command))) ;;This is your old M-x.
 #+END_SRC
 ** Windmove
 #+BEGIN_SRC emacs-lisp
