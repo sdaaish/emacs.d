@@ -610,20 +610,25 @@ Switch between org-buffers, "<f8> o".
 *** Launcher
 Launch various programs, "C-c b"
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-launcher (:color blue)
-     "Launch"
-     ("h" man "man")
-     ("b" better-shell-for-current-dir "better-shell")
-     ("c" cheat-sh "Cheat.sh")
-     ("C" wiki-summary "wiki-summary")
-     ("e" eshell "eshell")
-     ("f" free-keys "free-keys")
-     ("g" (browse-url "https://git-scm.com/docs/") "Git ref")
-     ("p" (powershell) "powershell")
-     ("r" (browse-url "http://www.reddit.com/r/emacs/") "reddit")
-     ("w" (browse-url "http://www.emacswiki.org/") "emacswiki")
-     ("s" shell "shell")
-     ("q" nil "cancel"))
+  (defhydra hydra-launcher (:color blue :hint nil)
+    "
+  _e_shell     _b_ettershell _s_hell     _p_owershell
+  _c_heatsheet _E_ww         _f_ree-keys ^ ^
+  _r_eddit     emacs_w_iki   open-_g_it  _W_iki-summary
+  "
+    ("b" better-shell-for-current-dir)
+    ("c" cheat-sh)
+    ("e" eshell)
+    ("E" eww)
+    ("f" free-keys)
+    ("g" (browse-url "https://git-scm.com/docs/"))
+    ("h" man "man")
+    ("p" (powershell))
+    ("r" (browse-url "http://www.reddit.com/r/emacs/"))
+    ("s" shell)
+    ("w" (browse-url "http://www.emacswiki.org/"))
+    ("W" wiki-summary)
+    ("q" nil "quit"))
   (bind-key "C-c b" 'hydra-launcher/body)
 #+END_SRC
 *** Expand text
