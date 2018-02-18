@@ -10,6 +10,9 @@
                       '(:key "C-c s" :description "Show cheatsheet")
                       '(:key "C-h B" :description "Show my keybindings"))
 
+(cheatsheet-add-group 'Ivy
+                      '(:key "C-M-j" :description "Enable new name in buffer")
+
 (cheatsheet-add-group 'IDO
                       '(:key "C-x b" :description "Switch buffers")
                       '(:key "C-f" :description "find file within IDO")
