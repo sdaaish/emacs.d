@@ -290,7 +290,8 @@ Turn off line-numbers in minor mode.
     (which-key-mode t)
     (setq which-key-idle-delay 0.3))
 #+END_SRC
-*** Company-mode
+*** Company
+**** Company-mode
 Complete anything
 #+BEGIN_SRC emacs-lisp
 (use-package company
@@ -298,12 +299,27 @@ Complete anything
 :config
   (global-company-mode t))
 #+END_SRC
-*** Company-shell
+**** Company-shell
 Add more functions to company
 #+BEGIN_SRC emacs-lisp
 (use-package company-shell
   :config
   (add-to-list 'company-backends '(company-shell company-shell-env)))
+#+END_SRC
+**** Company-keymapfix
+A fix to enable [tab] to expand yasnippets etc in ~company-mode-map~.
+From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interference-between-company-mode-and-yasnippet][StackOverflow]]. Another tip is in [[https://www.reddit.com/r/emacs/comments/5vhlws/using_tab_for_both_yasnippet_and_company][Reddit]] .
+#+BEGIN_SRC emacs-lisp
+  (defun company-yasnippet-or-completion ()
+    (interactive)
+    (let ((yas-fallback-behavior nil))
+      (unless (yas-expand)
+        (call-interactively #'company-complete-common))))
+
+  (add-hook 'company-mode-hook (lambda ()
+                                 (substitute-key-definition 'company-complete-common
+                                                            'company-yasnippet-or-completion
+                                                            company-active-map)))
 #+END_SRC
 *** Autohotkey-mode
 #+BEGIN_SRC emacs-lisp
