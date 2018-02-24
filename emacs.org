@@ -1331,6 +1331,14 @@ My org-files for Todo-list and agenda.
 (defvar my/notes-file (concat org-directory "notes.org"))
 (defvar my/diary-file (concat org-directory "diary.org"))
 #+END_SRC
+*** Org Archiving
+Separate file for archiving stuff. Use datetree syntax.
+#+BEGIN_SRC emacs-lisp
+(setq my/org-archive-file (expand-file-name "archive/archive.org" org-directory))
+(when (not (file-exists-p (file-name-directory my/org-archive-file)))
+      (make-directory (file-name-directory my/org-archive-file) t))
+(setq org-archive-location (concat my/org-archive-file "::datetree/* From %s"))
+#+END_SRC
 *** Org custom agenda
 For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html][Org Agenda Custom Commands]].
 #+BEGIN_SRC emacs-lisp
