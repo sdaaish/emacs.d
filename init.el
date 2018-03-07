@@ -32,6 +32,6 @@
   my/init-org-file (expand-file-name "emacs.org" my/init-dir))
 (org-babel-load-file my/init-org-file)
 
-;; Garbage collector - decrease threshold to 5 MB
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
+;; Garbage collector - decrease threshold to 100 MB
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 100 1024 1024))))
 ;;EOF
