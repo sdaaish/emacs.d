@@ -861,6 +861,13 @@ Use a separate file for emacs "customize".
 (when (file-exists-p custom-file)
   (load custom-file 'noerror))
 #+END_SRC
+Use only "'" instead of "quotes" for customize.
+#+BEGIN_SRC emacs-lisp
+(advice-add 'custom-save-all :around
+            (lambda (orig)
+              (let ((print-quoted t))
+                (funcall orig))))
+#+END_SRC
 ** Lisp
 My own Lisp-files
 #+BEGIN_SRC emacs-lisp
