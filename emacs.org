@@ -796,7 +796,9 @@ prepended to the element after the #+HEADERS: tag."
       (org-try-structure-completion)
       (when mod (insert mod) (forward-line))
       (when text (insert text))))
-
+#+END_SRC
+**** Org-mode keybindings
+#+BEGIN_SRC emacs-lisp
 (define-key org-mode-map "<"
   (lambda () (interactive)
   (if (or (region-active-p) (looking-back "^"))
@@ -804,6 +806,13 @@ prepended to the element after the #+HEADERS: tag."
   (self-insert-command 1))))
 
 (bind-key "C-c o" 'hydra-org-template/body)
+#+END_SRC
+**** Org-mode link buffer keybindings
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-load-hook
+  (lambda ()
+    (define-key org-mode-map "\C-n" 'org-next-link)
+    (define-key org-mode-map "\C-p" 'org-previous-link)))
 #+END_SRC
 *** Move text
 Use a hydra to move text. M-<up> or M-<down>.
