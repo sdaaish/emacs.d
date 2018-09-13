@@ -622,14 +622,16 @@ Testing Rocket Chat
     :requires promise async-await)
 #+END_SRC
 *** Projectile
-Find or switch to projects easy.
+Find or switch to projects easy, and use ~counsel-projectile~.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :config
     (projectile-mode t)
     (setq projectile-completion-system 'ivy)
+    (use-package counsel-projectile
+      :init (counsel-projectile-mode 1))
     :bind (:map projectile-mode-map
-           ("C-c p" . projectile-command-map))
+                ("C-c p" . projectile-command-map))
     )
 #+END_SRC
 **** Fix
@@ -1009,11 +1011,6 @@ Replaced IDO with Ivy.
     ("M-x" . counsel-M-x))
   (use-package ivy-hydra)
 #+END_SRC
-**** Consel-projectile
-#+BEGIN_EXAMPLE
-  (use-package counsel-projectile
-  :init (counsel-projectile-mode 1))
-#+END_EXAMPLE
 ** Windmove
 #+BEGIN_SRC emacs-lisp
 (when (fboundp 'windmove-default-keybindings)
