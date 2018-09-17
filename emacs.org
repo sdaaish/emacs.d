@@ -654,18 +654,60 @@ at the top level of DIRECTORY."
              (projectile-add-known-project (projectile-project-root))))))
      subdirs)))
 #+END_SRC
-*** Elfeed
+*** RSS stuff
+Use elfeed ass RSS-reader, plus extras.
+**** Elfeed
 Read RSS-feeds.
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
-    :bind ("C-x w" . elfeed))
+    :bind (
+    :map elfeed-search-mode-map
+	  ("m" . elfeed-toggle-star)
+    ("R" . elfeed-mark-all-as-read)
+    ("q" . bjm/elfeed-save-db-and-bury))
+    :config (setq elfeed-db-directory (concat my-emacs-dir "/shared/elfeeddb")))
 #+END_SRC
-*** Elfeed-org
+**** Elfeed-org
 Organise RSS with org-mode.
 #+BEGIN_SRC emacs-lisp
-(use-package elfeed-org
-:init (elfeed-org)
-:config (setq rmh-elfeed-org-files (list (concat org-directory "elfeed.org"))))
+  (use-package elfeed-org
+    :init (elfeed-org)
+    :config (setq rmh-elfeed-org-files (list (concat org-directory "/elfeed.org"))))
+#+END_SRC
+**** Elfeed-goodies
+Some extras
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed-goodies
+    :config (elfeed-goodies/setup))
+#+END_SRC
+**** Keys and functions
+From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
+#+BEGIN_SRC emacs-lisp
+  (defun bjm/elfeed-load-db-and-open ()
+    "Wrapper to load the elfeed db from disk before opening"
+    (interactive)
+    (elfeed-db-load)
+    (elfeed)
+    (elfeed-search-update--force))
+
+  ;;write to disk when quiting
+  (defun bjm/elfeed-save-db-and-bury ()
+    "Wrapper to save the elfeed db to disk before burying buffer"
+    (interactive)
+    (elfeed-db-save)
+    (quit-window))
+
+  ;;Mark as read, from https://cestlaz.github.io/posts/using-emacs-29%20elfeed/
+  (defun elfeed-mark-all-as-read ()
+    (interactive)
+    (mark-whole-buffer)
+    (elfeed-search-untag-all-unread))
+
+  ;; Toggle star for post
+  (defalias 'elfeed-toggle-star
+    (elfeed-expose #'elfeed-search-toggle-all 'star))
+
+  (bind-key "C-x w" 'bjm/elfeed-load-db-and-open)
 #+END_SRC
 ** Hydra config
 Hydras is keyboard mapping through menus.
