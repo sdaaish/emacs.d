@@ -662,11 +662,16 @@ Read RSS-feeds.
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
     :bind (
-    :map elfeed-search-mode-map
-	  ("m" . elfeed-toggle-star)
-    ("R" . elfeed-mark-all-as-read)
-    ("q" . bjm/elfeed-save-db-and-bury))
-    :config (setq elfeed-db-directory (concat my-emacs-dir "/shared/elfeeddb")))
+           :map elfeed-search-mode-map
+           ("m" . elfeed-toggle-star)
+           ("R" . elfeed-mark-all-as-read)
+           ("q" . bjm/elfeed-save-db-and-bury)
+           )
+    :config
+    (setq elfeed-db-directory (concat my-emacs-dir "/shared/elfeeddb"))
+    (setq elfeed-search-filter "@1-days-ago +unread")
+    (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal)
+    )
 #+END_SRC
 **** Elfeed-org
 Organise RSS with org-mode.
