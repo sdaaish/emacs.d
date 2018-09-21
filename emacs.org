@@ -1528,19 +1528,33 @@ Customize org-mode settings.
   (setq org-log-redeadline 'time)
   (setq org-log-reschedule 'time)
   (setq org-log-refile 'time)
-  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 4))))
   (setq org-log-into-drawer t)
   (setq org-enforce-todo-checkbox-dependencies t)
   (setq org-enforce-todo-dependencies t)
   (setq org-agenda-dim-blocked-tasks t)
 #+END_SRC
+*** Refile
+Define targets for refile. Store them in a file, one target per line.
+#+BEGIN_SRC emacs-lisp
+  (defun read-lines (filePath)
+    "Return a list of lines of a file at filePath."
+    (with-temp-buffer
+      (insert-file-contents filePath)
+      (split-string (buffer-string) "\n" t)))
+
+  (setq my/refile-targets (read-lines (concat org-directory ".target-files")))
+  (setq org-refile-targets '((my/refile-targets :maxlevel . 4)))
+  (setq org-refile-use-outline-path 'file)
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+  (setq org-outline-path-complete-in-steps nil)
+#+END_SRC
 ** Org-files
-My org-files for Todo-list and agenda.
+My org-files for Todo-list and agenda. Store the filenames to use for agenda in a separate file.
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
 (setq org-directory (concat my/dropbox-dir "emacs/org/"))
-(setq org-agenda-files (list org-directory))
+(setq org-agenda-files (concat org-directory ".agenda-files"))
 (bind-key "C-c l" 'org-store-link)
 (bind-key "C-c a" 'org-agenda)
 (bind-key "C-c c" 'org-capture)
