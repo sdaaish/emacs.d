@@ -662,6 +662,7 @@ Read RSS-feeds.
   (use-package elfeed
     :bind (
            :map elfeed-search-mode-map
+           ("h" . my/hydra-elfeed/body)
            ("m" . elfeed-toggle-star)
            ("R" . elfeed-mark-all-as-read)
            ("q" . bjm/elfeed-save-db-and-bury)
@@ -693,7 +694,8 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
     (interactive)
     (elfeed-db-load)
     (elfeed)
-    (elfeed-search-update--force))
+    (elfeed-search-update--force)
+    (elfeed-search-set-filter "@6-months-ago"))
 
   ;;write to disk when quiting
   (defun bjm/elfeed-save-db-and-bury ()
@@ -714,6 +716,33 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
 
   (bind-key "C-x w" 'bjm/elfeed-load-db-and-open)
 #+END_SRC
+**** Hydra
+A ~hydra~ for elfeed.
+#+BEGIN_SRC emacs-lisp
+(defhydra my/hydra-elfeed (:hint nil)
+   "
+   _d_efault   _c_ode   _e_macs   _S_ecurity   _t_oday   _w_eek   _*_star
+   _b_rowse   Mark as _R_ead   _M_ark  _L_ogs
+   _Q_uit elfeed   _q_uit    _p_: previous line   _n_: next line
+   "
+   ("b" (elfeed-search-browse-url))
+   ("d" (elfeed-search-set-filter "@6-months-ago"))
+   ("c" (elfeed-search-set-filter "@6-months-ago +code"))
+   ("e" (elfeed-search-set-filter "@6-months-ago +emacs"))
+   ("S" (elfeed-search-set-filter "@6-months-ago +security"))
+   ("t" (elfeed-search-set-filter "@1-days-ago +unread"))
+   ("w" (elfeed-search-set-filter "@7-days-ago +unread"))
+   ("*" (elfeed-search-set-filter "@6-months-ago +star"))
+   ("L" elfeed-goodies/toggle-logs)
+   ("M" (elfeed-toggle-star "Mark"))
+   ("R" (elfeed-mark-all-as-read))
+   ("T" (elfeed-search-set-filter "@1-day-ago"))
+   ("Q" bjm/elfeed-save-db-and-bury :color blue)
+   ("p" previous-line)
+   ("n" next-line)
+   ("q" nil :color blue)
+   )
+#+END_SRC
 ** Hydra config
 Hydras is keyboard mapping through menus.
 *** Hydra
@@ -724,8 +753,8 @@ Hydras is keyboard mapping through menus.
 *** Toggle stuff
 Use "C-c v" to toggle values.
 #+BEGIN_SRC emacs-lisp
-(defhydra hydra-toggle (:color blue)
-        "toggle"
+(defhydra hydra-toggle (:color blue :columns 4)
+        "Toggle modes"
         ("a" abbrev-mode "abbrev")
         ("b" describe-personal-keybindings "key-bindings")
         ("d" toggle-debug-on-error "debug")
