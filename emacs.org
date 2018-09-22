@@ -331,13 +331,16 @@ From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interfe
 #+BEGIN_SRC emacs-lisp
 (use-package ahk-mode)
 #+END_SRC
-*** Switch-window
-Use visual keys to switch windows.
+*** ace-window
+Switch windows and frames quickly.
 #+BEGIN_SRC emacs-lisp
-(use-package switch-window
-  :bind
-    (("C-M-z" . switch-window)
-    ("C-x o" . switch-window)))
+  (use-package ace-window
+    :config
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    (setq aw-background nil)
+    (setq aw-dispatch-always t)
+    :bind ("M-o" . ace-window)
+    ("C-x o" . ace-window))
 #+END_SRC
 *** Buffer-move
 To move buffers around
@@ -1111,6 +1114,7 @@ Replaced IDO with Ivy.
   (use-package ivy-hydra)
 #+END_SRC
 ** Windmove
+Move between windows quickly.
 #+BEGIN_SRC emacs-lisp
 (when (fboundp 'windmove-default-keybindings)
 (windmove-default-keybindings))
