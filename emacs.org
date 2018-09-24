@@ -1075,8 +1075,41 @@ Set mark-command for Windows env
 #+BEGIN_SRC emacs-lisp
 (bind-key "M-SPC" 'set-mark-command)
 #+END_SRC
+** ibuffer
+Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command but use use-package for simpler configuration.
+~projectile-ibuffer~ is also available with projectile.
 #+BEGIN_SRC emacs-lisp
+  (use-package ibuffer
+    :ensure nil
+    :bind ("C-x C-b" . ibuffer)
+    :config
+    (setq ibuffer-saved-filter-groups
+          (quote (("default"
+                   ("dired" (mode . dired-mode))
+                   ("shell" (or
+                             (mode . eshell-mode)
+                             (mode . shell-mode)))
+                   ("org" (or
+                           (mode . org-mode)
+                           (name . "^\*Org Agenda\*$")))
+                   ("powershell" (mode . powershell-mode))
+                   ("code" (mode . prog-mode))
+                   ("magit"  (name . "^magit"))
+                   ("emacs" (or
+                             (name . "^\*scratch\*$")
+                             (name . "^\*Messages\*$")))
+                   ("Help" (or (name . "\*Help\*")
+                               (name . "\*Apropos\*")
+                               (name . "\*info\*")))))))
+    (setq ibuffer-show-empty-filter-groups nil)
+    (setq ibuffer-expert t)
+    :hook (ibuffer-mode .
+                        (lambda ()
+                          (ibuffer-auto-mode 1)
+                          (ibuffer-switch-to-saved-filter-groups "default")))
+    )
 #+END_SRC
+* ivy, swiper and counsel
 These are really useful packages. http://oremacs.com/swiper/
 Replaced IDO with Ivy.
 #+BEGIN_SRC emacs-lisp
