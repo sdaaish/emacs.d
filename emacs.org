@@ -1109,6 +1109,29 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
                           (ibuffer-switch-to-saved-filter-groups "default")))
     )
 #+END_SRC
+** ibuffer-vc
+Get status by version-control.
+#+BEGIN_SRC emacs-lisp
+  (use-package ibuffer-vc
+    :config
+    (setq ibuffer-formats
+          '((mark modified read-only vc-status-mini " "
+                  (name 18 18 :left :elide)
+                  " "
+                  (size 9 -1 :right)
+                  " "
+                  (mode 16 16 :left :elide)
+                  " "
+                  (vc-status 16 16 :left)
+                  " "
+                  filename-and-process)))
+    :hook (ibuffer-mode .
+                        (lambda ()
+                          (ibuffer-vc-set-filter-groups-by-vc-root)
+                          (unless (eq ibuffer-sorting-mode 'alphabetic)
+                            (ibuffer-do-sort-by-alphabetic))))
+    )
+#+END_SRC
 * ivy, swiper and counsel
 These are really useful packages. http://oremacs.com/swiper/
 Replaced IDO with Ivy.
