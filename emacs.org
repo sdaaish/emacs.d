@@ -27,6 +27,55 @@ This is my version of an configuration file for GNU Emacs. The config tries to l
 #+BEGIN_SRC emacs-lisp
 (message "*** Reading from emacs.org ***")
 #+END_SRC
+* Variables
+Setting variables and constants for my directories and files.
+** Dropbox
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'gnu/linux)
+      (defconst my/dropbox-dir "~/Dropbox/"))
+  (if (eq system-type 'windows-nt)
+      (defconst my/dropbox-dir (concat (getenv "UserProfile") "\\\\Dropbox\\\\")))
+#+END_SRC
+** Emacs synced files
+#+BEGIN_SRC emacs-lisp
+  (defconst my/emacs-shared-dir (concat my/dropbox-dir "emacs/"))
+#+END_SRC
+** Backup-directory
+#+BEGIN_SRC emacs-lisp
+  (defconst my/emacs-backup-dir
+    (expand-file-name (concat user-emacs-directory "backups/")))
+#+END_SRC
+** Repositories
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'gnu/linux)
+      (defconst my/repo-dir "~/repos/"))
+  (if (eq system-type 'windows-nt)
+      (defconst my/repo-dir (concat (getenv "UserProfile") "\\Repos\\")))
+#+END_SRC
+** Org-mode variables
+Set the variables for org-mode files. Use separate files to store agenda and refiling targets, to improve performance.
+#+BEGIN_SRC emacs-lisp
+  (defun my/read-lines (filePath)
+    "Return a list of lines of a file at filePath."
+    (with-temp-buffer
+      (insert-file-contents filePath)
+      (split-string (buffer-string) "\n" t)))
+
+  ;; Define constants
+  (defconst my/org-directory (concat my/dropbox-dir "emacs/org/"))
+  (defconst my/notes-file (concat my/org-directory "notes.org"))
+  (defconst my/diary-file (concat my/org-directory "diary.org"))
+  (defconst my/org-agenda-files (concat my/org-directory ".agenda-files"))
+  (defvar my/refile-targets (my/read-lines (concat my/org-directory ".target-files")))
+  ;; My org-files directory
+  (setq org-directory my/org-directory)
+  ;; Org-agenda can read from a file
+  (setq org-agenda-files my/org-agenda-files)
+  ;; Store notes here
+  (setq org-default-notes-file my/notes-file)
+  ;; Choose targets for refile from this file
+  (setq org-refile-targets '((my/refile-targets :maxlevel . 4)))
+#+END_SRC
 * Config
 ** Initializing
 *** Message-buffer
@@ -459,7 +508,7 @@ Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswi
   (use-package twittering-mode
     :config
     (setq twittering-use-master-password t)
-    (setq twittering-private-info-file (concat my-emacs-dir ".twittering-mode.gpg")))
+    (setq twittering-private-info-file (concat my/emacs-shared-dir ".twittering-mode.gpg")))
 #+END_SRC
 *** ini-mode
 Windows ini-files.
@@ -671,7 +720,7 @@ Read RSS-feeds.
            ("q" . bjm/elfeed-save-db-and-bury)
            )
     :config
-    (setq elfeed-db-directory (concat my-emacs-dir "/shared/elfeeddb"))
+    (setq elfeed-db-directory (concat my/emacs-shared-dir "/shared/elfeeddb"))
     (setq elfeed-search-filter "@1-days-ago +unread")
     (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal)
     )
@@ -681,7 +730,7 @@ Organise RSS with org-mode.
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-org
     :init (elfeed-org)
-    :config (setq rmh-elfeed-org-files (list (concat org-directory "/elfeed.org"))))
+    :config (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org"))))
 #+END_SRC
 **** Elfeed-goodies
 Some extras
@@ -967,13 +1016,8 @@ Must check for OS-version to find out where Dropbox is located.
 Also must check for existing file, sometimes the system dont have Dropbox.
 See also: http://dotemacs.de/multiemacs.html
 #+BEGIN_SRC emacs-lisp
-(if (eq system-type 'gnu/linux)
- (setq my/dropbox-dir "~/Dropbox/"))
-(if (eq system-type 'windows-nt)
-  (setq my/dropbox-dir (concat (getenv "UserProfile") "\\Dropbox\\")))
-(setq my-emacs-dir (concat my/dropbox-dir "emacs/"))
-(if (file-exists-p (expand-file-name "private.org" my-emacs-dir))
- (org-babel-load-file (expand-file-name "private.org" my-emacs-dir)))
+(if (file-exists-p (expand-file-name "private.org" my/emacs-shared-dir))
+ (org-babel-load-file (expand-file-name "private.org" my/emacs-shared-dir)))
 #+END_SRC
 ** Load secret stuff
 Load secret stuff from this encrypted org-file.
@@ -1001,8 +1045,8 @@ enable encryption of org-files.
 *** Load secrets from this file
 This part dont work yet.
 #+BEGIN_SRC emacs-lisp
-;;(if (file-exists-p (expand-file-name "secret.org.gpg" my-emacs-dir))
-;; (org-babel-load-in-session-maybe (expand-file-name "secret.org.gpg" my-emacs-dir)))
+;;(if (file-exists-p (expand-file-name "secret.org.gpg" my/emacs-shared-dir))
+;; (org-babel-load-in-session-maybe (expand-file-name "secret.org.gpg" my/emacs-shared-dir)))
 #+END_SRC
 *** Authinfo file
 Define path for .authinfo-file
@@ -1522,8 +1566,6 @@ Saves backup of files in emacs-homedir. Keeps several versions of the files.
 #+BEGIN_SRC emacs-lisp
 ;; From https://github.com/magnars/.emacs.d
 ;; Write backup files to own directory
-(defconst my/emacs-backup-dir
-        (expand-file-name (concat user-emacs-directory "backups/")))
 (setq backup-directory-alist
       `((".*" . ,my/emacs-backup-dir)))
 
@@ -1568,11 +1610,6 @@ Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Be
 ** Org-mode variables
 *** File-variables
 #+BEGIN_SRC emacs-lisp
-(if (eq system-type 'gnu/linux)
-(setq my/repo-dir "~/repos/"))
-(if (eq system-type 'windows-nt)
-  (setq my/repo-dir (concat (getenv "UserProfile") "\\Repos\\")))
-(setq org-directory (concat my/dropbox-dir "emacs/org/"))
 #+END_SRC
 *** Other variables
 Customize org-mode settings.
@@ -1596,16 +1633,8 @@ Customize org-mode settings.
   (setq org-agenda-dim-blocked-tasks t)
 #+END_SRC
 *** Refile
-Define targets for refile. Store them in a file, one target per line.
+Refiling notes settings.
 #+BEGIN_SRC emacs-lisp
-  (defun read-lines (filePath)
-    "Return a list of lines of a file at filePath."
-    (with-temp-buffer
-      (insert-file-contents filePath)
-      (split-string (buffer-string) "\n" t)))
-
-  (setq my/refile-targets (read-lines (concat org-directory ".target-files")))
-  (setq org-refile-targets '((my/refile-targets :maxlevel . 4)))
   (setq org-refile-use-outline-path 'file)
   (setq org-refile-allow-creating-parent-nodes 'confirm)
   (setq org-outline-path-complete-in-steps nil)
@@ -1615,18 +1644,14 @@ My org-files for Todo-list and agenda. Store the filenames to use for agenda in 
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
-(setq org-agenda-files (concat org-directory ".agenda-files"))
 (bind-key "C-c l" 'org-store-link)
 (bind-key "C-c a" 'org-agenda)
 (bind-key "C-c c" 'org-capture)
-(setq org-default-notes-file (concat org-directory "notes.org"))
-(defvar my/notes-file (concat org-directory "notes.org"))
-(defvar my/diary-file (concat org-directory "diary.org"))
 #+END_SRC
 *** Org Archiving
 Separate file for archiving stuff. Use datetree syntax.
 #+BEGIN_SRC emacs-lisp
-(setq my/org-archive-file (expand-file-name "archive/archive.org" org-directory))
+(setq my/org-archive-file (expand-file-name "archive/archive.org" my/org-directory))
 (when (not (file-exists-p (file-name-directory my/org-archive-file)))
       (make-directory (file-name-directory my/org-archive-file) t))
 (setq org-archive-location (concat my/org-archive-file "::datetree/* From %s"))
@@ -1751,7 +1776,7 @@ Use backtick "`" and comma "," to use variable-expansion in the alist. See [[htt
 (setq org-publish-project-alist
 `(("org" :components ("org-notes" "org-static"))
 ("org-notes"
-:base-directory ,org-directory
+:base-directory ,my/org-directory
 :base-extension "org"
 :publishing-directory ,(concat my/dropbox-dir "emacs/html")
 :recursive t
@@ -1760,7 +1785,7 @@ Use backtick "`" and comma "," to use variable-expansion in the alist. See [[htt
 :auto-preamble t
 )
 ("org-static"
- :base-directory ,org-directory
+ :base-directory ,my/org-directory
  :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
  :publishing-directory ,(concat my/dropbox-dir "emacs/html")
  :recursive t
