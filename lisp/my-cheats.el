@@ -62,3 +62,7 @@
                       '(:key "tab/S-tab" :description "Next/Previous comment")
                       '(:key "m" :description "load more posts")
                       '(:key "q" :description "quit"))
+
+(cheatsheet-add-group 'avy
+                      '(:key "C-." :description "Goto char")
+                      '(:key "C-:" :description "Goto char 2"))
