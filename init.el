@@ -18,6 +18,7 @@
 ;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
+(package-initialize)
 
 ;; Stuff that are needed for this to work and should be installed by default with emacs.
 (require 'package)
