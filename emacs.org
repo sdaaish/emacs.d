@@ -901,27 +901,23 @@ Switch between org-buffers, "<f8> o".
 *** Launcher
 Launch various programs, "C-c b"
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-launcher (:color blue :hint nil)
-    "
-  _e_shell     _b_ettershell _s_hell     _p_owershell
-  _c_heat.sh   _E_ww         _f_ree-keys _H_ugo localhost
-  _r_eddit     emacs_w_iki   open-_g_it  _W_iki-summary
-  _R_SS        ^             ^           ^
-  "
-    ("b" better-shell-for-current-dir)
-    ("c" cheat-sh)
-    ("e" eshell)
-    ("E" eww)
-    ("f" free-keys)
-    ("g" (browse-url "https://git-scm.com/docs/"))
+  (defhydra hydra-launcher (:color blue :columns 4)
+    "Launch programs"
+    ("b" better-shell-for-current-dir "Better Shell")
+    ("c" cheat-sh "Cheat sheet")
+    ("e" eshell "Eshell")
+    ("E" eww "EWW")
+    ("f" free-keys "Free keys")
+    ("g" (browse-url "https://git-scm.com/docs/") "Git Book")
     ("h" man "man")
-    ("H" (browse-url "http://localhost:1313/"))    
-    ("p" (powershell))
-    ("r" (browse-url "http://www.reddit.com/r/emacs/"))
-    ("R" bjm/elfeed-load-db-and-open) 
-    ("s" shell)
-    ("w" (browse-url "http://www.emacswiki.org/"))
-    ("W" wiki-summary)
+    ("H" (browse-url "http://localhost:1313/") "Local Hugo site")
+    ("p" (powershell) "Powershell")
+    ("r" (browse-url "http://www.reddit.com/r/emacs/") "Reddit")
+    ("R" bjm/elfeed-load-db-and-open "RSS")
+    ("s" shell "Shell")
+    ("v" (shell-command (concat "code " buffer-file-name)) "VSCode")
+    ("w" (browse-url "http://www.emacswiki.org/") "Emacs Wiki")
+    ("W" wiki-summary "Wiki summary")
     ("q" nil "quit"))
   (bind-key "C-c b" 'hydra-launcher/body)
 #+END_SRC
