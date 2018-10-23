@@ -9,8 +9,9 @@
 
 ;; Garbage collection
 ;; Increase the garbage collection threshold to 500 MB to ease startup
-(setq gc-cons-threshold (* 500 1024 1024))
-  
+(setq gc-cons-threshold (* 5 1024 1024))
+(setq garbage-collection-messages t)
+
 ;; Enable narrowing
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page   'disabled nil)
@@ -33,5 +34,5 @@
 (org-babel-load-file my/init-org-file)
 
 ;; Garbage collector - decrease threshold to 100 MB
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 100 1024 1024))))
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 10 1024 1024))))
 ;;EOF
