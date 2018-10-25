@@ -1627,6 +1627,7 @@ Customize org-mode settings.
   (setq org-export-with-sub-superscripts '{})
   (setq org-export-coding-system 'utf-8)
   (setq org-export-backends '(ascii html latex odt org))
+  (setq org-export-babel-evaluate nil)
   (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-skip-scheduled-if-deadline-is-shown "repeated-after-deadline")
@@ -1640,7 +1641,10 @@ Customize org-mode settings.
   (setq org-enforce-todo-checkbox-dependencies t)
   (setq org-enforce-todo-dependencies t)
   (setq org-agenda-dim-blocked-tasks t)
-#+END_SRC
+  (setq org-fast-tag-selection-single-key t)
+  (setq org-use-fast-todo-selection t)
+  (setq org-enable-priority-commands nil)
+  #+END_SRC
 *** Refile
 Refiling notes settings.
 #+BEGIN_SRC emacs-lisp
@@ -1652,7 +1656,8 @@ Refiling notes settings.
 My org-files for Todo-list and agenda. Store the filenames to use for agenda in a separate file.
 #+BEGIN_SRC emacs-lisp
 (setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
+      '((sequence "IDEA(i)" "TODO(t)" "IN-PROGRESS(p)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
+        (sequence "|" "CANCELED(c)" "DELEGATED(l)" "SOMEDAY(s)")))
 (bind-key "C-c l" 'org-store-link)
 (bind-key "C-c a" 'org-agenda)
 (bind-key "C-c c" 'org-capture)
@@ -1665,7 +1670,7 @@ Separate file for archiving stuff. Use datetree syntax.
       (make-directory (file-name-directory my/org-archive-file) t))
 (setq org-archive-location (concat my/org-archive-file "::datetree/* From %s"))
 #+END_SRC
-*** Org custom agenda
+** Org custom agenda
 For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html][Org Agenda Custom Commands]].
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-custom-commands
@@ -1680,12 +1685,17 @@ For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom
                       (org-deadline-warning-days 90))))
            ((org-agenda-compact-blocks t)))
 
-          ("d" "Upcoming deadlines" agenda ""
-           ((org-agenda-entry-types '(:deadline))
+          ("d" "Upcoming dates"
+           ((agenda ""
+                    ((org-agenda-entry-types '(:deadline))))
+            (agenda ""
+                    ((org-agenda-entry-types '(:scheduled)))))
+            ((org-agenda-time-grid nil)
             (org-agenda-start-on-weekday nil)
             (org-agenda-span 1)
-            (org-deadline-warning-days 60)
-            (org-agenda-time-grid nil)))
+            (org-deadline-warning-days 14)
+            (org-agenda-time-grid nil)
+            (org-agenda-compact-blocks t)))
 
           ("h" . "Hemma|Huset")
           ("hh" "Agenda and Home-related tasks" tags-todo "Hemma|Huset"
@@ -1708,11 +1718,6 @@ For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom
            ((agenda "")
             (todo "TODO|IN-PROGRESS")
             (org-agenda-sorting-strategy '(priority-up effort-down))))
-
-          ("p" . "Priorities")
-          ("pa" "A items" tags-todo "+Priority=\"A\"")
-          ("pb" "B items" tags-todo "+Priority=\"B\"")
-          ("pc" "C items" tags-todo "+Priority=\"C\"")
           ))
 #+END_SRC
 ** Org-templates
