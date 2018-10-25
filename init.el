@@ -8,8 +8,8 @@
 (message "Reading configuration from init.el...")
 
 ;; Garbage collection
-;; Increase the garbage collection threshold to 500 MB to ease startup
-(setq gc-cons-threshold (* 5 1024 1024))
+;; Increase the garbage collection threshold to make startup faster
+(setq gc-cons-threshold (* 50 1024 1024))
 (setq garbage-collection-messages t)
 
 ;; Enable narrowing
@@ -33,6 +33,6 @@
   my/init-org-file (expand-file-name "emacs.org" my/init-dir))
 (org-babel-load-file my/init-org-file)
 
-;; Garbage collector - decrease threshold to 100 MB
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 10 1024 1024))))
+;; Garbage collector - decrease threshold
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
 ;;EOF

@@ -1087,16 +1087,17 @@ Tries to change the variable dynamic.
 From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 #+BEGIN_SRC emacs-lisp
 (defun my-minibuffer-setup-hook ()
-  (setq gc-cons-threshold (* 5 1024 1024)))
+  (setq gc-cons-threshold (* 50 1024 1024)))
 
 (defun my-minibuffer-exit-hook ()
-  (setq gc-cons-threshold (* 1 1024 1024)))
+  (setq gc-cons-threshold (* 5 1024 1024)))
 
 (defun my-projectile-before-switch-project-hook ()
   (setq gc-cons-threshold (* 50 1024 1024)))
 
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+(add-hook 'projectile-before-switch-project-hook #'my-projectile-before-switch-project-hook)
 #+END_SRC
 ** File encoding settings
 #+BEGIN_SRC emacs-lisp
