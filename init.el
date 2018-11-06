@@ -10,7 +10,7 @@
 ;; Garbage collection
 ;; Increase the garbage collection threshold to make startup faster
 (setq gc-cons-threshold (* 50 1024 1024))
-(setq garbage-collection-messages t)
+(setq garbage-collection-messages nil)
 
 ;; Enable narrowing
 (put 'narrow-to-region 'disabled nil)
