@@ -17,9 +17,12 @@
 (put 'narrow-to-page   'disabled nil)
 
 ;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
+;; Tips from https://github.com/nilcons/emacs-use-package-fast
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
-(package-initialize)
+(setq package--init-file-ensured nil)
+;; If this is commented, stops from adding this automatically. Don't exist in Emacs27.
+;; (package-initialize)
 
 ;; Stuff that are needed for this to work and should be installed by default with emacs.
 (require 'package)
@@ -30,8 +33,15 @@
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
 (setq
   my/init-dir (file-name-directory (or load-file-name (buffer-file-name)))
-  my/init-org-file (expand-file-name "emacs.org" my/init-dir))
-(org-babel-load-file my/init-org-file)
+  my/init-org-file (expand-file-name "emacs.org" my/init-dir)
+  my/init-el-file (expand-file-name "emacs.el" my/init-dir))
+
+;; Parts from http://www.holgerschurig.de/en/emacs-efficiently-untangling-elisp/
+;; Don't use org-babel if the lisp-file is newer
+(if (and (file-exists-p my/init-el-file)
+         (file-newer-than-file-p my/init-el-file my/init-org-file))
+    (load-file my/init-el-file)
+  (org-babel-load-file my/init-org-file))
 
 ;; Garbage collector - decrease threshold
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
