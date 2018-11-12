@@ -1,5 +1,5 @@
 #+TITLE: My GNU Emacs configuration
-#+STARTUP: indent 
+#+STARTUP: indent
 #+OPTIONS: H:5 num:nil tags:nil toc:3 timestamps:t
 #+LAYOUT: post
 #+DESCRIPTION: Loading emacs configuration using org-babel
@@ -124,7 +124,7 @@ From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
   (require 'use-package)
   (use-package diminish :ensure t)
   (require 'diminish)
-  (require 'bind-key)         
+  (require 'bind-key)
   (unless (package-installed-p 'org)
     (package-install 'org)))
 #+END_SRC
@@ -168,13 +168,11 @@ Fix for magit when you get with-editor errors (emacsclient). From https://github
 These packages works with emacs 24.1 or later, or are not dependent on a specific version.
 *** Powershell mode
 Powershell-mode is useful.
-Only in windows.
 #+BEGIN_SRC emacs-lisp
-(if (eq system-type 'windows-nt)
-(use-package powershell
-  :pin melpa
-  :ensure t
-  :defer t))
+  (use-package powershell
+    :pin melpa
+    :ensure t
+    :defer t)
 #+END_SRC
 *** Dos-mode
 Only in windows.
@@ -583,7 +581,7 @@ From https://github.com/abo-abo/hydra/wiki/YASnippet
 Load yasnippet and some templates.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :config 
+    :config
     (yas-global-mode nil)
     (use-package yasnippet-snippets)
     :bind (("C-c y" . hydra-yasnippet/body)
@@ -651,7 +649,7 @@ Automatically insert parenthesis.
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
   :diminish
-  :hook 
+  :hook
   ((org-mode prog-mode) . smartparens-mode))
 #+END_SRC
 *** Undo-tree
@@ -661,6 +659,7 @@ Make undo more intitive.
     :diminish
     :config
     (global-undo-tree-mode 1)
+    (setq undo-tree-visualizer-diff t)
     :bind (("C-z" . undo)
            ("C-S-z" . undo-tree-redo)))
 #+END_SRC
@@ -800,7 +799,7 @@ A ~hydra~ for elfeed.
 Delete whitespace more efficiently.
 #+BEGIN_SRC emacs-lisp
 (use-package hungry-delete
-:config 
+:config
 (global-hungry-delete-mode t))
 #+END_SRC
 *** avy
@@ -1106,6 +1105,7 @@ From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-thresh
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment   'utf-8)
 (setq buffer-file-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 ;; MS Windows clipboard is UTF-16LE
 (when (eq system-type 'windows-nt)
@@ -1387,7 +1387,7 @@ Things that we dont want during or after startup
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (set-scroll-bar-mode nil)))
-  
+
 ;; Load this when started as server (daemon)
 (add-hook 'after-make-frame-functions
   (lambda (frame)
@@ -1837,7 +1837,7 @@ Use backtick "`" and comma "," to use variable-expansion in the alist. See [[htt
 - [[https://www.masteringemacs.org/][Mastering emacs]]
 ** Examples
 + https://github.com/eschulte/emacs24-starter-kit.
-+ https://github.com/credmp/emacs-config 
++ https://github.com/credmp/emacs-config
 + https://gitlab.com/buildfunthings/emacs-config.
 + https://github.com/magnars/.emacs.d
 + https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
@@ -1862,7 +1862,7 @@ Use backtick "`" and comma "," to use variable-expansion in the alist. See [[htt
 + https://emacs.stackexchange.com/questions/2286/what-can-i-do-to-speed-up-my-start-up
 ** Videos
 + https://youtu.be/I28jFkpN5Zk
-  
+
 * The end
 Just record a last message, to know that the whole file has been loaded.
 #+BEGIN_SRC emacs-lisp
