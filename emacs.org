@@ -647,9 +647,27 @@ A client to make REST-calls from emacs.
     (use-package ob-restclient))
 #+END_SRC
 *** X509
-Support for certificate files.
+Support for certificate files, with a hydra to navigate options.
 #+BEGIN_SRC emacs-lisp
-(use-package x509-mode)
+  (use-package x509-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.cer\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.crt\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.crl\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.csr\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.pem\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.key\\'" . x509-mode))
+    (progn (defhydra hydra-x509 (:color blue :columns 2)
+             "X509 commands"
+             ("a" x509-viewasn1 "View ASN1")
+             ("c" x509-viewcert "View certificate")
+             ("d" x509-viewdh "View DH")
+             ("k" x509-viewkey "View key")
+             ("r" x509-viewcrl "View CRL")
+             ("q" nil "cancel")))
+    :bind (:map x509-mode-map
+                ("h" . hydra-x509/body))
+    )
 #+END_SRC
 *** Smart parenthesis
 Automatically insert parenthesis.
