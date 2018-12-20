@@ -1694,13 +1694,28 @@ Refiling notes settings.
 #+END_SRC
 ** Org-files
 My org-files for Todo-list and agenda. Store the filenames to use for agenda in a separate file.
+*** Keywords
+Keywords, keybindings and colors for headlines in org-mode.
 #+BEGIN_SRC emacs-lisp
-(setq org-todo-keywords
-      '((sequence "IDEA(i)" "TODO(t)" "IN-PROGRESS(p)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
-        (sequence "|" "CANCELED(c)" "DELEGATED(l)" "SOMEDAY(s)")))
-(bind-key "C-c l" 'org-store-link)
-(bind-key "C-c a" 'org-agenda)
-(bind-key "C-c c" 'org-capture)
+  (setq org-todo-keywords
+        '((sequence "TODO(t!)" "IN-PROGRESS(p!)" "NEXT(n!)" "WAITING(w@/!)" "|" "DONE(d@)")
+          (sequence "IDEA(i!)" "READ(r!)" "|")
+          (sequence "REPORT(z!)" "BUG(b!)" "|" "RESOLVED(x@)")
+          (sequence "|" "CANCELED(c@)" "DELEGATED(l@)" "SOMEDAY(s!)")))
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "cyan" :weight bold))
+          ("IN-PROGRESS" . (:foreground "yellow" :weight bold))
+          ("NEXT" . (:foreground "yellow" :weight bold))
+          ("DONE" . (:foreground "green" :weight bold))
+          ("WAITING" . (:foreground "red" :weight bold))
+          ("SOMEDAY" . (:foreground "gray" :weight bold))
+          ("IDEA" . (:foreground "dark orange" :weight bold))
+          ("READ" . (:foreground "dark orange" :weight bold))
+          ("BUG" . (:foreground "magenta" :weight bold))
+          ("REPORT" . (:foreground "cyan" :weight bold))))
+  (bind-key "C-c l" 'org-store-link)
+  (bind-key "C-c a" 'org-agenda)
+  (bind-key "C-c c" 'org-capture)
 #+END_SRC
 *** Org Archiving
 Separate file for archiving stuff. Use datetree syntax.
