@@ -787,28 +787,29 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
 **** Hydra
 A ~hydra~ for elfeed.
 #+BEGIN_SRC emacs-lisp
-(defhydra my/hydra-elfeed (:hint nil)
-   "
-   _d_efault   _c_ode   _e_macs   _S_ecurity   _t_oday   _w_eek   _*_star
-   _b_rowse   Mark as _R_ead   _M_ark  _L_ogs
-   _Q_uit elfeed   _q_uit    _p_: previous line   _n_: next line
-   "
-   ("b" (elfeed-search-browse-url))
-   ("d" (elfeed-search-set-filter "@6-months-ago"))
-   ("c" (elfeed-search-set-filter "@6-months-ago +code"))
-   ("e" (elfeed-search-set-filter "@6-months-ago +emacs"))
-   ("S" (elfeed-search-set-filter "@6-months-ago +security"))
-   ("t" (elfeed-search-set-filter "@1-days-ago +unread"))
-   ("w" (elfeed-search-set-filter "@7-days-ago +unread"))
-   ("*" (elfeed-search-set-filter "@6-months-ago +star"))
-   ("L" elfeed-goodies/toggle-logs)
-   ("M" (elfeed-toggle-star "Mark"))
-   ("R" (elfeed-mark-all-as-read))
-   ("T" (elfeed-search-set-filter "@1-day-ago"))
-   ("Q" bjm/elfeed-save-db-and-bury :color blue)
-   ("p" previous-line)
-   ("n" next-line)
-   ("q" nil :color blue)
+(defhydra my/hydra-elfeed (:color blue :hint nil :columns 4)
+   "Elfeed commands"
+   ("b" (elfeed-search-browse-url) "Browse")
+   ("fd" (elfeed-search-set-filter "@6-months-ago") "default")
+   ("fc" (elfeed-search-set-filter "@6-months-ago +code") "code")
+   ("fe" (elfeed-search-set-filter "@6-months-ago +emacs") "emacs")
+   ("fc" (elfeed-search-set-filter "@6-months-ago +security") "security")
+   ("ft" (elfeed-search-set-filter "@1-days-ago +unread") "today")
+   ("fw" (elfeed-search-set-filter "@7-days-ago +unread") "Week")
+   ("*" (elfeed-search-set-filter "@6-months-ago +star") "filter star")
+   ("g" elfeed-search-update--force "Update feed")
+   ("G" elfeed-search-fetch "Update all")
+   ("L" elfeed-goodies/toggle-logs "Logs")
+   ("m" (elfeed-toggle-star) "star")
+   ("M" (elfeed-toggle-star "Mark") "Mark")
+   ("R" (elfeed-mark-all-as-read) "Mark all as read")
+   ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
+   ("S" elfeed-search-set-filter "Set filter")
+   ("s" elfeed-search-live-filter "Search")
+   ("p" previous-line "previous")
+   ("n" next-line "next")
+   ("Q" bjm/elfeed-save-db-and-bury  "Quit, save DB")
+   ("q" nil "quit")
    )
 #+END_SRC
 *** hungry-mode
