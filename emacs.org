@@ -513,8 +513,19 @@ Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswi
 #+BEGIN_SRC emacs-lisp
   (use-package twittering-mode
     :config
-    (setq twittering-use-master-password t)
-    (setq twittering-private-info-file (concat my/emacs-shared-dir ".twittering-mode.gpg")))
+    (setq twittering-use-master-password t
+          twittering-private-info-file (concat my/emacs-shared-dir ".twittering-mode.gpg")
+          twittering-user-id-db-file (expand-file-name ".cache/.twit-user-db.gz" my/init-dir)
+          twittering-icon-storage-file (expand-file-name ".cache/.twit-icons.gz" my/init-dir)
+          twittering-use-icon-storage t
+          twittering-icon-storage-limit 1000
+          twittering-icon-mode t
+          twittering-reverse-mode t
+          twittering-display-remaining t
+          twittering-convert-fix-size 48
+          twittering-number-of-tweets-on-retrieval 100
+          twittering-timer-interval 300
+          twittering-url-show-status nil))
 #+END_SRC
 *** ini-mode
 Windows ini-files.
@@ -935,6 +946,7 @@ Launch various programs, "C-c b"
     ("p" (powershell) "Powershell")
     ("r" (browse-url "http://www.reddit.com/r/emacs/") "Reddit")
     ("t" (counsel-tramp) "Counsel-TRAMP")
+    ("T" twit "Twitter mode")
     ("R" bjm/elfeed-load-db-and-open "RSS")
     ("s" shell "Shell")
     ("v" (shell-command (concat "code " buffer-file-name)) "VSCode")
