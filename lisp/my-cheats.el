@@ -8,10 +8,15 @@
                       '(:key "C-x t" :description "Treemacs")
                       '(:key "C-x z" :description "ztree-dir")
                       '(:key "C-c s" :description "Show cheatsheet")
-                      '(:key "C-h B" :description "Show my keybindings"))
+                      '(:key "C-h B" :description "Show my keybindings")
+                      '(:key "C-;" :description "Resize-Window"))
 
 (cheatsheet-add-group 'Ivy
-                      '(:key "C-M-j" :description "Enable new name in buffer"))
+                      '(:key "C-M-j" :description "Enable new name in buffer")
+                      '(:key "C-c C-S-F" :description "counsel-recentf")
+                      '(:key "C-s C-S-R" :description "ivy-resume")
+                      '(:key "C-c g" :description "Counsel-git")
+                      '(:key "C-c j" :description "Counsel-git-grep"))
 
 (cheatsheet-add-group 'IDO
                       '(:key "C-x b" :description "Switch buffers")
