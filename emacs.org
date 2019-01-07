@@ -432,8 +432,17 @@ Mode that supports editing of Yara-files.
 #+BEGIN_SRC emacs-lisp
 (use-package better-shell
 :ensure t
-:bind (("C-'" . better-shell-shell)
-("C-;" . better-shell-remote-open)))
+:config
+    (progn (defhydra hydra-better-shell (:color blue :columns 2)
+             "Better Shell commands"
+             ("s" better-shell-shell "Cycle shell" :color red)
+             ("c" better-shell-for-current-dir  "New shell for current dir")
+             ("r" better-shell-remote-open "Open remote shell")
+             ("h" better-shell-sudo-here "Sudo here")
+             ("p" better-shell-for-projectile-root "Shell for Projectile root")
+             ("q" nil "cancel")
+             ("RET" nil)))
+:bind ("C-c s" . hydra-better-shell/body))
 #+END_SRC
 *** Elastic search mode
 #+BEGIN_SRC emacs-lisp
@@ -927,7 +936,7 @@ Launch various programs, "C-c b"
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-launcher (:color blue :columns 4)
     "Launch programs"
-    ("b" better-shell-for-current-dir "Better Shell")
+    ("b" hydra-better-shell/body "Better Shell")
     ("c" cheat-sh "Cheat sheet")
     ("e" eshell "Eshell")
     ("E" eww "EWW")
