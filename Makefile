@@ -12,6 +12,6 @@ DESTDIR ?= $(HOME)
 install : emacs
 
 emacs :	
-	@ln -fs $(SRCDIR) $(DESTDIR)/.emacs.d && \
+	@ln -fs $(SRCDIR) $(DESTDIR) && \
 	git submodule update --init && \
-	printf "\033[32mbin/$${file}\033[0m\n" || printf "\033[1;30memacs\033[0m\n"; done
+	printf "\033[32m.emacs.d\033[0m\n" || printf "\033[1;30m.emacs.d\033[0m\n"
