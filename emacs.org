@@ -972,13 +972,7 @@ Expand text in org mode
     ("E" (hot-expand "<e"))
     ("q" (hot-expand "<q"))
     ("v" (hot-expand "<v"))
-    ("n" (let (text) ; org-reveal speaker notes
-           (when (region-active-p)
-           (setq text (buffer-substring (region-beginning) (region-end)))
-             (delete-region (region-beginning) (region-end)))
-           (insert "#+BEGIN_NOTES\n\n#+END_NOTES")
-           (forward-line -1)
-           (when text (insert text))))
+    ("n" (hot-expand "<n"))
     ("O" (let (text)
            (when (region-active-p)
            (setq text (buffer-substring (region-beginning) (region-end)))
@@ -1003,23 +997,38 @@ Expand text in org mode
     ("<" self-insert-command "ins")
     ("o" nil "quit"))
 
-(defun hot-expand (str &optional mod header)
+  (require 'org-tempo) ; Required from org 9 onwards for old template expansion
+  ;; Reset the org-template expansion system, this is need after upgrading to org 9 for some reason
+  (setq org-structure-template-alist (eval (car (get 'org-structure-template-alist 'standard-value))))
+
+  (defun hot-expand (str &optional mod header)
     "Expand org template.
 
 STR is a structure template string recognised by org like <s. MOD is a
 string with additional parameters to add the begin line of the
 structure element. HEADER string includes more parameters that are
-prepended to the element after the #+HEADERS: tag."
+prepended to the element after the #+HEADER: tag."
     (let (text)
       (when (region-active-p)
         (setq text (buffer-substring (region-beginning) (region-end)))
         (delete-region (region-beginning) (region-end))
         (deactivate-mark))
-      (when header (insert "#+HEADERS: " header))
+      (when header (insert "#+HEADER: " header) (forward-line))
       (insert str)
-      (org-try-structure-completion)
+      (org-tempo-complete-tag)
       (when mod (insert mod) (forward-line))
       (when text (insert text))))
+
+  (define-key org-mode-map "<"
+    (lambda () (interactive)
+      (if (or (region-active-p) (looking-back "^"))
+          (hydra-org-template/body)
+        (self-insert-command 1))))
+
+  (eval-after-load "org"
+    '(cl-pushnew
+    '("not" . "note")
+      org-structure-template-alist))
 #+END_SRC
 **** Org-mode keybindings
 #+BEGIN_SRC emacs-lisp
