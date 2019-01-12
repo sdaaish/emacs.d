@@ -475,14 +475,26 @@ To make it possible to write in org and publish as jekyll.
 *** Copy-as-format
 Copy with formatting.
 #+BEGIN_SRC emacs-lisp
-(use-package copy-as-format
-:bind
-  ("C-c w g" . copy-as-format-github)
-  ("C-c w j" . copy-as-format-jira)
-  ("C-c w h" . copy-as-format-html)
-  ("C-c w m" . copy-as-format-markdown)
-  ("C-c w o" . copy-as-format-org-mode)
-  ("C-c w w" . copy-as-format-mediawiki))
+  (use-package copy-as-format
+    :config
+    (progn
+      (defhydra hydra-copy-as-format (:color blue :columns 3)
+        "Copy as format"
+        ("a" copy-as-format-asciidoc "asciidoc")
+        ("d" copy-as-format-disqus   "disqus")
+        ("g" copy-as-format-github   "github/lab/bucket")
+        ("H" copy-as-format-hipchat  "hipchat")
+        ("h" copy-as-format-html     "html")
+        ("j" copy-as-format-jira     "jira")
+        ("m" copy-as-format-markdown "markdown")
+        ("M" copy-as-format-mediawik "mediawiki")
+        ("o" copy-as-format-org-mode "org-mode")
+        ("p" copy-as-format-pod      "pod")
+        ("r" copy-as-format-rst      "rst")
+        ("s" copy-as-format-slack    "slack")
+        ("q" nil "quit")))
+    :bind ("C-c w" . hydra-copy-as-format/body)
+    )
 #+END_SRC
 *** Cheatsheet
 My own cheatsheet.
