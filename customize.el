@@ -17,6 +17,7 @@
  '(fci-rule-color "#37474f")
  '(global-company-mode t)
  '(hl-sexp-background-color "#1c1f26")
+ '(magit-log-arguments '("--graph" "--color" "--decorate" "-n256"))
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(package-hidden-regexps '("\\`markdown-moden"))
