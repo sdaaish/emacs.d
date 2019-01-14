@@ -662,11 +662,15 @@ To list what keys are free in different modes. Very useful.
 (use-package free-keys)
 #+END_SRC
 *** Restclient
-A client to make REST-calls from emacs.
+A client to make REST-calls from emacs and Org-mode. 
 #+BEGIN_SRC emacs-lisp
   (use-package company-restclient
+    :after company
+    :hook (restclient-mode .
+                           (lambda ()
+                             (set (make-local-variable 'company-backends)
+                                  '(company-restclient))))
     :config
-    (add-to-list 'company-backends 'company-restclient)
     (use-package restclient)
     (use-package ob-restclient))
 #+END_SRC
