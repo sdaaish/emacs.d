@@ -323,6 +323,18 @@ Create and download gists from emacs.
   :config (setq gist-view-gist t)
   :bind (("C-x j" . gist-list)))
 #+END_SRC
+*** Git-link
+Copy git links to kill-ring.
+#+begin_src emacs-lisp
+  (use-package git-link
+    :config
+    (progn (defhydra hydra-git-link (:color blue)
+             "Copy git-link"
+             ("h" git-link-homepage "Copy homepage")
+             ("l" git-link "Copy link")
+             ("c" git-link-commit "Copy commit")))
+    :bind ("C-c L" . hydra-git-link/body))
+#+end_src
 *** line-numbers
 Use relative linenumbers.
 #+BEGIN_SRC emacs-lisp
