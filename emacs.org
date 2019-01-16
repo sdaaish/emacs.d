@@ -134,6 +134,7 @@ If we set the variable use-package-always-ensure, we need to set :ensure to nil 
 (setq use-package-always-ensure t)
 (setq use-package-always-defer nil)
 (setq use-package-verbose t)
+(setq use-package-compute-statistics t)
 #+END_SRC
 ** Local custom file fix
 This setting avoids updates to local custom-file.
@@ -160,7 +161,8 @@ Magit is depending on 24.4, so load only them if that emacs-version or later is 
       :config
       (setq magit-completing-read-function 'ivy-completing-read)
       :bind ("C-x g" . magit-status))
-    (use-package magit-filenotify)
+    (use-package magit-filenotify
+      :commands magit)
     (setq-default with-editor-emacsclient-executable "emacsclient"))
 #+END_SRC
 Fix for magit when you get with-editor errors (emacsclient). From https://github.com/magit/magit/issues/2492
@@ -205,7 +207,8 @@ Winner for navigating between buffers (C-<left> or C-<right>)
 #+END_SRC
 *** Markdown preview mode
 #+BEGIN_SRC emacs-lisp
-(use-package markdown-preview-mode)
+  (use-package markdown-preview-mode
+    :commands markdown-preview)
 #+END_SRC
 *** Export markdown
 #+BEGIN_SRC emacs-lisp
@@ -241,13 +244,15 @@ Export org as Jira.
 For presentations from org-mode. [[https://github.com/yjwen/org-reveal][Homepage]]
 #+BEGIN_SRC emacs-lisp
   (use-package ox-reveal
+    :defer
     :config
     (setq org-reveal-root (concat "file://" (expand-file-name  "reveal.js" user-emacs-directory))))
 #+END_SRC
 *** ox-hugo
 #+BEGIN_SRC emacs-lisp
-(use-package ox-hugo
-:after ox)
+  (use-package ox-hugo
+    :defer
+    :after ox)
 #+END_SRC
 *** SSH-config
 Add mode for configuring .ssh/config and other related to SSH.
@@ -439,7 +444,8 @@ Save buffers when idle
 *** Yara-files
 Mode that supports editing of Yara-files.
 #+BEGIN_SRC emacs-lisp
-(use-package yara-mode)
+  (use-package yara-mode
+    :defer)
 #+END_SRC
 *** Better shell
 #+BEGIN_SRC emacs-lisp
@@ -459,8 +465,9 @@ Mode that supports editing of Yara-files.
 #+END_SRC
 *** Elastic search mode
 #+BEGIN_SRC emacs-lisp
-(use-package es-mode
-  :config
+  (use-package es-mode
+    :defer
+    :config
     (add-to-list 'auto-mode-alist '("\\.es$" . es-mode)))
 #+END_SRC
 *** Logstash-mode
@@ -478,12 +485,14 @@ Use logstash-mode for conf-files in logstash-directories.
 #+END_SRC
 *** XKCD
 #+BEGIN_SRC emacs-lisp
-(use-package xkcd)
+  (use-package xkcd
+    :commands xkcd)
 #+END_SRC
 *** org2jekyll
 To make it possible to write in org and publish as jekyll.
 #+BEGIN_SRC emacs-lisp
-(use-package org2jekyll)
+  (use-package org2jekyll
+    :defer)
 #+END_SRC
 *** Copy-as-format
 Copy with formatting.
@@ -520,7 +529,8 @@ My own cheatsheet.
 *** Try
 Use try to test packages.
 #+BEGIN_SRC emacs-lisp
-(use-package try)
+  (use-package try
+    :commands try)
 #+END_SRC
 *** htmlize
 Needed by org-babel-export
@@ -530,13 +540,15 @@ Needed by org-babel-export
 *** hackernews
 Read the heackernews in emacs.
 #+BEGIN_SRC emacs-lisp
-(use-package hackernews
-:config (setq hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el")))
+  (use-package hackernews
+    :commands hackernews
+    :config (setq hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el")))
 #+END_SRC
 *** Twitter
 Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswiki.org/emacs/TwitteringMode][manual]]
 #+BEGIN_SRC emacs-lisp
   (use-package twittering-mode
+    :commands twit
     :config
     (setq twittering-use-master-password t
           twittering-private-info-file (concat my/emacs-shared-dir ".twittering-mode.gpg")
@@ -640,22 +652,26 @@ Use proportional fonts everywhere.
 *** Docker file mode
 Support Dockerfile.
 #+BEGIN_SRC emacs-lisp
-(use-package dockerfile-mode)
+  (use-package dockerfile-mode
+    :defer)
 #+END_SRC
 *** Docker compose
 Support Docker Compose files.
 #+BEGIN_SRC emacs-lisp
-(use-package docker-compose-mode)
+  (use-package docker-compose-mode
+    :defer)
 #+END_SRC
 *** Toml-Mode
 Support .toml-files, eg for Hugo.
 #+BEGIN_SRC emacs-lisp
-(use-package toml-mode)
+  (use-package toml-mode
+    :defer)
 #+END_SRC
 *** Verify-url
 Check urls in an file.
 #+BEGIN_SRC emacs-lisp
-(use-package verify-url)
+  (use-package verify-url
+    :defer)
 #+END_SRC
 *** Rainbows
 Use different colors for delimeters to increase readability.
@@ -816,6 +832,7 @@ Use elfeed ass RSS-reader, plus extras.
 Read RSS-feeds.
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
+    :commands elfeed
     :bind (
            :map elfeed-search-mode-map
            ("h" . my/hydra-elfeed/body)
@@ -840,6 +857,7 @@ Organise RSS with org-mode.
 Some extras
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-goodies
+    :commands elfeed
     :config (elfeed-goodies/setup))
 #+END_SRC
 **** Keys and functions
@@ -917,12 +935,14 @@ Jump to any character.
 *** JSON-mode
 Edit JSON-files.
 #+BEGIN_SRC emacs-lisp
-(use-package json-mode)
+  (use-package json-mode
+    :defer)
 #+END_SRC
 *** Silversearcher
 Use ~ag~ to search for stuff. Requires ~silversearcher-ag~ to be installed in the system.
 #+begin_src emacs-lisp
-(use-package ag)
+  (use-package ag
+    :commands counsel-ag)
 #+end_src
 ** Hydra config
 Hydras is keyboard mapping through menus.
@@ -1346,6 +1366,7 @@ Replaced IDO with Ivy.
 Use counsel to navigate hosts.
 #+BEGIN_SRC emacs-lisp
   (use-package counsel-tramp
+    :commands counsel-tramp
     :hook
     (counsel-tramp-pre-command-hook .
                                     (lambda ()
@@ -1659,6 +1680,7 @@ Use dired+ to not generate more buffers.
 #+BEGIN_SRC emacs-lisp
   (use-package dired+
     :load-path "lisp"
+    :commands dired
     :config
     (diredp-toggle-find-file-reuse-dir 1))
 #+END_SRC
