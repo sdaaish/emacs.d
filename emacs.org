@@ -484,9 +484,41 @@ Use logstash-mode for conf-files in logstash-directories.
   (move-text-default-bindings))
 #+END_SRC
 *** XKCD
+Show images from xkcd. With hydra.
 #+BEGIN_SRC emacs-lisp
   (use-package xkcd
-    :commands xkcd)
+    :commands xkcd
+    :config
+    (progn (defhydra hydra-xkcd (:color pink :hint nil)
+             "
+   ^Navigate^              ^Move^             ^Extra^
+   -----------------------------------------------------------
+   _b_: Browse             ^_k_ ↑^            _e_: Explanation
+   _r_: Random         ← _h_    _l_ →         _c_: Copy link
+   _g_: Update             ^_j_ ↓^            _a_: Alternate text
+   _G_: Get                  ^^             ^^_q_: Quit
+   "
+             ("b"       xkcd-open-browser)
+             ("r"       xkcd-rand)
+             ("a"       xkcd-alt-text)
+             ("g"       xkcd-get-latest)
+             ("S-g"     xkcd-get)
+             ("G"       xkcd-get)
+             ("j"       scroll-up-command)
+             ("SPC"     scroll-up-command)
+             ("k"       scroll-down-command)
+             ("S-SPC"   scroll-up-command)
+             ("<left>"  xkcd-prev)
+             ("h"       xkcd-prev)
+             ("<right>" xkcd-next)
+             ("l"       xkcd-next)
+             ("e"       xkcd-open-explanation-browser)
+             ("c"       xkcd-copy-link)
+             ("q"       xkcd-kill-buffer :color blue)
+             ))
+    :bind (:map xkcd-mode-map
+                ("h" . hydra-xkcd/body))
+    :hook (xkcd-mode . hydra-xkcd/body))
 #+END_SRC
 *** org2jekyll
 To make it possible to write in org and publish as jekyll.
