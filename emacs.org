@@ -218,9 +218,8 @@ Winner for navigating between buffers (C-<left> or C-<right>)
 *** Export GHF markdown
 Github-flavoured markdown
 #+BEGIN_SRC emacs-lisp
-(use-package ox-gfm)
-(eval-after-load "org"
-  '(require 'ox-gfm nil t))
+  (use-package ox-gfm
+    :defer)
 #+END_SRC
 *** Export Jira
 Export org as Jira.
@@ -322,12 +321,13 @@ Highlight differences with diff-hl, which works better than git-gutter.
 *** Gist
 Create and download gists from emacs.
 #+BEGIN_SRC emacs-lisp
-(use-package gh
-  :pin melpa)
-(use-package gist
-  :pin melpa
-  :config (setq gist-view-gist t)
-  :bind (("C-x j" . gist-list)))
+  (use-package gh
+    :commands gist
+    :pin melpa)
+  (use-package gist
+    :pin melpa
+    :config (setq gist-view-gist t)
+    :bind (("C-x j" . gist-list)))
 #+END_SRC
 *** Git-link
 Copy git links to kill-ring.
