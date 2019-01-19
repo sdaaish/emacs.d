@@ -145,29 +145,20 @@ From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_alwa
 ;;  (when value
 ;;    (setq package-selected-packages value)))
 #+END_SRC
-** Version-dependent
+** Packages
 *** Magit
-Magit is depending on 24.4, so load only them if that emacs-version or later is installed.
-+ Magit is a Git-tool
+Magit is a Git-tool, probably the best porcelain in the world!
 #+BEGIN_SRC emacs-lisp
-  ;; Emacs version above 24.4 needed for these apps
-  (if (version< emacs-version "24.4")
-      (message "*** Emacs version is before 24.4 ***")
-    (message "*** Emacs version is `%s' ***" (emacs-version))
-    ;; Magit for GIT support
-    (use-package magit
-      :pin melpa
-      :ensure t
-      :config
-      (setq magit-completing-read-function 'ivy-completing-read)
-      :bind ("C-x g" . magit-status))
-    (use-package magit-filenotify
-      :commands magit)
+  (use-package magit
+    :pin melpa
+    :ensure t
+    :commands magit
+    :bind ("C-x g" . magit-status)
+    :config
+    (setq magit-completing-read-function 'ivy-completing-read)
     (setq-default with-editor-emacsclient-executable "emacsclient"))
 #+END_SRC
 Fix for magit when you get with-editor errors (emacsclient). From https://github.com/magit/magit/issues/2492
-** Packages
-These packages works with emacs 24.1 or later, or are not dependent on a specific version.
 *** Powershell mode
 Powershell-mode is useful.
 #+BEGIN_SRC emacs-lisp
