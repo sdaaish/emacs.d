@@ -152,13 +152,34 @@ Magit is a Git-tool, probably the best porcelain in the world!
   (use-package magit
     :pin melpa
     :ensure t
-    :commands magit
     :bind ("C-x g" . magit-status)
     :config
     (setq magit-completing-read-function 'ivy-completing-read)
     (setq-default with-editor-emacsclient-executable "emacsclient"))
 #+END_SRC
-Fix for magit when you get with-editor errors (emacsclient). From https://github.com/magit/magit/issues/2492
+*** Magit-gitflow
+Enable support for git-flow. Why? See https://jeffkreeftmeijer.com/git-flow/.
+#+BEGIN_SRC emacs-lisp
+  (use-package magit-gitflow
+    :after magit
+    :hook
+    (magit-mode . turn-on-magit-gitflow))
+#+END_SRC
+*** magit-find-file
+Package to support *git ls-files*.
+#+BEGIN_SRC emacs-lisp
+  (use-package magit-find-file
+    :after magit
+    :bind ("C-c m" . magit-find-file-completing-read))
+#+END_SRC
+*** magit-gh-pulls
+Pull requests on Github.
+#+BEGIN_SRC emacs-lisp
+  (use-package magit-gh-pulls
+    :after magit
+    :hook
+    (magit-mode . turn-on-magit-gh-pulls))
+#+END_SRC
 *** Powershell mode
 Powershell-mode is useful.
 #+BEGIN_SRC emacs-lisp
@@ -264,26 +285,6 @@ Use the bind-key package (used by use-package).
 (use-package bind-key
   :ensure t
   :bind ("C-h B" . describe-personal-keybindings))
-#+END_SRC
-*** Magit-gitflow
-Enable support for git-flow. Why? See https://jeffkreeftmeijer.com/git-flow/.
-#+BEGIN_SRC emacs-lisp
-(use-package magit-gitflow
-  :hook
-  (magit-mode . turn-on-magit-gitflow))
-#+END_SRC
-*** magit-find-file
-Package to support *git ls-files*.
-#+BEGIN_SRC emacs-lisp
-(use-package magit-find-file
-    :bind ("C-c m" . magit-find-file-completing-read))
-#+END_SRC
-*** magit-gh-pulls
-Pull requests on Github.
-#+BEGIN_SRC emacs-lisp
-  (use-package magit-gh-pulls
-    :hook
-    (magit-mode . turn-on-magit-gh-pulls))
 #+END_SRC
 *** Git
 Modes for editing git-files
