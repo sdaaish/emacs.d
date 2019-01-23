@@ -474,9 +474,8 @@ Mode that supports editing of Yara-files.
 *** Logstash-mode
 Use logstash-mode for conf-files in logstash-directories.
 #+BEGIN_SRC emacs-lisp
-(use-package logstash-conf
-:config
-(add-to-list 'auto-mode-alist '("/logstash/.*\\.conf'" . logstash-conf-mode)))
+  (use-package logstash-conf
+    :mode  ("/logstash/.*\\.conf'" . logstash-conf-mode))
 #+END_SRC
 *** Move text
 #+BEGIN_SRC emacs-lisp
@@ -601,7 +600,8 @@ Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswi
 *** ini-mode
 Windows ini-files.
 #+BEGIN_SRC emacs-lisp
-(use-package ini-mode)
+  (use-package ini-mode
+    :mode "\\.ini\\'")
 #+END_SRC
 *** ipcalc
 IP subnet calculation. To use it, evaluate (ipcalc "10.0.0.0/8") for example.
