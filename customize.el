@@ -53,4 +53,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-overstrike ((t (:inherit bold :foreground "orange"))))
+ '(macrostep-expansion-highlight-face ((t (:foreground "light gray"))))
  '(woman-bold ((t (:inherit bold :foreground "orange")))))
