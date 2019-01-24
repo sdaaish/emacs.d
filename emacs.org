@@ -233,21 +233,20 @@ Winner for navigating between buffers (C-<left> or C-<right>)
 #+END_SRC
 *** Export markdown
 #+BEGIN_SRC emacs-lisp
-(use-package auto-org-md
-:defer t)
+  (use-package auto-org-md
+    :after org)
 #+END_SRC
 *** Export GHF markdown
 Github-flavoured markdown
 #+BEGIN_SRC emacs-lisp
   (use-package ox-gfm
-    :defer)
+    :after org)
 #+END_SRC
 *** Export Jira
 Export org as Jira.
 #+BEGIN_SRC emacs-lisp
-(use-package ox-jira)
-(eval-after-load "org"
-  '(require 'ox-jira nil t))
+  (use-package ox-jira
+    :after org)
 #+END_SRC
 *** Mediawiki
 #+BEGIN_SRC emacs-lisp
@@ -264,15 +263,15 @@ Export org as Jira.
 For presentations from org-mode. [[https://github.com/yjwen/org-reveal][Homepage]]
 #+BEGIN_SRC emacs-lisp
   (use-package ox-reveal
-    :defer
+    :after org
+    :commands org-export-dispatch
     :config
     (setq org-reveal-root (concat "file://" (expand-file-name  "reveal.js" user-emacs-directory))))
 #+END_SRC
 *** ox-hugo
 #+BEGIN_SRC emacs-lisp
   (use-package ox-hugo
-    :defer
-    :after ox)
+    :after org)
 #+END_SRC
 *** SSH-config
 Add mode for configuring .ssh/config and other related to SSH.
@@ -335,11 +334,11 @@ Copy git links to kill-ring.
 #+begin_src emacs-lisp
   (use-package git-link
     :config
-    (progn (defhydra hydra-git-link (:color blue)
-             "Copy git-link"
-             ("h" git-link-homepage "Copy homepage")
-             ("l" git-link "Copy link")
-             ("c" git-link-commit "Copy commit")))
+    (defhydra hydra-git-link (:color blue)
+      "Copy git-link"
+      ("h" git-link-homepage "Copy homepage")
+      ("l" git-link "Copy link")
+      ("c" git-link-commit "Copy commit"))
     :bind ("C-c L" . hydra-git-link/body))
 #+end_src
 *** line-numbers
@@ -430,7 +429,8 @@ This was slow before, in emacs 25.1, but seems to work now in version 25.2.
 *** wiki-summary
 Use wiki search from emacs
 #+BEGIN_SRC emacs-lisp
-(use-package wiki-summary)
+  (use-package wiki-summary
+    :commands wiki-summary)
 #+END_SRC
 *** Super-save
 Save buffers when idle
@@ -716,25 +716,29 @@ Use different colors for delimeters to increase readability.
 *** Cheat.sh
 Check out stuff on https://cheat.sh/
 #+BEGIN_SRC emacs-lisp
-(use-package cheat-sh)
+  (use-package cheat-sh
+    :commands cheat-sh)
 #+END_SRC
 *** Free keys
 To list what keys are free in different modes. Very useful.
 #+BEGIN_SRC emacs-lisp
-(use-package free-keys)
+  (use-package free-keys
+    :commands free-keys)
 #+END_SRC
 *** Restclient
 A client to make REST-calls from emacs and Org-mode. 
 #+BEGIN_SRC emacs-lisp
-  (use-package company-restclient
-    :after company
-    :hook (restclient-mode .
-                           (lambda ()
-                             (set (make-local-variable 'company-backends)
-                                  '(company-restclient))))
+  (use-package restclient
+    :commands restclient
     :config
-    (use-package restclient)
-    (use-package ob-restclient))
+    (use-package ob-restclient
+      :after org)
+    (use-package company-restclient
+      :after company
+      :hook (restclient-mode .
+                             (lambda ()
+                               (set (make-local-variable 'company-backends)
+                                    '(company-restclient))))))
 #+END_SRC
 *** X509
 Support for certificate files, with a hydra to navigate options.
