@@ -32,7 +32,7 @@ Setting variables and constants for my directories and files.
 ** Dropbox
 #+BEGIN_SRC emacs-lisp
   (if (eq system-type 'gnu/linux)
-      (defconst my/dropbox-dir "~/Dropbox/"))
+      (defconst my/dropbox-dir (expand-file-name "Dropbox/" "~")))
   (if (eq system-type 'windows-nt)
       (defconst my/dropbox-dir (concat (getenv "UserProfile") "\\\\Dropbox\\\\")))
 #+END_SRC
@@ -48,7 +48,7 @@ Setting variables and constants for my directories and files.
 ** Repositories
 #+BEGIN_SRC emacs-lisp
   (if (eq system-type 'gnu/linux)
-      (defconst my/repo-dir "~/repos/"))
+      (defconst my/repo-dir (expand-file-name "repos/" "~")))
   (if (eq system-type 'windows-nt)
       (defconst my/repo-dir (concat (getenv "UserProfile") "\\Repos\\")))
 #+END_SRC
@@ -164,7 +164,7 @@ Manage github things from emacs.
     :after magit
     :config
     (magithub-feature-autoinject t)
-    (setq magithub-clone-default-directory (expand-file-name "repos/" "~")))
+    (setq magithub-clone-default-directory my/repo-dir))
 #+end_src
 *** Magit-gitflow
 Enable support for git-flow. Why? See https://jeffkreeftmeijer.com/git-flow/.
