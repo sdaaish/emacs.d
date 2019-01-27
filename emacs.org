@@ -450,19 +450,19 @@ Mode that supports editing of Yara-files.
 #+END_SRC
 *** Better shell
 #+BEGIN_SRC emacs-lisp
-(use-package better-shell
-:ensure t
-:config
-    (progn (defhydra hydra-better-shell (:color blue :columns 2)
-             "Better Shell commands"
-             ("s" better-shell-shell "Cycle shell" :color red)
-             ("c" better-shell-for-current-dir  "New shell for current dir")
-             ("r" better-shell-remote-open "Open remote shell")
-             ("h" better-shell-sudo-here "Sudo here")
-             ("p" better-shell-for-projectile-root "Shell for Projectile root")
-             ("q" nil "cancel")
-             ("RET" nil)))
-:bind ("C-c s" . hydra-better-shell/body))
+  (use-package better-shell
+    :ensure t
+    :config
+    (defhydra hydra-better-shell (:color blue :columns 2)
+      "Better Shell commands"
+      ("s" better-shell-shell "Cycle shell" :color red)
+      ("c" better-shell-for-current-dir  "New shell for current dir")
+      ("r" better-shell-remote-open "Open remote shell")
+      ("h" better-shell-sudo-here "Sudo here")
+      ("p" better-shell-for-projectile-root "Shell for Projectile root")
+      ("q" nil "cancel")
+      ("RET" nil))
+    :bind ("C-c s" . hydra-better-shell/body))
 #+END_SRC
 *** Elastic search mode
 #+BEGIN_SRC emacs-lisp
@@ -489,8 +489,8 @@ Show images from xkcd. With hydra.
   (use-package xkcd
     :commands xkcd
     :config
-    (progn (defhydra hydra-xkcd (:color pink :hint nil)
-             "
+    (defhydra hydra-xkcd (:color pink :hint nil)
+      "
    ^Navigate^              ^Move^             ^Extra^
    -----------------------------------------------------------
    _b_: Browse             ^_k_ ↑^            _e_: Explanation
@@ -498,24 +498,24 @@ Show images from xkcd. With hydra.
    _g_: Update             ^_j_ ↓^            _a_: Alternate text
    _G_: Get                  ^^             ^^_q_: Quit
    "
-             ("b"       xkcd-open-browser)
-             ("r"       xkcd-rand)
-             ("a"       xkcd-alt-text)
-             ("g"       xkcd-get-latest)
-             ("S-g"     xkcd-get)
-             ("G"       xkcd-get)
-             ("j"       scroll-up-command)
-             ("SPC"     scroll-up-command)
-             ("k"       scroll-down-command)
-             ("S-SPC"   scroll-up-command)
-             ("<left>"  xkcd-prev)
-             ("h"       xkcd-prev)
-             ("<right>" xkcd-next)
-             ("l"       xkcd-next)
-             ("e"       xkcd-open-explanation-browser)
-             ("c"       xkcd-copy-link)
-             ("q"       xkcd-kill-buffer :color blue)
-             ))
+      ("b"       xkcd-open-browser)
+      ("r"       xkcd-rand)
+      ("a"       xkcd-alt-text)
+      ("g"       xkcd-get-latest)
+      ("S-g"     xkcd-get)
+      ("G"       xkcd-get)
+      ("j"       scroll-up-command)
+      ("SPC"     scroll-up-command)
+      ("k"       scroll-down-command)
+      ("S-SPC"   scroll-up-command)
+      ("<left>"  xkcd-prev)
+      ("h"       xkcd-prev)
+      ("<right>" xkcd-next)
+      ("l"       xkcd-next)
+      ("e"       xkcd-open-explanation-browser)
+      ("c"       xkcd-copy-link)
+      ("q"       xkcd-kill-buffer :color blue)
+      )
     :bind (:map xkcd-mode-map
                 ("h" . hydra-xkcd/body))
     :hook (xkcd-mode . hydra-xkcd/body))
@@ -531,22 +531,21 @@ Copy with formatting.
 #+BEGIN_SRC emacs-lisp
   (use-package copy-as-format
     :config
-    (progn
-      (defhydra hydra-copy-as-format (:color blue :columns 3)
-        "Copy as format"
-        ("a" copy-as-format-asciidoc "asciidoc")
-        ("d" copy-as-format-disqus   "disqus")
-        ("g" copy-as-format-github   "github/lab/bucket")
-        ("H" copy-as-format-hipchat  "hipchat")
-        ("h" copy-as-format-html     "html")
-        ("j" copy-as-format-jira     "jira")
-        ("m" copy-as-format-markdown "markdown")
-        ("M" copy-as-format-mediawik "mediawiki")
-        ("o" copy-as-format-org-mode "org-mode")
-        ("p" copy-as-format-pod      "pod")
-        ("r" copy-as-format-rst      "rst")
-        ("s" copy-as-format-slack    "slack")
-        ("q" nil "quit")))
+    (defhydra hydra-copy-as-format (:color blue :columns 3)
+      "Copy as format"
+      ("a" copy-as-format-asciidoc "asciidoc")
+      ("d" copy-as-format-disqus   "disqus")
+      ("g" copy-as-format-github   "github/lab/bucket")
+      ("H" copy-as-format-hipchat  "hipchat")
+      ("h" copy-as-format-html     "html")
+      ("j" copy-as-format-jira     "jira")
+      ("m" copy-as-format-markdown "markdown")
+      ("M" copy-as-format-mediawik "mediawiki")
+      ("o" copy-as-format-org-mode "org-mode")
+      ("p" copy-as-format-pod      "pod")
+      ("r" copy-as-format-rst      "rst")
+      ("s" copy-as-format-slack    "slack")
+      ("q" nil "quit"))
     :bind ("C-c w" . hydra-copy-as-format/body)
     )
 #+END_SRC
@@ -612,20 +611,20 @@ IP subnet calculation. To use it, evaluate (ipcalc "10.0.0.0/8") for example.
 *** Treemacs
 Directory navigating explorer-style.
 #+BEGIN_SRC emacs-lisp
-(use-package treemacs
-     :bind (("C-x t" . treemacs)
-     :map treemacs-mode-map
-     ("C-x t" . treemacs-toggle))
-     :config
-     (progn (setq treemacs-follow-after-init t
-            treemacs-show-hidden-files t)
-      (treemacs-follow-mode t)
-      (pcase (cons (not (null (executable-find "git")))
-                   (not (null (executable-find "python3"))))
-        (`(t . t)
-         (treemacs-git-mode 'extended))
-        (`(t . _)
-         (treemacs-git-mode 'simple)))))
+  (use-package treemacs
+    :bind (("C-x t" . treemacs)
+           :map treemacs-mode-map
+           ("C-x t" . treemacs-toggle))
+    :config
+    (setq treemacs-follow-after-init t
+          treemacs-show-hidden-files t)
+    (treemacs-follow-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null (executable-find "python3")))
+                 (`(t . t)
+                  (treemacs-git-mode 'extended))
+                 (`(t . _)
+                  (treemacs-git-mode 'simple)))))
 #+END_SRC
 *** ztree
 Cool directory package.
@@ -751,14 +750,14 @@ Support for certificate files, with a hydra to navigate options.
     (add-to-list 'auto-mode-alist '("\\.csr\\'" . x509-mode))
     (add-to-list 'auto-mode-alist '("\\.pem\\'" . x509-mode))
     (add-to-list 'auto-mode-alist '("\\.key\\'" . x509-mode))
-    (progn (defhydra hydra-x509 (:color blue :columns 2)
-             "X509 commands"
-             ("a" x509-viewasn1 "View ASN1")
-             ("c" x509-viewcert "View certificate")
-             ("d" x509-viewdh "View DH")
-             ("k" x509-viewkey "View key")
-             ("r" x509-viewcrl "View CRL")
-             ("q" nil "cancel")))
+    (defhydra hydra-x509 (:color blue :columns 2)
+      "X509 commands"
+      ("a" x509-viewasn1 "View ASN1")
+      ("c" x509-viewcert "View certificate")
+      ("d" x509-viewdh "View DH")
+      ("k" x509-viewkey "View key")
+      ("r" x509-viewcrl "View CRL")
+      ("q" nil "cancel"))
     :bind (:map x509-mode-map
                 ("h" . hydra-x509/body))
     )
@@ -793,55 +792,51 @@ Find or switch to projects easy, and use ~counsel-projectile~.
     (use-package counsel-projectile
       :init (counsel-projectile-mode 1))
 
-    (progn
-      (defhydra hydra-projectile-other-window (:color teal)
-        "projectile-other-window"
-        ("f"  projectile-find-file-other-window        "file")
-        ("g"  projectile-find-file-dwim-other-window   "file dwim")
-        ("d"  projectile-find-dir-other-window         "dir")
-        ("b"  projectile-switch-to-buffer-other-window "buffer")
-        ("q"  nil                                      "cancel" :color blue)))
+    (defhydra hydra-projectile-other-window (:color teal)
+      "projectile-other-window"
+      ("f"  projectile-find-file-other-window        "file")
+      ("g"  projectile-find-file-dwim-other-window   "file dwim")
+      ("d"  projectile-find-dir-other-window         "dir")
+      ("b"  projectile-switch-to-buffer-other-window "buffer")
+      ("q"  nil                                      "cancel" :color blue))
 
-    (progn
-      (defhydra hydra-projectile (:color teal :hint nil)
-        "
-         PROJECTILE: %(projectile-project-root)
+    (defhydra hydra-projectile (:color teal :hint nil)
+      "
+           PROJECTILE: %(projectile-project-root)
 
-         Find File            Search/Tags          Buffers                Cache
-    ------------------------------------------------------------------------------------------
-      _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
-     _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
-     _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
-      _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
-      _d_: dir
+           Find File            Search/Tags          Buffers                Cache
+      ------------------------------------------------------------------------------------------
+        _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+       _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+       _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
+        _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
+        _d_: dir
 
-    "
-        ("a"   projectile-ag)
-        ("b"   projectile-switch-to-buffer)
-        ("c"   projectile-invalidate-cache)
-        ("d"   projectile-find-dir)
-        ("s-f" projectile-find-file)
-        ("F"   projectile-find-file)
-        ("ff"  projectile-find-file-dwim)
-        ("fd"  projectile-find-file-in-directory)
-        ("g"   ggtags-update-tags)
-        ("i"   projectile-ibuffer)
-        ("k"   projectile-kill-buffers)
-        ("m"   projectile-multi-occur)
-        ("p"   projectile-switch-project "switch project")
-        ("r"   projectile-recentf)
-        ("x"   projectile-remove-known-project)
-        ("X"   projectile-cleanup-known-projects)
-        ("z"   projectile-cache-current-file)
-        ("D"   projectile-discover-projects-in-directory)
-        ("'"   hydra-projectile-other-window/body "open other window")
-        ("q"   nil "cancel" :color blue))
-      )
-    :bind
-    ("C-c p" . hydra-projectile/body)
-    (:map projectile-mode-map
-          ("C-c P" . projectile-command-map)) ;; Keep counsel-projectile for now
-    )
+      "
+      ("a"   projectile-ag)
+      ("b"   projectile-switch-to-buffer)
+      ("c"   projectile-invalidate-cache)
+      ("d"   projectile-find-dir)
+      ("s-f" projectile-find-file)
+      ("F"   projectile-find-file)
+      ("ff"  projectile-find-file-dwim)
+      ("fd"  projectile-find-file-in-directory)
+      ("g"   ggtags-update-tags)
+      ("i"   projectile-ibuffer)
+      ("k"   projectile-kill-buffers)
+      ("m"   projectile-multi-occur)
+      ("p"   projectile-switch-project "switch project")
+      ("r"   projectile-recentf)
+      ("x"   projectile-remove-known-project)
+      ("X"   projectile-cleanup-known-projects)
+      ("z"   projectile-cache-current-file)
+      ("D"   projectile-discover-projects-in-directory)
+      ("'"   hydra-projectile-other-window/body "open other window")
+      ("q"   nil "cancel" :color blue))
+
+    :bind (("C-c p" . hydra-projectile/body)
+           (:map projectile-mode-map
+                 ("C-c P" . projectile-command-map)))) ;; Keep counsel-projectile for now
 #+END_SRC
 **** Fix
 From https://github.com/bbatsov/projectile/issues/1165.
@@ -1684,29 +1679,28 @@ Save bookmarks all the time.
 *** Language
 Spellchecking. I use Hunspell.
 #+BEGIN_SRC emacs-lisp
-(use-package ispell
-  :ensure nil
-  :config
-  (progn
+  (use-package ispell
+    :ensure nil
+    :config
     (add-to-list 'ispell-local-dictionary-alist '("swedish-hunspell"
-                                              "[[:alpha:]]"
-                                              "[^[:alpha:]]"
-                                              "[']"
-                                              t
-                                              ("-d" "sv_SE"); Dictionary file name
-                                              nil
-                                              iso-8859-1))
+                                                  "[[:alpha:]]"
+                                                  "[^[:alpha:]]"
+                                                  "[']"
+                                                  t
+                                                  ("-d" "sv_SE"); Dictionary file name
+                                                  nil
+                                                  iso-8859-1))
 
     (add-to-list 'ispell-local-dictionary-alist '("english-hunspell"
-                                              "[[:alpha:]]"
-                                              "[^[:alpha:]]"
-                                              "[']"
-                                              t
-                                              ("-d" "en_US")
-                                              nil
-                                              iso-8859-1))
-  (setq ispell-program-name "hunspell"
-        ispell-dictionary "swedish-hunspell")))
+                                                  "[[:alpha:]]"
+                                                  "[^[:alpha:]]"
+                                                  "[']"
+                                                  t
+                                                  ("-d" "en_US")
+                                                  nil
+                                                  iso-8859-1))
+    (setq ispell-program-name "hunspell"
+          ispell-dictionary "swedish-hunspell"))
 #+END_SRC
 *** Dired customizations
 Changes for local keyboard.
