@@ -984,7 +984,18 @@ Query Stackexchange from emacs.
   (use-package sx
     :config
     (setq sx-cache-directory (expand-file-name ".sx/" my/emacs-shared-dir))
-    :bind-keymap (("C-c x" . sx-keymap)))
+
+    (defhydra hydra-sx (:color blue :columns 4)
+      "Stack Exchange"
+      ("t" sx-tab-all-questions "All questions")
+      ("i" sx-inbox "Inbox")
+      ("o" sx-open-link "Open link")
+      ("u" sx-tab-unanswered-my-tags "Unanswered")
+      ("a" sx-ask "Ask")
+      ("s" sx-search "Search")
+      ("q" nil "Cancel"))
+
+    :bind ("C-c x" . hydra-sx/body))
 #+end_src
 ** Hydra config
 Hydras is keyboard mapping through menus.
