@@ -193,9 +193,9 @@ Pull requests on Github.
 Powershell-mode is useful.
 #+BEGIN_SRC emacs-lisp
   (use-package powershell
-    :pin melpa
-    :ensure t
-    :defer t)
+    :commands powershell
+    :config
+    (setq powershell-eldoc-def-files (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
 #+END_SRC
 *** Dos-mode
 Only in windows.
@@ -264,7 +264,6 @@ For presentations from org-mode. [[https://github.com/yjwen/org-reveal][Homepage
 #+BEGIN_SRC emacs-lisp
   (use-package ox-reveal
     :after ox
-    :commands org-export-dispatch
     :config
     (setq org-reveal-root (concat "file://" (expand-file-name  "reveal.js" user-emacs-directory))))
 #+END_SRC
@@ -1071,6 +1070,7 @@ Switch between org-buffers, "<f8> o".
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-org-stuff (:color blue :columns 3)
 "Org mode stuff"
+    ("c" org-gcal-sync "Sync Google Calender")
     ("g" org-mobile-pull "Pull from mobile")
     ("p" org-mobile-push "Push to mobile")
     ("P" org-publish-project "org-publish-project")
@@ -2010,9 +2010,9 @@ A few templates to speed up capture.
       ;; Notes for code
       ("c" "Coding stuff")
       ("cc" "note with code" entry (file+headline my/notes-file "Code")
-       "* %? \n#+BEGIN_SRC %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+END_SRC\n")
+       "* %? \n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n")
       ("cs" "note with code, source" entry (file+headline my/notes-file "Code")
-       "* %? \n#+BEGIN_SRC %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+END_SRC\n%a\n")
+       "* %? \n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n%a\n")
       ))
 #+END_SRC
 ** Localized calender
