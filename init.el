@@ -5,7 +5,7 @@
 ;; This loads everything that are needed for a clean install to work.
 
 ;; 2017-03-07/SDAA
-(message "Reading configuration from init.el...")
+(message "*** Reading configuration from init.el...")
 
 ;; Garbage collection
 ;; Increase the garbage collection threshold to make startup faster
@@ -32,9 +32,6 @@
 ;; Read the rest from my org-babel enabled config-file
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
 (setq
-  my/init-dir (file-name-directory (or load-file-name (buffer-file-name)))
-  my/init-org-file (expand-file-name "emacs.org" my/init-dir)
-  my/init-el-file (expand-file-name "emacs.el" my/init-dir))
 
 ;; Parts from http://www.holgerschurig.de/en/emacs-efficiently-untangling-elisp/
 ;; Don't use org-babel if the lisp-file is newer
