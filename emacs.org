@@ -19,7 +19,8 @@ CLOSED: [2017-04-07 fre 11:32]
 CLOSED: [2017-04-07 fre 11:32]
 ** DONE magit on some Windows-clients
 CLOSED: [2017-04-07 fre 11:32]
-** TODO Configure local variables and files
+** DONE Configure local variables and files
+CLOSED: [2019-02-05 Tue 22:38]
 ** DONE Emacsclient dont load theme and settings
 CLOSED: [2017-08-21 mån 16:25]
 * Introduction
@@ -40,6 +41,12 @@ Setting variables and constants for my directories and files.
 #+BEGIN_SRC emacs-lisp
   (defconst my/emacs-shared-dir (concat my/dropbox-dir "emacs/"))
 #+END_SRC
+** Private emacs-file
+File with personal stuff.
+#+begin_src emacs-lisp
+(defconst my/private-orgfile (expand-file-name "private.org" my/emacs-shared-dir))
+(defconst my/private-elfile (expand-file-name "private.el" my/emacs-shared-dir))
+#+end_src
 ** Backup-directory
 #+BEGIN_SRC emacs-lisp
   (defconst my/emacs-backup-dir
@@ -1019,6 +1026,7 @@ Hydra for quick access to emacs files, "<f8> i".
     ("E" (find-file my/emacs-elfile) "emacs.el")
     ("i" (find-file user-init-file) "init.el")
     ("k" my/server-shutdown "Save&kill")
+    ("p" (find-file my/private-orgfile) "private.org")
     ("r" (load-file user-init-file) "Reload emacs")
     ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "lisp"))) "Cheat sheet")
     ("q" nil "cancel"))
@@ -1174,13 +1182,16 @@ Use a hydra to move text. M-<up> or M-<down>.
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
-Must check for OS-version to find out where Dropbox is located.
-Also must check for existing file, sometimes the system dont have Dropbox.
-See also: http://dotemacs.de/multiemacs.html
+Untangle with function in ~init.el~.
 #+BEGIN_SRC emacs-lisp
-(if (file-exists-p (expand-file-name "private.org" my/emacs-shared-dir))
- (org-babel-load-file (expand-file-name "private.org" my/emacs-shared-dir)))
+  (when (not (and (file-exists-p my/private-elfile)
+                  (file-newer-than-file-p my/private-elfile my/private-orgfile)))
+    (my/tangle-config-org my/private-orgfile my/private-elfile))
+
+  ;; Load the el-file
+  (load-file my/private-elfile)
 #+END_SRC
+See also: http://dotemacs.de/multiemacs.html
 ** Load secret stuff
 Load secret stuff from this encrypted org-file.
 *** EasyPG
