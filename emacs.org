@@ -546,11 +546,14 @@ Needed by org-babel-export
 (use-package htmlize)
 #+END_SRC
 *** hackernews
-Read the heackernews in emacs.
+Read hackernews in emacs.
 #+BEGIN_SRC emacs-lisp
   (use-package hackernews
     :commands hackernews
-    :config (setq hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el")))
+    :config
+    (setq hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el"))
+    (setq hackernews-items-per-page 60)
+    (setq hackernews-item-format "%-7s%-80t %15c\n"))
 #+END_SRC
 *** Twitter
 Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswiki.org/emacs/TwitteringMode][manual]]
