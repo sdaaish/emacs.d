@@ -82,6 +82,8 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
   (setq org-default-notes-file my/notes-file)
   ;; Choose targets for refile from this file
   (setq org-refile-targets '((my/refile-targets :maxlevel . 4)))
+  ;; Files for mobile sync
+  (defvar my/mobile-files (my/read-lines (concat my/org-directory ".mobile-files")))
 #+END_SRC
 * Config
 ** Initializing
@@ -2011,7 +2013,7 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
     :config
     (setq org-mobile-directory (concat my/dropbox-dir "Appar/MobileOrg/"))
     (setq org-mobile-inbox-for-pull (concat my/dropbox-dir "emacs/org/sync.org"))
-    (setq org-mobile-files (org-agenda-files))
+    (setq org-mobile-files my/mobile-files)
     (setq org-mobile-agendas 'default)
     (setq org-mobile-force-id-on-agenda-items nil))
 #+END_SRC
