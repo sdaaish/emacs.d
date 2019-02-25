@@ -852,7 +852,23 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
     :config
     (setq elfeed-db-directory (concat my/emacs-shared-dir "/shared/elfeeddb"))
     (setq elfeed-search-filter "@1-days-ago +unread")
-    (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal)
+    (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal :foreground "khaki2")
+
+    (defface elfeed-emacs
+      '((t :foreground "#ff69b4"))
+      "Marks emacs in Elfeed."
+      :group 'elfeed)
+
+    (push '(emacs elfeed-emacs)
+          elfeed-search-face-alist)
+
+    (defface elfeed-security
+      '((t :foreground "#ffc0cb"))
+      "Marks emacs in Elfeed."
+      :group 'elfeed)
+
+    (push '(security elfeed-security)
+          elfeed-search-face-alist)
 
     (defun bjm/elfeed-load-db-and-open ()
       "Wrapper to load the elfeed db from disk before opening"
