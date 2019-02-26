@@ -855,19 +855,35 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
     (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal :foreground "khaki2")
 
     (defface elfeed-emacs
-      '((t :foreground "#ff69b4"))
-      "Marks emacs in Elfeed."
+      '((t :foreground "cyan"))
+      "Marks Emacs in Elfeed."
       :group 'elfeed)
 
     (push '(emacs elfeed-emacs)
           elfeed-search-face-alist)
 
     (defface elfeed-security
-      '((t :foreground "#ffc0cb"))
-      "Marks emacs in Elfeed."
+      '((t :foreground "hot pink"))
+      "Marks Security in Elfeed."
       :group 'elfeed)
 
     (push '(security elfeed-security)
+          elfeed-search-face-alist)
+
+    (defface elfeed-windows
+      '((t :foreground "sky blue"))
+      "Marks Windows in Elfeed."
+      :group 'elfeed)
+
+    (push '(windows elfeed-windows)
+          elfeed-search-face-alist)
+
+    (defface elfeed-network
+      '((t :foreground "SpringGreen1"))
+      "Marks Network in Elfeed."
+      :group 'elfeed)
+
+    (push '(network elfeed-network)
           elfeed-search-face-alist)
 
     (defun bjm/elfeed-load-db-and-open ()
@@ -935,7 +951,6 @@ A ~hydra~ for elfeed.
    ("G" elfeed-search-fetch "Update all")
    ("L" elfeed-goodies/toggle-logs "Logs")
    ("m" (elfeed-toggle-star) "star")
-   ("M" (elfeed-toggle-star "Mark") "Mark")
    ("R" (elfeed-mark-all-as-read) "Mark all as read")
    ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
    ("S" elfeed-search-set-filter "Set filter")
