@@ -852,7 +852,39 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
     :config
     (setq elfeed-db-directory (concat my/emacs-shared-dir "/shared/elfeeddb"))
     (setq elfeed-search-filter "@1-days-ago +unread")
-    (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal)
+    (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal :foreground "khaki2")
+
+    (defface elfeed-emacs
+      '((t :foreground "cyan"))
+      "Marks Emacs in Elfeed."
+      :group 'elfeed)
+
+    (push '(emacs elfeed-emacs)
+          elfeed-search-face-alist)
+
+    (defface elfeed-security
+      '((t :foreground "hot pink"))
+      "Marks Security in Elfeed."
+      :group 'elfeed)
+
+    (push '(security elfeed-security)
+          elfeed-search-face-alist)
+
+    (defface elfeed-windows
+      '((t :foreground "sky blue"))
+      "Marks Windows in Elfeed."
+      :group 'elfeed)
+
+    (push '(windows elfeed-windows)
+          elfeed-search-face-alist)
+
+    (defface elfeed-network
+      '((t :foreground "SpringGreen1"))
+      "Marks Network in Elfeed."
+      :group 'elfeed)
+
+    (push '(network elfeed-network)
+          elfeed-search-face-alist)
 
     (defun bjm/elfeed-load-db-and-open ()
       "Wrapper to load the elfeed db from disk before opening"
@@ -860,7 +892,7 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
       (elfeed-db-load)
       (elfeed)
       (elfeed-search-update--force)
-      (elfeed-search-set-filter "@6-months-ago"))
+      (elfeed-search-set-filter "@1-months-ago"))
 
     ;;write to disk when quiting
     (defun bjm/elfeed-save-db-and-bury ()
@@ -892,7 +924,8 @@ Organise RSS with org-mode.
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-org
     :commands elfeed
-    :config (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org"))))
+    :config (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org"))
+                  rmh-elfeed-org-auto-ignore-invalid-feeds t))
 #+END_SRC
 **** Elfeed-goodies
 Some extras
@@ -918,7 +951,6 @@ A ~hydra~ for elfeed.
    ("G" elfeed-search-fetch "Update all")
    ("L" elfeed-goodies/toggle-logs "Logs")
    ("m" (elfeed-toggle-star) "star")
-   ("M" (elfeed-toggle-star "Mark") "Mark")
    ("R" (elfeed-mark-all-as-read) "Mark all as read")
    ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
    ("S" elfeed-search-set-filter "Set filter")
@@ -1326,9 +1358,6 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
                    ("shell" (or
                              (mode . eshell-mode)
                              (mode . shell-mode)))
-                   ("org" (or
-                           (mode . org-mode)
-                           (name . "^\\*Org Agenda\\*$")))
                    ("powershell" (mode . powershell-mode))
                    ("code" (mode . prog-mode))
                    ("magit" (or
@@ -1337,12 +1366,21 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
                    ("emacs" (or
                              (name . "^\\*scratch\\*$")
                              (name . "^\\*Messages\\*$")))
-                   ("Help" (or (name . "\\*Help\\*")
-                               (name . "\\*Apropos\\*")
-                               (name . "\\*info\\*")))
                    ("Tramp" (or (filename . "^\\/scp:")
                                 (name . "^\\*tramp")))
-                   ("iBuffer" (mode . ibuffer-mode))))))
+                   ("iBuffer" (mode . ibuffer-mode)))
+                  ("Help"
+                   ("Man" (mode . Man-mode))
+                   ("Help" (or (name . "\\*Help\\*")
+                               (name . "\\*Apropos\\*")
+                               (name . "\\*info\\*")
+                               (mode . help-mode)))
+                   )
+                  ("Org"
+                   ("Org" (or
+                           (mode . org-mode)
+                           (name . "^\\*Org Agenda\\*$")))
+                   ))))
     (setq ibuffer-show-empty-filter-groups nil)
     (setq ibuffer-expert t)
     :hook (ibuffer-mode .
@@ -1374,6 +1412,13 @@ Get status by version-control.
                             (ibuffer-do-sort-by-alphabetic))))
     )
 #+END_SRC
+** ibuffer-projectile
+Group buffers based on projectile.
+#+begin_src emacs-lisp
+  (use-package ibuffer-projectile
+    :bind (:map ibuffer-mode-map
+                ("c" . ibuffer-projectile-set-filter-groups)))
+#+end_src
 * ivy, swiper and counsel
 These are really useful packages. http://oremacs.com/swiper/
 Replaced IDO with Ivy.
