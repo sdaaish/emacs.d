@@ -22,7 +22,8 @@
 (setq package-enable-at-startup nil)
 (setq package--init-file-ensured nil)
 ;; If this is commented, stops from adding this automatically. Don't exist in Emacs27.
-;; (package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 ;; Stuff that are needed for this to work and should be installed by default with emacs.
 (require 'package)
