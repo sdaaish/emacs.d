@@ -1523,35 +1523,39 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 ** Theme
 *** Load themes
 #+BEGIN_SRC emacs-lisp
-(defun my/load-themes ()
- "Loads my themes if in windows"
+  (defun my/load-themes ()
+    "Loads my themes if in windows"
 
-  (use-package afternoon-theme)
-  (load-theme 'afternoon t t)
+    (use-package afternoon-theme
+      :config
+      (load-theme 'afternoon t t))
 
-  (use-package base16-theme)
-  (load-theme 'base16 t t)
+    (use-package base16-theme
+      :config
+      (load-theme 'base16 t t))
 
-  (use-package material-theme)
-  (load-theme 'material t t)
+    (use-package material-theme
+      :config
+      (load-theme 'material t t))
 
-  (use-package twilight-bright-theme)
-  (load-theme 'twilight-bright t t)
+    (use-package twilight-bright-theme
+      :config
+      (load-theme 'twilight-bright t t))
 
-  (use-package zenburn-theme)
-  (load-theme 'zenburn t t)
+    (use-package zenburn-theme
+      :config
+      (load-theme 'zenburn t t))
 
-  (use-package org-beautify-theme
-    :pin melpa
-    :disabled
-    :config
-    (load-theme 'org-beautify t t))
+    (use-package org-beautify-theme
+      :disabled
+      :config
+      (load-theme 'org-beautify t t))
 
-  (load-theme 'material))
+    (use-package gruber-darker-theme
+      :config(load-theme 'gruber-darker t t))
+
+    (load-theme 'material))
 #+END_SRC
-
-#+RESULTS:
-: my/load-themes
 
 ***  Load different theme if in gui or terminal
 #+BEGIN_SRC emacs-lisp
@@ -1572,7 +1576,7 @@ Switch betweens selected themes with "C-<".
 #+BEGIN_SRC emacs-lisp
 (use-package theme-looper
   :config
-  (theme-looper-set-theme-set '(afternoon twilight-bright tango-dark zenburn material))
+  (theme-looper-set-theme-set '(afternoon twilight-bright tango-dark zenburn material gruber-darker))
   :bind
   ("C-<" . theme-looper-enable-next-theme)
   ("C->" . theme-looper-enable-random-theme))
