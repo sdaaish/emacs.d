@@ -68,12 +68,21 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
       (insert-file-contents filePath)
       (split-string (buffer-string) "\n" t)))
 
+  (defun my/fullpath (filepath directory)
+    "Concatenate directory to names in filepath and return as list."
+    (let (value)
+      (setq list (my/read-lines filepath))
+      (dolist (shortfile list value)
+        (setq fullpath (concat directory shortfile))
+        (setq value (cons fullpath value)))))
+
   ;; Define constants
-  (defconst my/org-directory (concat my/dropbox-dir "emacs/org/"))
-  (defconst my/notes-file (concat my/org-directory "notes.org"))
-  (defconst my/diary-file (concat my/org-directory "diary.org"))
-  (defconst my/org-agenda-files (concat my/org-directory ".agenda-files"))
-  (defvar my/refile-targets (my/read-lines (concat my/org-directory ".target-files")))
+  (defconst my/org-directory (expand-file-name "emacs/org/" my/dropbox-dir))
+  (defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
+  (defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
+  (defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
+  (defvar my/refile-targets (my/read-lines (expand-file-name ".target-files"  my/org-directory)))
+  (defvar my/mobile-target-file (expand-file-name  ".mobile-files" my/org-directory))
   ;; My org-files directory
   (setq org-directory my/org-directory)
   ;; Org-agenda can read from a file
@@ -83,7 +92,7 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
   ;; Choose targets for refile from this file
   (setq org-refile-targets '((my/refile-targets :maxlevel . 4)))
   ;; Files for mobile sync
-  (defvar my/mobile-files (my/read-lines (concat my/org-directory ".mobile-files")))
+  (defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
 #+END_SRC
 * Config
 ** Initializing
@@ -2102,8 +2111,8 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
     (autoload 'org-mobile-pull "org-mobile" nil t)
     (autoload 'org-mobile-push "org-mobile" nil t)
     :config
-    (setq org-mobile-directory (concat my/dropbox-dir "Appar/MobileOrg/"))
-    (setq org-mobile-inbox-for-pull (concat my/dropbox-dir "emacs/org/sync.org"))
+    (setq org-mobile-directory (expand-file-name "Appar/MobileOrg/" my/dropbox-dir))
+    (setq org-mobile-inbox-for-pull (expand-file-name "sync.org" my/org-directory))
     (setq org-mobile-files my/mobile-files)
     (setq org-mobile-agendas 'default)
     (setq org-mobile-force-id-on-agenda-items nil))
