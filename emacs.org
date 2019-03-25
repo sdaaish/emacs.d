@@ -635,17 +635,18 @@ Read csv-files.
 **** Hydra for yasnippet
 From https://github.com/abo-abo/hydra/wiki/YASnippet
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-yasnippet (:color blue :hint nil)
+  (defhydra hydra-yasnippet (:pre (yas-minor-mode t)
+                                  :color blue :hint nil)
     "
-                  ^YASnippets^
-    --------------------------------------------
-      Modes:    Load/Visit:    Actions:
+                      ^YASnippets^
+        -----------------------------------
+        Actions:    Load/Visit:   Modes:
 
-     _c_ompany-yas   _d_irectory    _i_nsert
-     _g_lobal        _f_ile         _t_ryout
-     _m_inor         _l_ist         _n_ew
-     _e_xtra         _a_ll
-    "
+        _i_nsert     _d_irectory    _c_ompany-yas
+        _t_ryout     _f_ile         _g_lobal: %`yas-global-mode
+        _n_ew        _l_ist         _m_inor: %`yas-minor-mode
+        _e_xtra      _a_ll
+  "
     ("c" company-yasnippet)
     ("d" yas-load-directory)
     ("e" yas-activate-extra-mode)
