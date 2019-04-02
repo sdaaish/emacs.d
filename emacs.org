@@ -1394,7 +1394,8 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
                              (name . "^\\*Messages\\*$")))
                    ("Tramp" (or (filename . "^\\/scp:")
                                 (name . "^\\*tramp")))
-                   ("iBuffer" (mode . ibuffer-mode)))
+                   ("iBuffer" (mode . ibuffer-mode))
+                   ("Gists" (name . "^\\*gist.*")))
                   ("Help"
                    ("Man" (mode . Man-mode))
                    ("Help" (or (name . "\\*Help\\*")
@@ -1412,7 +1413,9 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
     :hook (ibuffer-mode .
                         (lambda ()
                           (ibuffer-auto-mode 1)
-                          (ibuffer-switch-to-saved-filter-groups "default")))
+                          (ibuffer-switch-to-saved-filter-groups "default")
+                          (unless (eq ibuffer-sorting-mode 'alphabetic)
+                            (ibuffer-do-sort-by-alphabetic))))
     )
 #+END_SRC
 ** ibuffer-vc
