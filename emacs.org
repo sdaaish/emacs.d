@@ -1116,16 +1116,22 @@ Hydra for quick access to emacs files, "<f8> i".
 *** Hydra for org
 Switch between org-buffers, "<f8> o".
 #+BEGIN_SRC emacs-lisp
-(defhydra hydra-org-stuff (:color blue :columns 3)
-"Org mode stuff"
-    ("c" org-gcal-sync "Sync Google Calender")
+  (defhydra hydra-org-stuff (:color blue :columns 3)
+    "Org mode stuff"
+    ("c" my/org-gcal-sync "Sync Google Calender")
     ("g" org-mobile-pull "Pull from mobile")
     ("p" org-mobile-push "Push to mobile")
     ("P" org-publish-project "org-publish-project")
     ("o" org-iswitchb "Switch org-buffer")
     ("s" org-save-all-org-buffers "Save Org buffers")
     ("q" nil "cancel"))
-(bind-key "<f8> o" 'hydra-org-stuff/body)
+  (bind-key "<f8> o" 'hydra-org-stuff/body)
+  (defun my/org-gcal-sync()
+    "Synchronizes Google calendar with Org"
+    (interactive)
+    (org-save-all-org-buffers)
+    (org-gcal-sync)
+    )
 #+END_SRC
 *** Launcher
 Launch various programs, "C-c b"
