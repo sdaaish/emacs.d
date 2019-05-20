@@ -1119,8 +1119,7 @@ Switch between org-buffers, "<f8> o".
   (defhydra hydra-org-stuff (:color blue :columns 3)
     "Org mode stuff"
     ("c" my/org-gcal-sync "Sync Google Calender")
-    ("g" org-mobile-pull "Pull from mobile")
-    ("p" org-mobile-push "Push to mobile")
+    ("g" my/org-mobile-sync "Synchronize mobile")
     ("P" org-publish-project "org-publish-project")
     ("o" org-iswitchb "Switch org-buffer")
     ("s" org-save-all-org-buffers "Save Org buffers")
@@ -1130,8 +1129,14 @@ Switch between org-buffers, "<f8> o".
     "Synchronizes Google calendar with Org"
     (interactive)
     (org-save-all-org-buffers)
-    (org-gcal-sync)
-    )
+    (org-gcal-sync))
+  (defun my/org-mobile-sync()
+    "Synchronizes agenda files with mobile app."
+    (interactive)
+    (org-save-all-org-buffers)
+    (org-mobile-pull)
+    (org-mobile-push)
+    (message "Synced mobile agendas."))
 #+END_SRC
 *** Launcher
 Launch various programs, "C-c b"
