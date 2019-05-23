@@ -1041,6 +1041,19 @@ Support files in apib format, [[https://apiblueprint.org/][API Blueprint]]
   (use-package apib-mode
     :defer)
 #+end_src
+*** json-navigator
+Navigate JSON-files. Also use tree-mode for navigation.
+#+begin_src emacs-lisp
+  (use-package json-navigator
+    :config
+    (use-package tree-mode
+      :bind (:map tree-minor-mode
+                  ("q" . quit-window)))
+    :chords
+    ("jj" . json-navigator-navigate-region)
+    ("jp" . json-navigator-navigate-after-point)
+    )
+#+end_src
 ** Hydra config
 Hydras is keyboard mapping through menus.
 *** Hydra
