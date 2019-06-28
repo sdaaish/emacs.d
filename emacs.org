@@ -1282,12 +1282,14 @@ Use a hydra to move text. M-<up> or M-<down>.
 This load a local file with private info.
 Untangle with function in ~init.el~.
 #+BEGIN_SRC emacs-lisp
-  (when (not (and (file-exists-p my/private-elfile)
-                  (file-newer-than-file-p my/private-elfile my/private-orgfile)))
-    (my/tangle-config-org my/private-orgfile my/private-elfile))
+  (if (file-exists-p my/private-orgfile)
+      (when (not (and (file-exists-p my/private-elfile)
+                      (file-newer-than-file-p my/private-elfile my/private-orgfile)))
+        (my/tangle-config-org my/private-orgfile my/private-elfile)))
 
   ;; Load the el-file
-  (load-file my/private-elfile)
+  (if (file-exists-p my/private-elfile)
+      (load-file my/private-elfile))
 #+END_SRC
 See also: http://dotemacs.de/multiemacs.html
 ** Load secret stuff
