@@ -68,12 +68,21 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
       (insert-file-contents filePath)
       (split-string (buffer-string) "\n" t)))
 
+  (defun my/fullpath (filepath directory)
+    "Concatenate directory to names in filepath and return as list."
+    (let (value)
+      (setq list (my/read-lines filepath))
+      (dolist (shortfile list value)
+        (setq fullpath (concat directory shortfile))
+        (setq value (cons fullpath value)))))
+
   ;; Define constants
-  (defconst my/org-directory (concat my/dropbox-dir "emacs/org/"))
-  (defconst my/notes-file (concat my/org-directory "notes.org"))
-  (defconst my/diary-file (concat my/org-directory "diary.org"))
-  (defconst my/org-agenda-files (concat my/org-directory ".agenda-files"))
-  (defvar my/refile-targets (my/read-lines (concat my/org-directory ".target-files")))
+  (defconst my/org-directory (expand-file-name "emacs/org/" my/dropbox-dir))
+  (defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
+  (defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
+  (defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
+  (defvar my/refile-targets (my/read-lines (expand-file-name ".target-files"  my/org-directory)))
+  (defvar my/mobile-target-file (expand-file-name  ".mobile-files" my/org-directory))
   ;; My org-files directory
   (setq org-directory my/org-directory)
   ;; Org-agenda can read from a file
@@ -83,7 +92,7 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
   ;; Choose targets for refile from this file
   (setq org-refile-targets '((my/refile-targets :maxlevel . 4)))
   ;; Files for mobile sync
-  (defvar my/mobile-files (my/read-lines (concat my/org-directory ".mobile-files")))
+  (defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
 #+END_SRC
 * Config
 ** Initializing
@@ -126,16 +135,18 @@ Works from version 25.1
 Ensure that *use-package* and *orgmode* is installed, otherwise install it.
 From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
 #+BEGIN_SRC emacs-lisp
-(eval-when-compile
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-  (require 'use-package)
-  (use-package diminish :ensure t)
-  (require 'diminish)
-  (require 'bind-key)
-  (unless (package-installed-p 'org)
-    (package-install 'org)))
+  (eval-when-compile
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
+    (require 'use-package)
+    (use-package diminish :ensure t)
+    (require 'diminish)
+    (require 'bind-key)
+    (use-package org
+      :pin org
+      :ensure t
+      :defer))
 #+END_SRC
 *** Use-package default settings
 If we set the variable use-package-always-ensure, we need to set :ensure to nil for packages that are already included in emacs. I prefer to set this variable since I dont install packages manually.
@@ -211,7 +222,9 @@ Powershell-mode is useful.
   (use-package powershell
     :commands powershell
     :config
-    (setq powershell-eldoc-def-files (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
+    (setq powershell-eldoc-def-files (list (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
+    (when (eq system-type 'gnu/linux)
+      (setq powershell-location-of-exe "/usr/bin/pwsh")))
 #+END_SRC
 *** Dos-mode
 Only in windows.
@@ -358,7 +371,7 @@ Complete anything
 :diminish
 :config
   (global-company-mode t)
-  (setq company-idle-delay 0.1))
+  (setq company-idle-delay 0))
 #+END_SRC
 **** Company-shell
 Add more functions to company
@@ -395,7 +408,8 @@ Switch windows and frames quickly.
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     (setq aw-background nil)
     (setq aw-dispatch-always t)
-    :bind ("M-o" . ace-window))
+    :bind (("M-o" . ace-window)
+           ("C-x o" . aw-flip-window)))
 #+END_SRC
 *** Resize windows
 Use ~resize-window~ for changing size.
@@ -418,12 +432,12 @@ Use wiki search from emacs
 *** Super-save
 Save buffers when idle
 #+BEGIN_SRC emacs-lisp
-(use-package super-save
-:diminish super-save-mode
-  :config
-  (super-save-mode +1)
-  (setq super-save-auto-save-when-idle t)
-  (setq super-save-idle-duration 20))
+  (use-package super-save
+    :diminish super-save-mode
+    :config
+    (super-save-mode +1)
+    (setq super-save-auto-save-when-idle t)
+    (setq super-save-idle-duration 5))
 #+END_SRC
 *** Yara-files
 Mode that supports editing of Yara-files.
@@ -623,17 +637,18 @@ Read csv-files.
 **** Hydra for yasnippet
 From https://github.com/abo-abo/hydra/wiki/YASnippet
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-yasnippet (:color blue :hint nil)
+  (defhydra hydra-yasnippet (:pre (yas-minor-mode t)
+                                  :color blue :hint nil)
     "
-                  ^YASnippets^
-    --------------------------------------------
-      Modes:    Load/Visit:    Actions:
+                      ^YASnippets^
+        -----------------------------------
+        Actions:    Load/Visit:   Modes:
 
-     _c_ompany-yas   _d_irectory    _i_nsert
-     _g_lobal        _f_ile         _t_ryout
-     _m_inor         _l_ist         _n_ew
-     _e_xtra         _a_ll
-    "
+        _i_nsert     _d_irectory    _c_ompany-yas
+        _t_ryout     _f_ile         _g_lobal: %`yas-global-mode
+        _n_ew        _l_ist         _m_inor: %`yas-minor-mode
+        _e_xtra      _a_ll
+  "
     ("c" company-yasnippet)
     ("d" yas-load-directory)
     ("e" yas-activate-extra-mode)
@@ -651,8 +666,9 @@ Load yasnippet and some templates.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :config
-    (yas-global-mode nil)
-    (use-package yasnippet-snippets)
+    (yas-global-mode 0)
+    (use-package yasnippet-snippets
+      :after yasnippet)
     :bind (("C-c y" . hydra-yasnippet/body)
            :map yas-minor-mode-map
            ("C-c i" . yas-expand)))
@@ -944,7 +960,7 @@ A ~hydra~ for elfeed.
    ("fd" (elfeed-search-set-filter "@6-months-ago") "default")
    ("fc" (elfeed-search-set-filter "@6-months-ago +code") "code")
    ("fe" (elfeed-search-set-filter "@6-months-ago +emacs") "emacs")
-   ("fc" (elfeed-search-set-filter "@6-months-ago +security") "security")
+   ("fs" (elfeed-search-set-filter "@6-months-ago +security") "security")
    ("ft" (elfeed-search-set-filter "@1-days-ago +unread") "today")
    ("fw" (elfeed-search-set-filter "@7-days-ago +unread") "Week")
    ("*" (elfeed-search-set-filter "@6-months-ago +star") "filter star")
@@ -1013,6 +1029,30 @@ Query Stackexchange from emacs.
       ("q" nil "Cancel"))
 
     :bind ("C-c x" . hydra-sx/body))
+#+end_src
+*** docker
+#+begin_src emacs-lisp
+(use-package docker
+:bind ("C-c d" . docker))
+#+end_src
+*** apib-mode
+Support files in apib format, [[https://apiblueprint.org/][API Blueprint]]
+#+begin_src emacs-lisp
+  (use-package apib-mode
+    :defer)
+#+end_src
+*** json-navigator
+Navigate JSON-files. Also use tree-mode for navigation.
+#+begin_src emacs-lisp
+  (use-package json-navigator
+    :config
+    (use-package tree-mode
+      :bind (:map tree-minor-mode
+                  ("q" . quit-window)))
+    :chords
+    ("jj" . json-navigator-navigate-region)
+    ("jp" . json-navigator-navigate-after-point)
+    )
 #+end_src
 ** Hydra config
 Hydras is keyboard mapping through menus.
@@ -1089,16 +1129,27 @@ Hydra for quick access to emacs files, "<f8> i".
 *** Hydra for org
 Switch between org-buffers, "<f8> o".
 #+BEGIN_SRC emacs-lisp
-(defhydra hydra-org-stuff (:color blue :columns 3)
-"Org mode stuff"
-    ("c" org-gcal-sync "Sync Google Calender")
-    ("g" org-mobile-pull "Pull from mobile")
-    ("p" org-mobile-push "Push to mobile")
+  (defhydra hydra-org-stuff (:color blue :columns 3)
+    "Org mode stuff"
+    ("c" my/org-gcal-sync "Sync Google Calender")
+    ("g" my/org-mobile-sync "Synchronize mobile")
     ("P" org-publish-project "org-publish-project")
     ("o" org-iswitchb "Switch org-buffer")
     ("s" org-save-all-org-buffers "Save Org buffers")
     ("q" nil "cancel"))
-(bind-key "<f8> o" 'hydra-org-stuff/body)
+  (bind-key "<f8> o" 'hydra-org-stuff/body)
+  (defun my/org-gcal-sync()
+    "Synchronizes Google calendar with Org"
+    (interactive)
+    (org-save-all-org-buffers)
+    (org-gcal-sync))
+  (defun my/org-mobile-sync()
+    "Synchronizes agenda files with mobile app."
+    (interactive)
+    (org-save-all-org-buffers)
+    (org-mobile-pull)
+    (org-mobile-push)
+    (message "Synced mobile agendas."))
 #+END_SRC
 *** Launcher
 Launch various programs, "C-c b"
@@ -1369,7 +1420,8 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
                              (name . "^\\*Messages\\*$")))
                    ("Tramp" (or (filename . "^\\/scp:")
                                 (name . "^\\*tramp")))
-                   ("iBuffer" (mode . ibuffer-mode)))
+                   ("iBuffer" (mode . ibuffer-mode))
+                   ("Gists" (name . "^\\*gist.*")))
                   ("Help"
                    ("Man" (mode . Man-mode))
                    ("Help" (or (name . "\\*Help\\*")
@@ -1387,7 +1439,9 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
     :hook (ibuffer-mode .
                         (lambda ()
                           (ibuffer-auto-mode 1)
-                          (ibuffer-switch-to-saved-filter-groups "default")))
+                          (ibuffer-switch-to-saved-filter-groups "default")
+                          (unless (eq ibuffer-sorting-mode 'alphabetic)
+                            (ibuffer-do-sort-by-alphabetic))))
     )
 #+END_SRC
 ** ibuffer-vc
@@ -1521,35 +1575,39 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 ** Theme
 *** Load themes
 #+BEGIN_SRC emacs-lisp
-(defun my/load-themes ()
- "Loads my themes if in windows"
+  (defun my/load-themes ()
+    "Loads my themes if in windows"
 
-  (use-package afternoon-theme)
-  (load-theme 'afternoon t t)
+    (use-package afternoon-theme
+      :config
+      (load-theme 'afternoon t t))
 
-  (use-package base16-theme)
-  (load-theme 'base16 t t)
+    (use-package base16-theme
+      :config
+      (load-theme 'base16 t t))
 
-  (use-package material-theme)
-  (load-theme 'material t t)
+    (use-package material-theme
+      :config
+      (load-theme 'material t t))
 
-  (use-package twilight-bright-theme)
-  (load-theme 'twilight-bright t t)
+    (use-package twilight-bright-theme
+      :config
+      (load-theme 'twilight-bright t t))
 
-  (use-package zenburn-theme)
-  (load-theme 'zenburn t t)
+    (use-package zenburn-theme
+      :config
+      (load-theme 'zenburn t t))
 
-  (use-package org-beautify-theme
-    :pin melpa
-    :disabled
-    :config
-    (load-theme 'org-beautify t t))
+    (use-package org-beautify-theme
+      :disabled
+      :config
+      (load-theme 'org-beautify t t))
 
-  (load-theme 'material))
+    (use-package gruber-darker-theme
+      :config(load-theme 'gruber-darker t t))
+
+    (load-theme 'material))
 #+END_SRC
-
-#+RESULTS:
-: my/load-themes
 
 ***  Load different theme if in gui or terminal
 #+BEGIN_SRC emacs-lisp
@@ -1570,7 +1628,7 @@ Switch betweens selected themes with "C-<".
 #+BEGIN_SRC emacs-lisp
 (use-package theme-looper
   :config
-  (theme-looper-set-theme-set '(afternoon twilight-bright tango-dark zenburn material))
+  (theme-looper-set-theme-set '(afternoon twilight-bright tango-dark zenburn material gruber-darker))
   :bind
   ("C-<" . theme-looper-enable-next-theme)
   ("C->" . theme-looper-enable-random-theme))
@@ -1803,6 +1861,18 @@ Display time as 24-hour format
 #+BEGIN_SRC emacs-lisp
 (setq display-time-24hr-format t)
 #+END_SRC
+*** Eldoc
+Some eldoc settings.
+#+begin_src emacs-lisp
+(setq eldoc-idle-delay 0.1)
+#+end_src
+*** Help-settings
+From [[https://emacsredux.com/blog/2014/06/18/quickly-find-emacs-lisp-sources/][Find-func]].
+Find function faster and jump to function directly.
+#+begin_src emacs-lisp
+  (define-key 'help-command (kbd "C-l") 'find-library)
+  (define-key 'help-command (kbd "C-k") 'find-function-on-key)
+#+end_src
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
@@ -1985,12 +2055,20 @@ For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom
                     ((org-agenda-entry-types '(:deadline))))
             (agenda ""
                     ((org-agenda-entry-types '(:scheduled)))))
-            ((org-agenda-time-grid nil)
+           ((org-agenda-time-grid nil)
             (org-agenda-start-on-weekday nil)
             (org-agenda-span 1)
             (org-deadline-warning-days 14)
             (org-agenda-time-grid nil)
             (org-agenda-compact-blocks t)))
+
+          ("l" "Log for last week"
+           ((agenda ""
+                    ((org-agenda-span 14)
+                     (org-agenda-start-day "-7d")
+                     (org-agenda-repeating-timestamp-show-all t)
+                     (org-agenda-include-inactive-timestamps t))))
+           ((org-agenda-compact-blocks t)))
 
           ("h" . "Hemma|Huset")
           ("hh" "Agenda and Home-related tasks" tags-todo "Hemma|Huset"
@@ -2018,43 +2096,54 @@ For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom
 ** Org-templates
 A few templates to speed up capture.
 #+BEGIN_SRC emacs-lisp
-(setq org-capture-templates
-    `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
-       "* TODO %?\n%T\n" :prepend t)
+  (setq org-capture-templates
+        `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
+           "* TODO %^{Description of todo}\nAdded: %U\n%?" :prepend t)
 
-      ;; Multiline for blog-notes
-      ("b" "Blog idea")
-      ("be" "Emacs idea" entry (file+headline my/notes-file "Emacs")
-       "* %?\n%T\n" :prepend t)
-      ("bb" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
-       "* %?\n%T\n" :prepend t)
+          ;; Multiline for blog-notes
+          ("b" "Blog idea")
+          ("be" "Emacs idea" entry (file+headline my/notes-file "Emacs")
+           "* IDEA %^{Title} :Emacs:\nAdded: %U\n%?" :prepend t)
+          ("bb" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
+           "* IDEA %^{Title} :Blog:\nAdded: %U\n%?" :prepend t)
 
-      ;;Links
-      ("l" "Link" entry (file+headline my/notes-file "Links")
-         "* [[%^C][%^{Title}]]  %^G\n%T\n%?" :prepend t)
+          ;;Links
+          ("l" "Link" entry (file+headline my/notes-file "Links")
+           "* [[%^C][%^{Title}]]  %^G\nAdded: %U\n%?" :prepend t)
 
-      ;; Notes
-      ("n" "Note" entry (file+headline my/notes-file "Notes")
-       "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+          ;; Notes
+          ("n" "Note" entry (file+headline my/notes-file "Notes")
+           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
 
-      ;; Journal
-      ("j" "Journal" entry (file+olp+datetree my/diary-file)
-       "* %?\n%U\n" :clock-in t :clock-resume t)
+          ;; Idea
+          ("i" "Idea" entry (file+headline my/notes-file "Someday")
+           "* IDEA %^{Title}\nAdded: %U\n%?" :prepend t)
 
-      ;; Multiline for watching stuff
-      ("f" "Filmtips")
-      ("fm" "Movies" entry (file+headline my/notes-file "Film")
-       "* %^{Titel} :Film:\nAdded on %T\n%?" :prepend t)
-      ("ft" "Video" entry (file+headline my/notes-file "Video")
-       "* %^{Titel} :Video:Info:\nAdded on %T\n%^L\n%?" :prepend t)
+          ;; Journal
+          ("j" "Journal" entry (file+olp+datetree my/diary-file)
+           "* %^{Enter title}\n%U\n%?" :clock-in t :clock-resume t)
 
-      ;; Notes for code
-      ("c" "Coding stuff")
-      ("cc" "note with code" entry (file+headline my/notes-file "Code")
-       "* %? \n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n")
-      ("cs" "note with code, source" entry (file+headline my/notes-file "Code")
-       "* %? \n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n%a\n")
-      ))
+          ;; Multiline for watching stuff
+          ("f" "Filmtips")
+          ("fm" "Movies" entry (file+headline my/notes-file "Film")
+           "* %^{Titel} :Film:\nAdded on %T\n%?" :prepend t)
+          ("ft" "Video" entry (file+headline my/notes-file "Video")
+           "* %^{Titel} :Video:Info:\nAdded on %T\n%^L\n%?" :prepend t)
+
+          ;; Notes for code
+          ("c" "Coding stuff")
+          ("cc" "note with code" entry (file+headline my/notes-file "Code")
+           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n")
+          ("cs" "note with code, source" entry (file+headline my/notes-file "Code")
+           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n%a\n")
+
+          ;; Reports and bugs
+          ("r" "Reporting")
+          ("rb" "Bug" entry (file+headline my/notes-file "Reports")
+           "* BUG %^{Description of bug} %^G\nAdded: %U\n%?")
+          ("rr" "Report" entry (file+headline my/notes-file "Reports")
+           "* REPORT %^{Description of report} %^G\nAdded: %U\n#+begin_example\n%^C\n#+end_example\n%?")
+          ))
 #+END_SRC
 ** Localized calender
 Use swedish calendar, from [[http://bigwalter.net/daniel/elisp/sv-kalender.el][Sv-kalender]]
@@ -2070,8 +2159,8 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
     (autoload 'org-mobile-pull "org-mobile" nil t)
     (autoload 'org-mobile-push "org-mobile" nil t)
     :config
-    (setq org-mobile-directory (concat my/dropbox-dir "Appar/MobileOrg/"))
-    (setq org-mobile-inbox-for-pull (concat my/dropbox-dir "emacs/org/sync.org"))
+    (setq org-mobile-directory (expand-file-name "Appar/MobileOrg/" my/dropbox-dir))
+    (setq org-mobile-inbox-for-pull (expand-file-name "sync.org" my/org-directory))
     (setq org-mobile-files my/mobile-files)
     (setq org-mobile-agendas 'default)
     (setq org-mobile-force-id-on-agenda-items nil))
