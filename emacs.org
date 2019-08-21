@@ -1874,6 +1874,14 @@ Find function faster and jump to function directly.
   (define-key 'help-command (kbd "C-l") 'find-library)
   (define-key 'help-command (kbd "C-k") 'find-function-on-key)
 #+end_src
+*** Regular expressions
+Use ~string~ as default syntax for *regexp-builder*.
+#+begin_src emacs-lisp
+  (setq reb-re-syntax 'string)
+  (add-hook 'reb-mode-hook
+            (lambda()
+              (define-key reb-mode-map "C-c C-q" 'reb-quit)))
+#+end_src
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
