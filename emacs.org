@@ -101,6 +101,12 @@ Increase message-buffer
 (setq message-log-max (* 256 1024))
 #+END_SRC
 ** Package-archives
+*** Bugfix for ELPA
+Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
+#+begin_src emacs-lisp
+  (when (< emacs-major-version 27)
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+#+end_src
 *** Load packages from these archives.
 #+BEGIN_SRC emacs-lisp
 (prefer-coding-system 'utf-8)
