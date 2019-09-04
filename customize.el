@@ -56,4 +56,9 @@
  ;; If there is more than one, they won't work right.
  '(Man-overstrike ((t (:inherit bold :foreground "orange"))))
  '(macrostep-expansion-highlight-face ((t (:foreground "light gray"))))
+ '(package-status-avail-obso ((t (:inherit package-status-incompat :foreground "magenta"))))
+ '(package-status-dependency ((t (:inherit nil :foreground "cyan"))))
+ '(package-status-incompat ((t (:inherit error :foreground "gold"))))
+ '(package-status-installed ((t (:inherit font-lock-comment-face :foreground "deep sky blue"))))
+ '(package-status-new ((t (:inherit (bold package-status-available) :foreground "light green"))))
  '(woman-bold ((t (:inherit bold :foreground "orange")))))
