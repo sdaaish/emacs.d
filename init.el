@@ -34,9 +34,9 @@
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
-;; Stuff that are needed for this to work and should be installed by default with emacs.
-(require 'org)
-(require 'ob-tangle)
+;; Install latest version of org and org-plus-contrib
+(use-package org
+  :straight org-plus-contrib)
 
 ;; Read the rest from my org-babel enabled config-file
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
