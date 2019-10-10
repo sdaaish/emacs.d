@@ -109,6 +109,230 @@ Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 #+end_src
+* Hydra config
+Hydras is keyboard mapping through menus.
+*** Hydra
+#+BEGIN_SRC emacs-lisp
+;; Hydra keymapping support
+(use-package hydra)
+#+END_SRC
+*** Toggle stuff
+Use "C-c v" to toggle values.
+#+BEGIN_SRC emacs-lisp
+  (require 'whitespace)
+  (defhydra hydra-toggle (:color pink)
+    "
+      _a_ abbrev-mode:       %`abbrev-mode
+      _d_ debug-on-error:    %`debug-on-error
+      _f_ auto-fill-mode:    %`auto-fill-function
+      _t_ truncate-lines:    %`truncate-lines
+      _w_ whitespace-mode:   %`whitespace-mode
+      _l_ linum-mode:        %`linum-mode
+      _r_ relative-mode      %`linum-relative-mode
+      _R_ rainbow-mode       %`rainbow-delimiters-mode
+      "
+    ("a" abbrev-mode nil)
+    ("d" toggle-debug-on-error nil)
+    ("f" auto-fill-mode nil)
+    ("l" linum-mode nil)
+    ("r" linum-relative-mode nil)
+    ("R" rainbow-delimiters-mode nil)
+    ("t" toggle-truncate-lines nil)
+    ("w" whitespace-mode nil)
+    ("q" nil "cancel" :color blue))
+  (bind-key "C-c v" 'hydra-toggle/body)
+#+END_SRC
+*** Zoom font
+Use <F2> to zoom in or out of fonts
+#+BEGIN_SRC emacs-lisp
+(defhydra hydra-zoom (global-map "<f2>")
+  "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out"))
+ (setq text-scale-mode-step 1.1)
+#+END_SRC
+*** Font size changes
+Change fonts with C-<f2>.
+#+BEGIN_SRC emacs-lisp
+(defhydra hydra-font (global-map "C-<f2>")
+  "Change fonts to next/previous"
+    ("n" my/cycle-font-next "next font")
+    ("p" my/cycle-font-previous "out"))
+#+END_SRC
+*** Emacs init files.
+Hydra for quick access to emacs files, "<f8> i".
+#+BEGIN_SRC emacs-lisp
+(defhydra hydra-config-files (:color blue :columns 3)
+  "Emacs config files"
+    ("c" (find-file custom-file) "customize.el")
+    ("e" (find-file my/emacs-orgfile) "emacs.org")
+    ("E" (find-file my/emacs-elfile) "emacs.el")
+    ("i" (find-file user-init-file) "init.el")
+    ("k" my/server-shutdown "Save&kill")
+    ("p" (find-file my/private-orgfile) "private.org")
+    ("r" (load-file user-init-file) "Reload emacs")
+    ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "lisp"))) "Cheat sheet")
+    ("q" nil "cancel"))
+(bind-key "<f8> i" 'hydra-config-files/body)
+(defun my/server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs)
+  )
+#+END_SRC
+*** Hydra for org
+Switch between org-buffers, "<f8> o".
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-org-stuff (:color blue :columns 3)
+    "Org mode stuff"
+    ("c" my/org-gcal-sync "Sync Google Calender")
+    ("g" my/org-mobile-sync "Synchronize mobile")
+    ("P" org-publish-project "org-publish-project")
+    ("o" org-iswitchb "Switch org-buffer")
+    ("s" org-save-all-org-buffers "Save Org buffers")
+    ("q" nil "cancel"))
+  (bind-key "<f8> o" 'hydra-org-stuff/body)
+  (defun my/org-gcal-sync()
+    "Synchronizes Google calendar with Org"
+    (interactive)
+    (org-save-all-org-buffers)
+    (org-gcal-sync))
+  (defun my/org-mobile-sync()
+    "Synchronizes agenda files with mobile app."
+    (interactive)
+    (org-save-all-org-buffers)
+    (org-mobile-pull)
+    (org-mobile-push)
+    (message "Synced mobile agendas."))
+#+END_SRC
+*** Launcher
+Launch various programs, "C-c b"
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-launcher (:color blue :columns 4)
+    "Launch programs"
+    ("b" hydra-better-shell/body "Better Shell")
+    ("c" cheat-sh "Cheat sheet")
+    ("e" eshell "Eshell")
+    ("E" eww "EWW")
+    ("f" free-keys "Free keys")
+    ("g" (browse-url "https://git-scm.com/docs/") "Git Book")
+    ("h" man "man")
+    ("H" (browse-url "http://localhost:1313/") "Local Hugo site")
+    ("n" hackernews "Hackernews")
+    ("p" (powershell) "Powershell")
+    ("r" (browse-url "http://www.reddit.com/r/emacs/") "Reddit")
+    ("t" (counsel-tramp) "Counsel-TRAMP")
+    ("T" twit "Twitter mode")
+    ("R" bjm/elfeed-load-db-and-open "RSS")
+    ("s" shell "Shell")
+    ("v" (shell-command (concat "code " buffer-file-name)) "VSCode")
+    ("w" (browse-url "http://www.emacswiki.org/") "Emacs Wiki")
+    ("W" wiki-summary "Wiki summary")
+    ("q" nil "quit"))
+  (bind-key "C-c b" 'hydra-launcher/body)
+#+END_SRC
+*** Expand text
+Expand text in org mode
+;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
+#+BEGIN_SRC emacs-lisp
+(defhydra hydra-org-template (:color blue :hint nil)
+    "
+ _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
+ _l_atex   _E_xample   _p_owershell    _i_ndex:
+ _a_scii   _v_erse     _S_hellsript    _I_NCLUDE:
+ _s_rc     _n_ote      _P_erl tangled  _H_TML:
+ _h_tml    _O_ptions   plant_u_ml      _A_SCII:
+"
+    ("s" (hot-expand "<s"))
+    ("E" (hot-expand "<e"))
+    ("q" (hot-expand "<q"))
+    ("v" (hot-expand "<v"))
+    ("n" (hot-expand "<n"))
+    ("O" (let (text)
+           (when (region-active-p)
+           (setq text (buffer-substring (region-beginning) (region-end)))
+             (delete-region (region-beginning) (region-end)))
+           (insert "#+BEGIN_OPTIONS\n\n#+END_OPTIONS")
+           (forward-line -1)
+           (when text (insert text))))
+    ("c" (hot-expand "<c"))
+    ("l" (hot-expand "<l"))
+    ("h" (hot-expand "<h"))
+    ("a" (hot-expand "<a"))
+    ("L" (hot-expand "<L"))
+    ("i" (hot-expand "<i"))
+    ("e" (hot-expand "<s" "emacs-lisp"))
+    ("p" (hot-expand "<s" "powershell"))
+    ("S" (hot-expand "<s" "sh"))
+    ("u" (hot-expand "<s" "plantuml :file CHANGE.png"))
+    ("P" (hot-expand "<s" "perl" ":results output :exports both :shebang \"#!/usr/bin/env perl\"\n"))
+    ("I" (hot-expand "<I"))
+    ("H" (hot-expand "<H"))
+    ("A" (hot-expand "<A"))
+    ("<" self-insert-command "ins")
+    ("o" nil "quit"))
+
+  (require 'org-tempo) ; Required from org 9 onwards for old template expansion
+  ;; Reset the org-template expansion system, this is need after upgrading to org 9 for some reason
+  (setq org-structure-template-alist (eval (car (get 'org-structure-template-alist 'standard-value))))
+
+  (defun hot-expand (str &optional mod header)
+    "Expand org template.
+
+STR is a structure template string recognised by org like <s. MOD is a
+string with additional parameters to add the begin line of the
+structure element. HEADER string includes more parameters that are
+prepended to the element after the #+HEADER: tag."
+    (let (text)
+      (when (region-active-p)
+        (setq text (buffer-substring (region-beginning) (region-end)))
+        (delete-region (region-beginning) (region-end))
+        (deactivate-mark))
+      (when header (insert "#+HEADER: " header) (forward-line))
+      (insert str)
+      (org-tempo-complete-tag)
+      (when mod (insert mod) (forward-line))
+      (when text (insert text))))
+
+  (define-key org-mode-map "<"
+    (lambda () (interactive)
+      (if (or (region-active-p) (looking-back "^"))
+          (hydra-org-template/body)
+        (self-insert-command 1))))
+
+  (eval-after-load "org"
+    '(cl-pushnew
+    '("not" . "note")
+      org-structure-template-alist))
+#+END_SRC
+**** Org-mode keybindings
+#+BEGIN_SRC emacs-lisp
+(define-key org-mode-map "<"
+  (lambda () (interactive)
+  (if (or (region-active-p) (looking-back "^"))
+  (hydra-org-template/body)
+  (self-insert-command 1))))
+
+(bind-key "C-c o" 'hydra-org-template/body)
+#+END_SRC
+**** Org-mode link buffer keybindings
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-load-hook
+  (lambda ()
+    (define-key org-mode-map "\C-n" 'org-next-link)
+    (define-key org-mode-map "\C-p" 'org-previous-link)))
+#+END_SRC
+*** Move text
+Use a hydra to move text. M-<up> or M-<down>.
+#+BEGIN_SRC emacs-lisp
+(use-package move-text
+  :config
+  (defhydra hydra-move-text ()
+    "Move text"
+    ("u" move-text-up "up")
+    ("d" move-text-down "down")))
+#+END_SRC
 * Git and projects
 ** Magit
 Magit is a Git-tool, probably the best porcelain in the world!
@@ -786,230 +1010,6 @@ Automatically insert parenthesis.
   :diminish
   :hook
   ((org-mode prog-mode) . smartparens-mode))
-#+END_SRC
-* Hydra config
-Hydras is keyboard mapping through menus.
-*** Hydra
-#+BEGIN_SRC emacs-lisp
-;; Hydra keymapping support
-(use-package hydra)
-#+END_SRC
-*** Toggle stuff
-Use "C-c v" to toggle values.
-#+BEGIN_SRC emacs-lisp
-  (require 'whitespace)
-  (defhydra hydra-toggle (:color pink)
-    "
-      _a_ abbrev-mode:       %`abbrev-mode
-      _d_ debug-on-error:    %`debug-on-error
-      _f_ auto-fill-mode:    %`auto-fill-function
-      _t_ truncate-lines:    %`truncate-lines
-      _w_ whitespace-mode:   %`whitespace-mode
-      _l_ linum-mode:        %`linum-mode
-      _r_ relative-mode      %`linum-relative-mode
-      _R_ rainbow-mode       %`rainbow-delimiters-mode
-      "
-    ("a" abbrev-mode nil)
-    ("d" toggle-debug-on-error nil)
-    ("f" auto-fill-mode nil)
-    ("l" linum-mode nil)
-    ("r" linum-relative-mode nil)
-    ("R" rainbow-delimiters-mode nil)
-    ("t" toggle-truncate-lines nil)
-    ("w" whitespace-mode nil)
-    ("q" nil "cancel" :color blue))
-  (bind-key "C-c v" 'hydra-toggle/body)
-#+END_SRC
-*** Zoom font
-Use <F2> to zoom in or out of fonts
-#+BEGIN_SRC emacs-lisp
-(defhydra hydra-zoom (global-map "<f2>")
-  "zoom"
-    ("g" text-scale-increase "in")
-    ("l" text-scale-decrease "out"))
- (setq text-scale-mode-step 1.1)
-#+END_SRC
-*** Font size changes
-Change fonts with C-<f2>.
-#+BEGIN_SRC emacs-lisp
-(defhydra hydra-font (global-map "C-<f2>")
-  "Change fonts to next/previous"
-    ("n" my/cycle-font-next "next font")
-    ("p" my/cycle-font-previous "out"))
-#+END_SRC
-*** Emacs init files.
-Hydra for quick access to emacs files, "<f8> i".
-#+BEGIN_SRC emacs-lisp
-(defhydra hydra-config-files (:color blue :columns 3)
-  "Emacs config files"
-    ("c" (find-file custom-file) "customize.el")
-    ("e" (find-file my/emacs-orgfile) "emacs.org")
-    ("E" (find-file my/emacs-elfile) "emacs.el")
-    ("i" (find-file user-init-file) "init.el")
-    ("k" my/server-shutdown "Save&kill")
-    ("p" (find-file my/private-orgfile) "private.org")
-    ("r" (load-file user-init-file) "Reload emacs")
-    ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "lisp"))) "Cheat sheet")
-    ("q" nil "cancel"))
-(bind-key "<f8> i" 'hydra-config-files/body)
-(defun my/server-shutdown ()
-  "Save buffers, Quit, and Shutdown (kill) server"
-  (interactive)
-  (save-some-buffers)
-  (kill-emacs)
-  )
-#+END_SRC
-*** Hydra for org
-Switch between org-buffers, "<f8> o".
-#+BEGIN_SRC emacs-lisp
-  (defhydra hydra-org-stuff (:color blue :columns 3)
-    "Org mode stuff"
-    ("c" my/org-gcal-sync "Sync Google Calender")
-    ("g" my/org-mobile-sync "Synchronize mobile")
-    ("P" org-publish-project "org-publish-project")
-    ("o" org-iswitchb "Switch org-buffer")
-    ("s" org-save-all-org-buffers "Save Org buffers")
-    ("q" nil "cancel"))
-  (bind-key "<f8> o" 'hydra-org-stuff/body)
-  (defun my/org-gcal-sync()
-    "Synchronizes Google calendar with Org"
-    (interactive)
-    (org-save-all-org-buffers)
-    (org-gcal-sync))
-  (defun my/org-mobile-sync()
-    "Synchronizes agenda files with mobile app."
-    (interactive)
-    (org-save-all-org-buffers)
-    (org-mobile-pull)
-    (org-mobile-push)
-    (message "Synced mobile agendas."))
-#+END_SRC
-*** Launcher
-Launch various programs, "C-c b"
-#+BEGIN_SRC emacs-lisp
-  (defhydra hydra-launcher (:color blue :columns 4)
-    "Launch programs"
-    ("b" hydra-better-shell/body "Better Shell")
-    ("c" cheat-sh "Cheat sheet")
-    ("e" eshell "Eshell")
-    ("E" eww "EWW")
-    ("f" free-keys "Free keys")
-    ("g" (browse-url "https://git-scm.com/docs/") "Git Book")
-    ("h" man "man")
-    ("H" (browse-url "http://localhost:1313/") "Local Hugo site")
-    ("n" hackernews "Hackernews")
-    ("p" (powershell) "Powershell")
-    ("r" (browse-url "http://www.reddit.com/r/emacs/") "Reddit")
-    ("t" (counsel-tramp) "Counsel-TRAMP")
-    ("T" twit "Twitter mode")
-    ("R" bjm/elfeed-load-db-and-open "RSS")
-    ("s" shell "Shell")
-    ("v" (shell-command (concat "code " buffer-file-name)) "VSCode")
-    ("w" (browse-url "http://www.emacswiki.org/") "Emacs Wiki")
-    ("W" wiki-summary "Wiki summary")
-    ("q" nil "quit"))
-  (bind-key "C-c b" 'hydra-launcher/body)
-#+END_SRC
-*** Expand text
-Expand text in org mode
-;; From https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates
-#+BEGIN_SRC emacs-lisp
-(defhydra hydra-org-template (:color blue :hint nil)
-    "
- _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
- _l_atex   _E_xample   _p_owershell    _i_ndex:
- _a_scii   _v_erse     _S_hellsript    _I_NCLUDE:
- _s_rc     _n_ote      _P_erl tangled  _H_TML:
- _h_tml    _O_ptions   plant_u_ml      _A_SCII:
-"
-    ("s" (hot-expand "<s"))
-    ("E" (hot-expand "<e"))
-    ("q" (hot-expand "<q"))
-    ("v" (hot-expand "<v"))
-    ("n" (hot-expand "<n"))
-    ("O" (let (text)
-           (when (region-active-p)
-           (setq text (buffer-substring (region-beginning) (region-end)))
-             (delete-region (region-beginning) (region-end)))
-           (insert "#+BEGIN_OPTIONS\n\n#+END_OPTIONS")
-           (forward-line -1)
-           (when text (insert text))))
-    ("c" (hot-expand "<c"))
-    ("l" (hot-expand "<l"))
-    ("h" (hot-expand "<h"))
-    ("a" (hot-expand "<a"))
-    ("L" (hot-expand "<L"))
-    ("i" (hot-expand "<i"))
-    ("e" (hot-expand "<s" "emacs-lisp"))
-    ("p" (hot-expand "<s" "powershell"))
-    ("S" (hot-expand "<s" "sh"))
-    ("u" (hot-expand "<s" "plantuml :file CHANGE.png"))
-    ("P" (hot-expand "<s" "perl" ":results output :exports both :shebang \"#!/usr/bin/env perl\"\n"))
-    ("I" (hot-expand "<I"))
-    ("H" (hot-expand "<H"))
-    ("A" (hot-expand "<A"))
-    ("<" self-insert-command "ins")
-    ("o" nil "quit"))
-
-  (require 'org-tempo) ; Required from org 9 onwards for old template expansion
-  ;; Reset the org-template expansion system, this is need after upgrading to org 9 for some reason
-  (setq org-structure-template-alist (eval (car (get 'org-structure-template-alist 'standard-value))))
-
-  (defun hot-expand (str &optional mod header)
-    "Expand org template.
-
-STR is a structure template string recognised by org like <s. MOD is a
-string with additional parameters to add the begin line of the
-structure element. HEADER string includes more parameters that are
-prepended to the element after the #+HEADER: tag."
-    (let (text)
-      (when (region-active-p)
-        (setq text (buffer-substring (region-beginning) (region-end)))
-        (delete-region (region-beginning) (region-end))
-        (deactivate-mark))
-      (when header (insert "#+HEADER: " header) (forward-line))
-      (insert str)
-      (org-tempo-complete-tag)
-      (when mod (insert mod) (forward-line))
-      (when text (insert text))))
-
-  (define-key org-mode-map "<"
-    (lambda () (interactive)
-      (if (or (region-active-p) (looking-back "^"))
-          (hydra-org-template/body)
-        (self-insert-command 1))))
-
-  (eval-after-load "org"
-    '(cl-pushnew
-    '("not" . "note")
-      org-structure-template-alist))
-#+END_SRC
-**** Org-mode keybindings
-#+BEGIN_SRC emacs-lisp
-(define-key org-mode-map "<"
-  (lambda () (interactive)
-  (if (or (region-active-p) (looking-back "^"))
-  (hydra-org-template/body)
-  (self-insert-command 1))))
-
-(bind-key "C-c o" 'hydra-org-template/body)
-#+END_SRC
-**** Org-mode link buffer keybindings
-#+BEGIN_SRC emacs-lisp
-(add-hook 'org-load-hook
-  (lambda ()
-    (define-key org-mode-map "\C-n" 'org-next-link)
-    (define-key org-mode-map "\C-p" 'org-previous-link)))
-#+END_SRC
-*** Move text
-Use a hydra to move text. M-<up> or M-<down>.
-#+BEGIN_SRC emacs-lisp
-(use-package move-text
-  :config
-  (defhydra hydra-move-text ()
-    "Move text"
-    ("u" move-text-up "up")
-    ("d" move-text-down "down")))
 #+END_SRC
 * Private and local stuff
 ** Load private stuff
