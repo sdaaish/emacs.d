@@ -109,13 +109,7 @@ Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 #+end_src
-* Packages
-** Use-package chords
-Use chords as keyboard shortcuts.
-#+begin_src emacs-lisp
-  (use-package use-package-chords
-        :config (key-chord-mode 1))
-#+end_src
+* Git and projects
 ** Magit
 Magit is a Git-tool, probably the best porcelain in the world!
 #+BEGIN_SRC emacs-lisp
@@ -158,23 +152,6 @@ Pull requests on Github.
     :hook
     (magit-mode . turn-on-magit-gh-pulls))
 #+END_SRC
-** Winner-mode
-Winner is used to restore windows.
-#+BEGIN_SRC emacs-lisp
-(use-package winner)
-#+END_SRC
-** Bind-key
-Use the bind-key package (used by use-package).
-#+BEGIN_SRC emacs-lisp
-(use-package bind-key
-    :bind ("C-h B" . describe-personal-keybindings))
-#+END_SRC
-** diff-hl
-Highlight differences with diff-hl, which works better than git-gutter.
-#+BEGIN_SRC emacs-lisp
-(use-package diff-hl
-:hook ((prog-mode vc-dir-mode) . diff-hl-mode))
-#+END_SRC
 ** Gist
 Create and download gists from emacs.
 #+BEGIN_SRC emacs-lisp
@@ -196,6 +173,147 @@ Copy git links to kill-ring.
       ("c" git-link-commit "Copy commit"))
     :bind ("C-c L" . hydra-git-link/body))
 #+end_src
+** Yasnippets
+*** Hydra for yasnippet
+From https://github.com/abo-abo/hydra/wiki/YASnippet
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-yasnippet (:pre (yas-minor-mode t)
+                                  :color blue :hint nil)
+    "
+                      ^YASnippets^
+        -----------------------------------
+        Actions:    Load/Visit:   Modes:
+
+        _i_nsert     _d_irectory    _c_ompany-yas
+        _t_ryout     _f_ile         _g_lobal: %`yas-global-mode
+        _n_ew        _l_ist         _m_inor: %`yas-minor-mode
+        _e_xtra      _a_ll
+  "
+    ("c" company-yasnippet)
+    ("d" yas-load-directory)
+    ("e" yas-activate-extra-mode)
+    ("i" yas-insert-snippet)
+    ("f" yas-visit-snippet-file :color blue)
+    ("n" yas-new-snippet)
+    ("t" yas-tryout-snippet)
+    ("l" yas-describe-tables)
+    ("g" yas-global-mode)
+    ("m" yas-minor-mode)
+    ("a" yas-reload-all))
+#+END_SRC
+*** Yasnippet
+Load yasnippet and some templates.
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :config
+    (yas-global-mode 0)
+    (use-package yasnippet-snippets
+      :after yasnippet)
+    :bind (("C-c y" . hydra-yasnippet/body)
+           :map yas-minor-mode-map
+           ("C-c i" . yas-expand)))
+#+END_SRC
+** Projectile
+Find or switch to projects easy, and use ~counsel-projectile~.
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :diminish
+    :config
+    (projectile-mode t)
+    (setq projectile-completion-system 'ivy)
+    (use-package counsel-projectile
+      :init (counsel-projectile-mode 1))
+
+    (defhydra hydra-projectile-other-window (:color teal)
+      "projectile-other-window"
+      ("f"  projectile-find-file-other-window        "file")
+      ("g"  projectile-find-file-dwim-other-window   "file dwim")
+      ("d"  projectile-find-dir-other-window         "dir")
+      ("b"  projectile-switch-to-buffer-other-window "buffer")
+      ("q"  nil                                      "cancel" :color blue))
+
+    (defhydra hydra-projectile (:color teal :hint nil)
+      "
+           PROJECTILE: %(projectile-project-root)
+
+           Find File            Search/Tags          Buffers                Cache
+      ------------------------------------------------------------------------------------------
+        _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+       _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+       _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
+        _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
+        _d_: dir
+
+      "
+      ("a"   projectile-ag)
+      ("b"   projectile-switch-to-buffer)
+      ("c"   projectile-invalidate-cache)
+      ("d"   projectile-find-dir)
+      ("s-f" projectile-find-file)
+      ("F"   projectile-find-file)
+      ("ff"  projectile-find-file-dwim)
+      ("fd"  projectile-find-file-in-directory)
+      ("g"   ggtags-update-tags)
+      ("i"   projectile-ibuffer)
+      ("k"   projectile-kill-buffers)
+      ("m"   projectile-multi-occur)
+      ("p"   projectile-switch-project "switch project")
+      ("r"   projectile-recentf)
+      ("x"   projectile-remove-known-project)
+      ("X"   projectile-cleanup-known-projects)
+      ("z"   projectile-cache-current-file)
+      ("D"   projectile-discover-projects-in-directory)
+      ("'"   hydra-projectile-other-window/body "open other window")
+      ("q"   nil "cancel" :color blue))
+
+    :bind (("C-c p" . hydra-projectile/body)
+           (:map projectile-mode-map
+                 ("C-c P" . projectile-command-map)))) ;; Keep counsel-projectile for now
+#+END_SRC
+*** Fix
+From https://github.com/bbatsov/projectile/issues/1165.
+#+BEGIN_SRC emacs-lisp
+(defun projectile-discover-projects-in-directory (directory)
+  "Discover any projects in DIRECTORY and add them to the projectile cache.
+This function is not recursive and only adds projects with roots
+at the top level of DIRECTORY."
+  (interactive
+   (list (read-directory-name "Starting directory: ")))
+  (let ((subdirs (directory-files directory t)))
+    (mapcar
+     (lambda (dir)
+       (when (and (file-directory-p dir)
+                  (not (member (file-name-nondirectory dir) '(".." "."))))
+         (let ((default-directory dir)
+               (projectile-cached-project-root dir))
+           (when (projectile-project-p)
+             (projectile-add-known-project (projectile-project-root))))))
+     subdirs)))
+#+END_SRC
+* Packages
+** Use-package chords
+Use chords as keyboard shortcuts.
+#+begin_src emacs-lisp
+  (use-package use-package-chords
+        :config (key-chord-mode 1))
+#+end_src
+** Winner-mode
+Winner is used to restore windows.
+#+BEGIN_SRC emacs-lisp
+(use-package winner)
+#+END_SRC
+** Bind-key
+Use the bind-key package (used by use-package).
+#+BEGIN_SRC emacs-lisp
+(use-package bind-key
+    :bind ("C-h B" . describe-personal-keybindings))
+#+END_SRC
+** diff-hl
+Highlight differences with diff-hl, which works better than git-gutter.
+#+BEGIN_SRC emacs-lisp
+(use-package diff-hl
+:hook ((prog-mode vc-dir-mode) . diff-hl-mode))
+#+END_SRC
 ** line-numbers
 Use relative linenumbers.
 #+BEGIN_SRC emacs-lisp
@@ -426,46 +544,6 @@ Cool directory package.
   :bind ("C-x z" . ztree-dir)
   :config (setq-default ztree-dir-show-filtered-files t))
 #+END_SRC
-** Yasnippets
-*** Hydra for yasnippet
-From https://github.com/abo-abo/hydra/wiki/YASnippet
-#+BEGIN_SRC emacs-lisp
-  (defhydra hydra-yasnippet (:pre (yas-minor-mode t)
-                                  :color blue :hint nil)
-    "
-                      ^YASnippets^
-        -----------------------------------
-        Actions:    Load/Visit:   Modes:
-
-        _i_nsert     _d_irectory    _c_ompany-yas
-        _t_ryout     _f_ile         _g_lobal: %`yas-global-mode
-        _n_ew        _l_ist         _m_inor: %`yas-minor-mode
-        _e_xtra      _a_ll
-  "
-    ("c" company-yasnippet)
-    ("d" yas-load-directory)
-    ("e" yas-activate-extra-mode)
-    ("i" yas-insert-snippet)
-    ("f" yas-visit-snippet-file :color blue)
-    ("n" yas-new-snippet)
-    ("t" yas-tryout-snippet)
-    ("l" yas-describe-tables)
-    ("g" yas-global-mode)
-    ("m" yas-minor-mode)
-    ("a" yas-reload-all))
-#+END_SRC
-*** Yasnippet
-Load yasnippet and some templates.
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :config
-    (yas-global-mode 0)
-    (use-package yasnippet-snippets
-      :after yasnippet)
-    :bind (("C-c y" . hydra-yasnippet/body)
-           :map yas-minor-mode-map
-           ("C-c i" . yas-expand)))
-#+END_SRC
 ** proportional
 Use proportional fonts everywhere.
 #+BEGIN_SRC emacs-lisp
@@ -475,36 +553,6 @@ Use proportional fonts everywhere.
 Check urls in an file.
 #+BEGIN_SRC emacs-lisp
   (use-package verify-url)
-#+END_SRC
-** Rainbows
-Use different colors for delimeters to increase readability.
-#+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters
-      :hook
-      ((org-mode prog-mode) . rainbow-delimiters-mode))
-#+END_SRC
-** Restclient
-A client to make REST-calls from emacs and Org-mode. 
-#+BEGIN_SRC emacs-lisp
-  (use-package restclient
-    :commands restclient
-    :config
-    (use-package ob-restclient
-      :after org)
-    (use-package company-restclient
-      :after company
-      :hook (restclient-mode .
-                             (lambda ()
-                               (set (make-local-variable 'company-backends)
-                                    '(company-restclient))))))
-#+END_SRC
-** Smart parenthesis
-Automatically insert parenthesis.
-#+BEGIN_SRC emacs-lisp
-(use-package smartparens
-  :diminish
-  :hook
-  ((org-mode prog-mode) . smartparens-mode))
 #+END_SRC
 ** Undo-tree
 Make undo more intuitive.
@@ -518,83 +566,6 @@ Make undo more intuitive.
     :bind (("C-z" . undo)
            ("C-S-z" . undo-tree-redo))
     :chords ("uu" . undo-tree-visualize))
-#+END_SRC
-** Projectile
-Find or switch to projects easy, and use ~counsel-projectile~.
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :diminish
-    :config
-    (projectile-mode t)
-    (setq projectile-completion-system 'ivy)
-    (use-package counsel-projectile
-      :init (counsel-projectile-mode 1))
-
-    (defhydra hydra-projectile-other-window (:color teal)
-      "projectile-other-window"
-      ("f"  projectile-find-file-other-window        "file")
-      ("g"  projectile-find-file-dwim-other-window   "file dwim")
-      ("d"  projectile-find-dir-other-window         "dir")
-      ("b"  projectile-switch-to-buffer-other-window "buffer")
-      ("q"  nil                                      "cancel" :color blue))
-
-    (defhydra hydra-projectile (:color teal :hint nil)
-      "
-           PROJECTILE: %(projectile-project-root)
-
-           Find File            Search/Tags          Buffers                Cache
-      ------------------------------------------------------------------------------------------
-        _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
-       _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
-       _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
-        _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
-        _d_: dir
-
-      "
-      ("a"   projectile-ag)
-      ("b"   projectile-switch-to-buffer)
-      ("c"   projectile-invalidate-cache)
-      ("d"   projectile-find-dir)
-      ("s-f" projectile-find-file)
-      ("F"   projectile-find-file)
-      ("ff"  projectile-find-file-dwim)
-      ("fd"  projectile-find-file-in-directory)
-      ("g"   ggtags-update-tags)
-      ("i"   projectile-ibuffer)
-      ("k"   projectile-kill-buffers)
-      ("m"   projectile-multi-occur)
-      ("p"   projectile-switch-project "switch project")
-      ("r"   projectile-recentf)
-      ("x"   projectile-remove-known-project)
-      ("X"   projectile-cleanup-known-projects)
-      ("z"   projectile-cache-current-file)
-      ("D"   projectile-discover-projects-in-directory)
-      ("'"   hydra-projectile-other-window/body "open other window")
-      ("q"   nil "cancel" :color blue))
-
-    :bind (("C-c p" . hydra-projectile/body)
-           (:map projectile-mode-map
-                 ("C-c P" . projectile-command-map)))) ;; Keep counsel-projectile for now
-#+END_SRC
-*** Fix
-From https://github.com/bbatsov/projectile/issues/1165.
-#+BEGIN_SRC emacs-lisp
-(defun projectile-discover-projects-in-directory (directory)
-  "Discover any projects in DIRECTORY and add them to the projectile cache.
-This function is not recursive and only adds projects with roots
-at the top level of DIRECTORY."
-  (interactive
-   (list (read-directory-name "Starting directory: ")))
-  (let ((subdirs (directory-files directory t)))
-    (mapcar
-     (lambda (dir)
-       (when (and (file-directory-p dir)
-                  (not (member (file-name-nondirectory dir) '(".." "."))))
-         (let ((default-directory dir)
-               (projectile-cached-project-root dir))
-           (when (projectile-project-p)
-             (projectile-add-known-project (projectile-project-root))))))
-     subdirs)))
 #+END_SRC
 ** RSS stuff
 Use elfeed ass RSS-reader, plus extras.
@@ -786,7 +757,37 @@ Navigate JSON-files. Also use tree-mode for navigation.
     ("jp" . json-navigator-navigate-after-point)
     )
 #+end_src
-** Hydra config
+** Rainbows
+Use different colors for delimeters to increase readability.
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+      :hook
+      ((org-mode prog-mode) . rainbow-delimiters-mode))
+#+END_SRC
+** Restclient
+A client to make REST-calls from emacs and Org-mode. 
+#+BEGIN_SRC emacs-lisp
+  (use-package restclient
+    :commands restclient
+    :config
+    (use-package ob-restclient
+      :after org)
+    (use-package company-restclient
+      :after company
+      :hook (restclient-mode .
+                             (lambda ()
+                               (set (make-local-variable 'company-backends)
+                                    '(company-restclient))))))
+#+END_SRC
+** Smart parenthesis
+Automatically insert parenthesis.
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens
+  :diminish
+  :hook
+  ((org-mode prog-mode) . smartparens-mode))
+#+END_SRC
+* Hydra config
 Hydras is keyboard mapping through menus.
 *** Hydra
 #+BEGIN_SRC emacs-lisp
