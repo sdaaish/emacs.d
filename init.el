@@ -16,19 +16,27 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page   'disabled nil)
 
-;; Apparently this has to be here: https://www.emacswiki.org/emacs/ELPA
-;; Tips from https://github.com/nilcons/emacs-use-package-fast
-(setq package-archives nil)
-(setq package-enable-at-startup nil)
-(setq package--init-file-ensured nil)
-;; If this is commented, stops from adding this automatically. Don't exist in Emacs27.
-(when (< emacs-major-version 27)
-  (package-initialize))
+;; install straight package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; Stuff that are needed for this to work and should be installed by default with emacs.
-(require 'package)
-(require 'org)
-(require 'ob-tangle)
+;; Also install use-package
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+
+;; Install latest version of org and org-plus-contrib
+(use-package org
+  :straight org-plus-contrib)
 
 ;; Read the rest from my org-babel enabled config-file
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org

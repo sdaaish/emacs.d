@@ -100,91 +100,35 @@ Increase message-buffer
 #+BEGIN_SRC emacs-lisp
 (setq message-log-max (* 256 1024))
 #+END_SRC
-** Package-archives
+*** Standard language
+#+BEGIN_SRC emacs-lisp
+(prefer-coding-system 'utf-8)
+#+END_SRC
+*** Package-archives
+Use Melpa only to list packages and read about them.
+#+begin_src emacs-lisp
+(require 'package)
+(add-to-list 'package-archives
+  '("melpa" .		"https://melpa.org/packages/") t)
+#+end_src
 *** Bugfix for ELPA
 Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
 #+begin_src emacs-lisp
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 #+end_src
-*** Load packages from these archives.
-#+BEGIN_SRC emacs-lisp
-(prefer-coding-system 'utf-8)
-(add-to-list 'package-archives
-  '("melpa-stable" .	"https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-  '("melpa" .		"https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-  '("gnu"	.		"https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives
-  '("org" . "https://orgmode.org/elpa/") t)
-#+END_SRC
-*** Installation order, higher priority first
-See http://endlessparentheses.com/new-in-emacs-25-1-archive-priorities-and-downgrading-packages.html
-Works from version 25.1
-#+BEGIN_SRC emacs-lisp
-  (setq package-archive-priorities
-            (quote (("melpa-stable" . 1)
-              ("gnu" . 5)
-              ("melpa" . 10)
-              ("org" . 15))))
-      ;; If there is no package-archives, download them. If they exist, dont.
-      (unless (and (file-exists-p (concat user-emacs-directory "elpa/archives/gnu"))
-                   (file-exists-p (concat user-emacs-directory "elpa/archives/melpa"))
-                   (file-exists-p (concat user-emacs-directory "elpa/archives/melpa-stable"))
-                   (file-exists-p (concat user-emacs-directory "elpa/archives/org")))
-        (package-refresh-contents)
-      (message "*** Did refresh content. ***"))
-#+END_SRC
-** Package bootstrap
-Ensure that *use-package* and *orgmode* is installed, otherwise install it.
-From http://www.lunaryorn.com/posts/my-emacs-configuration-with-use-package.html
-#+BEGIN_SRC emacs-lisp
-  (eval-when-compile
-    (unless (package-installed-p 'use-package)
-      (package-refresh-contents)
-      (package-install 'use-package))
-    (require 'use-package)
-    (use-package diminish :ensure t)
-    (require 'diminish)
-    (require 'bind-key)
-    (use-package org
-      :pin org
-      :ensure t
-      :defer))
-#+END_SRC
-*** Use-package default settings
-If we set the variable use-package-always-ensure, we need to set :ensure to nil for packages that are already included in emacs. I prefer to set this variable since I dont install packages manually.
-#+BEGIN_SRC emacs-lisp
-(setq use-package-always-ensure t)
-(setq use-package-always-defer nil)
-(setq use-package-verbose t)
-(setq use-package-compute-statistics t)
-#+END_SRC
-** Local custom file fix
-This setting avoids updates to local custom-file.
-From https://www.reddit.com/r/emacs/comments/4x655n/packageselectedpackages_always_appear_after/
-#+BEGIN_SRC emacs-lisp
-;;(defun package--save-selected-packages (&optional value)
-;;  "Set and save `package-selected-packages' to VALUE."
-;;  (when value
-;;    (setq package-selected-packages value)))
-#+END_SRC
-** Packages
+* Packages
 *** Use-package chords
 Use chords as keyboard shortcuts.
 #+begin_src emacs-lisp
   (use-package use-package-chords
-    :ensure t
-    :config (key-chord-mode 1))
+        :config (key-chord-mode 1))
 #+end_src
 *** Magit
 Magit is a Git-tool, probably the best porcelain in the world!
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :pin melpa
-    :ensure t
-    :bind ("C-x g" . magit-status)
+        :bind ("C-x g" . magit-status)
     :config
     (setq magit-completing-read-function 'ivy-completing-read)
     (setq-default with-editor-emacsclient-executable "emacsclient"))
@@ -193,6 +137,7 @@ Magit is a Git-tool, probably the best porcelain in the world!
 Manage github things from emacs.
 #+begin_src emacs-lisp
   (use-package magithub
+    :disabled
     :after magit
     :config
     (magithub-feature-autoinject t)
@@ -234,10 +179,7 @@ Powershell-mode is useful.
 *** Dos-mode
 Only in windows.
 #+BEGIN_SRC emacs-lisp
-(if (eq system-type 'windows-nt)
-  (use-package bat-mode
-    :ensure nil)
-)
+  (use-package bat-mode)
 #+END_SRC
 *** Winner-mode
 Winner for navigating between buffers (C-<left> or C-<right>)
@@ -269,7 +211,6 @@ Winner for navigating between buffers (C-<left> or C-<right>)
 #+BEGIN_SRC emacs-lisp
   (use-package mediawiki
     :disabled
-    :pin melpa
     :config
     (setq mediawiki-site-alist
           (append
@@ -280,8 +221,6 @@ Winner for navigating between buffers (C-<left> or C-<right>)
 Add mode for configuring .ssh/config and other related to SSH.
 #+BEGIN_SRC emacs-lisp
 (use-package ssh-config-mode
-:ensure t
-:defer t
 :config
  (add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
  (add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
@@ -294,8 +233,7 @@ Add mode for configuring .ssh/config and other related to SSH.
 Use the bind-key package (used by use-package).
 #+BEGIN_SRC emacs-lisp
 (use-package bind-key
-  :ensure t
-  :bind ("C-h B" . describe-personal-keybindings))
+    :bind ("C-h B" . describe-personal-keybindings))
 #+END_SRC
 *** Git
 Modes for editing git-files
@@ -327,7 +265,6 @@ Create and download gists from emacs.
   (use-package gh
     :commands gist)
   (use-package gist
-    :pin melpa
     :config (setq gist-view-gist t)
     :bind (("C-x j" . gist-list)))
 #+END_SRC
@@ -447,14 +384,12 @@ Save buffers when idle
 *** Yara-files
 Mode that supports editing of Yara-files.
 #+BEGIN_SRC emacs-lisp
-  (use-package yara-mode
-    :defer)
+  (use-package yara-mode)
 #+END_SRC
 *** Better shell
 #+BEGIN_SRC emacs-lisp
   (use-package better-shell
-    :ensure t
-    :config
+        :config
     (defhydra hydra-better-shell (:color blue :columns 2)
       "Better Shell commands"
       ("s" better-shell-shell "Cycle shell" :color red)
@@ -469,8 +404,7 @@ Mode that supports editing of Yara-files.
 *** Elastic search mode
 #+BEGIN_SRC emacs-lisp
   (use-package es-mode
-    :defer
-    :config
+        :config
     (add-to-list 'auto-mode-alist '("\\.es$" . es-mode)))
 #+END_SRC
 *** Logstash-mode
@@ -686,26 +620,22 @@ Use proportional fonts everywhere.
 *** Docker file mode
 Support Dockerfile.
 #+BEGIN_SRC emacs-lisp
-  (use-package dockerfile-mode
-    :defer)
+  (use-package dockerfile-mode)
 #+END_SRC
 *** Docker compose
 Support Docker Compose files.
 #+BEGIN_SRC emacs-lisp
-  (use-package docker-compose-mode
-    :defer)
+  (use-package docker-compose-mode)
 #+END_SRC
 *** Toml-Mode
 Support .toml-files, eg for Hugo.
 #+BEGIN_SRC emacs-lisp
-  (use-package toml-mode
-    :defer)
+  (use-package toml-mode)
 #+END_SRC
 *** Verify-url
 Check urls in an file.
 #+BEGIN_SRC emacs-lisp
-  (use-package verify-url
-    :defer)
+  (use-package verify-url)
 #+END_SRC
 *** Rainbows
 Use different colors for delimeters to increase readability.
@@ -1001,8 +931,7 @@ Jump to any character.
 *** JSON-mode
 Edit JSON-files.
 #+BEGIN_SRC emacs-lisp
-  (use-package json-mode
-    :defer)
+  (use-package json-mode)
 #+END_SRC
 *** Silversearcher
 Use ~ag~ to search for stuff. Requires ~silversearcher-ag~ to be installed in the system.
@@ -1043,8 +972,7 @@ Query Stackexchange from emacs.
 *** apib-mode
 Support files in apib format, [[https://apiblueprint.org/][API Blueprint]]
 #+begin_src emacs-lisp
-  (use-package apib-mode
-    :defer)
+  (use-package apib-mode)
 #+end_src
 *** json-navigator
 Navigate JSON-files. Also use tree-mode for navigation.
@@ -1304,7 +1232,7 @@ Load secret stuff from this encrypted org-file.
 Since we use "use-package" to load builtin function, add ":ensure nil".
 #+BEGIN_SRC emacs-lisp
 (use-package epa-file
-  :ensure nil
+:straight (:type built-in)
   :config
   (setq epa-file-select-keys nil)
   (setq epa-file-encrypt-to "8A114B0F26AA73E8")
@@ -1315,7 +1243,7 @@ Since we use "use-package" to load builtin function, add ":ensure nil".
 enable encryption of org-files.
 #+BEGIN_SRC emacs-lisp
 (use-package org-crypt
-  :ensure nil
+:straight (:type built-in)
   :config
   (org-crypt-use-before-save-magic)
   (setq org-crypt-tag-matcher "encrypt")
@@ -1408,7 +1336,7 @@ Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command bu
 ~projectile-ibuffer~ is also available with projectile.
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer
-    :ensure nil
+    :straight (:type built-in)
     :bind ("C-x C-b" . ibuffer)
     :config
     (setq ibuffer-saved-filter-groups
@@ -1807,7 +1735,7 @@ Save bookmarks all the time.
 Spellchecking. I use Hunspell.
 #+BEGIN_SRC emacs-lisp
   (use-package ispell
-    :ensure nil
+    :straight (:type built-in)
     :config
     (add-to-list 'ispell-local-dictionary-alist '("swedish-hunspell"
                                                   "[[:alpha:]]"
@@ -1833,7 +1761,7 @@ Spellchecking. I use Hunspell.
 Changes for local keyboard.
 #+begin_src emacs-lisp
   (use-package dired
-    :ensure nil
+    :straight (:type built-in)
     :bind (:map dired-mode-map
                 ("'" . diredp-up-directory-reuse-dir-buffer))
     )
@@ -1842,7 +1770,7 @@ Changes for local keyboard.
 Use dired+ to not generate more buffers.
 #+BEGIN_SRC emacs-lisp
   (use-package dired+
-    :load-path "lisp"
+:straight (:type built-in)
     :after dired
     :config
     (diredp-toggle-find-file-reuse-dir 1))
@@ -1856,7 +1784,7 @@ Use dired+ to not generate more buffers.
 Unique buffernames with uniquify.
 #+BEGIN_SRC emacs-lisp
   (use-package uniquify
-    :ensure nil
+    :straight (:type built-in)
     :config
     (setq uniquify-buffer-name-style 'forward))
 #+END_SRC
@@ -2172,7 +2100,7 @@ Use swedish calendar, from [[http://bigwalter.net/daniel/elisp/sv-kalender.el][S
 This copys files to Dropbox dir where the MobileOrg app can read/write data.
 #+BEGIN_SRC emacs-lisp
   (use-package org-mobile
-    :ensure nil
+    :straight (:type built-in)
     :init
     (autoload 'org-mobile-pull "org-mobile" nil t)
     (autoload 'org-mobile-push "org-mobile" nil t)
@@ -2259,8 +2187,7 @@ Export org as Jira.
 *** org2jekyll
 To make it possible to write in org and publish as jekyll.
 #+BEGIN_SRC emacs-lisp
-  (use-package org2jekyll
-    :defer)
+  (use-package org2jekyll)
 #+END_SRC
 *** Export mediawiki
 #+begin_src emacs-lisp
