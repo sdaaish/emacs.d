@@ -24,7 +24,7 @@ CLOSED: [2019-02-05 Tue 22:38]
 ** DONE Emacsclient dont load theme and settings
 CLOSED: [2017-08-21 mån 16:25]
 * Introduction
-This is my version of an configuration file for GNU Emacs. The config tries to load needed packages from start, but this doesnt work right out of the box for now. You need to start emacs 3 times before it loads without faults.
+This is my version of an configuration file for GNU Emacs. I now use ~straight~ to install packages and ~use-package~ to configure them. Previously I used ~package.el~, the built-in package-handling system with ~use-package~ but it became a bit akward and slow when I wanted to upgrade installed packages. This configuration should start without problems but will take a very long time the first time, since ~straight~ needs to clone and build all packages. And ~Git~is needed before this to work.
 #+BEGIN_SRC emacs-lisp
 (message "*** Reading from %s ***" (buffer-name))
 #+END_SRC
@@ -93,38 +93,30 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
   ;; Files for mobile sync
   (defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
 #+END_SRC
-* Config
-** Initializing
-*** Message-buffer
+* Initializing
+** Message-buffer
 Increase message-buffer
 #+BEGIN_SRC emacs-lisp
 (setq message-log-max (* 256 1024))
 #+END_SRC
-*** Standard language
+** Standard language
 #+BEGIN_SRC emacs-lisp
 (prefer-coding-system 'utf-8)
 #+END_SRC
-*** Package-archives
-Use Melpa only to list packages and read about them.
-#+begin_src emacs-lisp
-(require 'package)
-(add-to-list 'package-archives
-  '("melpa" .		"https://melpa.org/packages/") t)
-#+end_src
-*** Bugfix for ELPA
+** Bugfix for ELPA
 Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
 #+begin_src emacs-lisp
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 #+end_src
 * Packages
-*** Use-package chords
+** Use-package chords
 Use chords as keyboard shortcuts.
 #+begin_src emacs-lisp
   (use-package use-package-chords
         :config (key-chord-mode 1))
 #+end_src
-*** Magit
+** Magit
 Magit is a Git-tool, probably the best porcelain in the world!
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -133,7 +125,7 @@ Magit is a Git-tool, probably the best porcelain in the world!
     (setq magit-completing-read-function 'ivy-completing-read)
     (setq-default with-editor-emacsclient-executable "emacsclient"))
 #+END_SRC
-*** Magithub
+** Magithub
 Manage github things from emacs.
 #+begin_src emacs-lisp
   (use-package magithub
@@ -143,7 +135,7 @@ Manage github things from emacs.
     (magithub-feature-autoinject t)
     (setq magithub-clone-default-directory my/repo-dir))
 #+end_src
-*** Magit-gitflow
+** Magit-gitflow
 Enable support for git-flow. Why? See https://jeffkreeftmeijer.com/git-flow/.
 #+BEGIN_SRC emacs-lisp
   (use-package magit-gitflow
@@ -151,14 +143,14 @@ Enable support for git-flow. Why? See https://jeffkreeftmeijer.com/git-flow/.
     :hook
     (magit-mode . turn-on-magit-gitflow))
 #+END_SRC
-*** magit-find-file
+** magit-find-file
 Package to support *git ls-files*.
 #+BEGIN_SRC emacs-lisp
   (use-package magit-find-file
     :after magit
     :bind ("C-c m" . magit-find-file-completing-read))
 #+END_SRC
-*** magit-gh-pulls
+** magit-gh-pulls
 Pull requests on Github.
 #+BEGIN_SRC emacs-lisp
   (use-package magit-gh-pulls
@@ -166,100 +158,24 @@ Pull requests on Github.
     :hook
     (magit-mode . turn-on-magit-gh-pulls))
 #+END_SRC
-*** Powershell mode
-Powershell-mode is useful.
-#+BEGIN_SRC emacs-lisp
-  (use-package powershell
-    :commands powershell
-    :config
-    (setq powershell-eldoc-def-files (list (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
-    (when (eq system-type 'gnu/linux)
-      (setq powershell-location-of-exe "/usr/bin/pwsh")))
-#+END_SRC
-*** Dos-mode
-Only in windows.
-#+BEGIN_SRC emacs-lisp
-  (use-package bat-mode)
-#+END_SRC
-*** Winner-mode
-Winner for navigating between buffers (C-<left> or C-<right>)
+** Winner-mode
+Winner is used to restore windows.
 #+BEGIN_SRC emacs-lisp
 (use-package winner)
 #+END_SRC
-*** Markdown-mode
-#+BEGIN_SRC emacs-lisp
-(use-package markdown-mode
-  :commands
-    (markdown-mode gfm-mode)
-  :mode
-    (("README\\.md\\'" . gfm-mode)
-    ("\\.md\\'" . markdown-mode)
-    ("\\.markdown\\'" . markdown-mode))
-  :init
-    (setq markdown-command "multimarkdown")
-  :config
-    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-    (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)))
-#+END_SRC
-*** Markdown preview mode
-#+BEGIN_SRC emacs-lisp
-  (use-package markdown-preview-mode
-    :commands markdown-preview)
-#+END_SRC
-*** Mediawiki
-#+BEGIN_SRC emacs-lisp
-  (use-package mediawiki
-    :disabled
-    :config
-    (setq mediawiki-site-alist
-          (append
-           '(("Charlottendal" "https://www.charlottendal.net/mwiki/" "username" "password" "Main Page"))
-           mediawiki-site-alist)))
-#+END_SRC
-*** SSH-config
-Add mode for configuring .ssh/config and other related to SSH.
-#+BEGIN_SRC emacs-lisp
-(use-package ssh-config-mode
-:config
- (add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
- (add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
- (add-to-list 'auto-mode-alist '("/known_hosts\\'"       . ssh-known-hosts-mode))
- (add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
- (add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
-)
-#+END_SRC
-*** Bind-key
+** Bind-key
 Use the bind-key package (used by use-package).
 #+BEGIN_SRC emacs-lisp
 (use-package bind-key
     :bind ("C-h B" . describe-personal-keybindings))
 #+END_SRC
-*** Git
-Modes for editing git-files
-**** gitconfig
-#+BEGIN_SRC emacs-lisp
-(use-package gitconfig-mode
-:config
-(add-to-list 'auto-mode-alist '("/\\.gitconfig\\..*\\'" . gitconfig-mode)))
-#+END_SRC
-**** gitignore
-Use this to get support for .gitignore-files
-#+BEGIN_SRC emacs-lisp
-(use-package gitignore-mode)
-#+END_SRC
-**** gitattributes
-Edit gitattributes-files.
-#+BEGIN_SRC emacs-lisp
-(use-package gitattributes-mode)
-#+END_SRC
-*** diff-hl
+** diff-hl
 Highlight differences with diff-hl, which works better than git-gutter.
 #+BEGIN_SRC emacs-lisp
 (use-package diff-hl
 :hook ((prog-mode vc-dir-mode) . diff-hl-mode))
 #+END_SRC
-*** Gist
+** Gist
 Create and download gists from emacs.
 #+BEGIN_SRC emacs-lisp
   (use-package gh
@@ -268,7 +184,7 @@ Create and download gists from emacs.
     :config (setq gist-view-gist t)
     :bind (("C-x j" . gist-list)))
 #+END_SRC
-*** Git-link
+** Git-link
 Copy git links to kill-ring.
 #+begin_src emacs-lisp
   (use-package git-link
@@ -280,7 +196,7 @@ Copy git links to kill-ring.
       ("c" git-link-commit "Copy commit"))
     :bind ("C-c L" . hydra-git-link/body))
 #+end_src
-*** line-numbers
+** line-numbers
 Use relative linenumbers.
 #+BEGIN_SRC emacs-lisp
 (use-package linum-relative
@@ -291,13 +207,13 @@ Turn off line-numbers in minor mode.
 #+BEGIN_SRC emacs-lisp
 (use-package linum-off)
 #+END_SRC
-*** Indentation
+** Indentation
 Use aggressive mode for indentation. Use to be auto-indent, but aggressive seems better.
 #+BEGIN_SRC emacs-lisp
   (use-package aggressive-indent
     :config (global-aggressive-indent-mode t))
 #+END_SRC
-*** which-key
+** which-key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :diminish
@@ -305,8 +221,9 @@ Use aggressive mode for indentation. Use to be auto-indent, but aggressive seems
     (which-key-mode t)
     (setq which-key-idle-delay 0))
 #+END_SRC
-*** Company
-**** Company-mode
+** Company
+Auto completion.
+*** Company-mode
 Complete anything
 #+BEGIN_SRC emacs-lisp
 (use-package company
@@ -315,7 +232,7 @@ Complete anything
   (global-company-mode t)
   (setq company-idle-delay 0))
 #+END_SRC
-**** Company-shell
+*** Company-shell
 Add more functions to company
 #+BEGIN_SRC emacs-lisp
   (use-package company-shell
@@ -323,7 +240,7 @@ Add more functions to company
     (add-to-list 'company-backends '(company-shell company-shell-env))
     (add-to-list 'company-shell-modes '(bat-mode powershell-mode)))
 #+END_SRC
-**** Company-keymapfix
+*** Company-keymapfix
 A fix to enable [tab] to expand yasnippets etc in ~company-mode-map~.
 From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interference-between-company-mode-and-yasnippet][StackOverflow]]. Another tip is in [[https://www.reddit.com/r/emacs/comments/5vhlws/using_tab_for_both_yasnippet_and_company][Reddit]] .
 #+BEGIN_SRC emacs-lisp
@@ -338,11 +255,7 @@ From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interfe
                                                             'company-yasnippet-or-completion
                                                             company-active-map)))
 #+END_SRC
-*** Autohotkey-mode
-#+BEGIN_SRC emacs-lisp
-(use-package ahk-mode)
-#+END_SRC
-*** ace-window
+** ace-window
 Switch windows and frames quickly.
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
@@ -353,40 +266,19 @@ Switch windows and frames quickly.
     :bind (("M-o" . ace-window)
            ("C-x o" . aw-flip-window)))
 #+END_SRC
-*** Resize windows
+** Resize windows
 Use ~resize-window~ for changing size.
 #+BEGIN_SRC emacs-lisp
   (use-package resize-window
     :bind ("C-;" . resize-window))
 #+END_SRC
-*** Pretty bullets
+** Pretty bullets
 This was slow before, in emacs 25.1, but seems to work now in version 25.2.
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
     :hook (org-mode-hook . org-bullets-mode))
 #+END_SRC
-*** wiki-summary
-Use wiki search from emacs
-#+BEGIN_SRC emacs-lisp
-  (use-package wiki-summary
-    :commands wiki-summary)
-#+END_SRC
-*** Super-save
-Save buffers when idle
-#+BEGIN_SRC emacs-lisp
-  (use-package super-save
-    :diminish super-save-mode
-    :config
-    (super-save-mode +1)
-    (setq super-save-auto-save-when-idle t)
-    (setq super-save-idle-duration 5))
-#+END_SRC
-*** Yara-files
-Mode that supports editing of Yara-files.
-#+BEGIN_SRC emacs-lisp
-  (use-package yara-mode)
-#+END_SRC
-*** Better shell
+** Better shell
 #+BEGIN_SRC emacs-lisp
   (use-package better-shell
         :config
@@ -401,26 +293,7 @@ Mode that supports editing of Yara-files.
       ("RET" nil))
     :bind ("C-c s" . hydra-better-shell/body))
 #+END_SRC
-*** Elastic search mode
-#+BEGIN_SRC emacs-lisp
-  (use-package es-mode
-        :config
-    (add-to-list 'auto-mode-alist '("\\.es$" . es-mode)))
-#+END_SRC
-*** Logstash-mode
-Use logstash-mode for conf-files in logstash-directories.
-#+BEGIN_SRC emacs-lisp
-  (use-package logstash-conf
-    :mode  (("logstash.*\\.conf\\'" . logstash-conf-mode)
-            ("pipeline.*\\.conf\\'" . logstash-conf-mode)))
-#+END_SRC
-*** Move text
-#+BEGIN_SRC emacs-lisp
-(use-package move-text
-  :config
-  (move-text-default-bindings))
-#+END_SRC
-*** XKCD
+** XKCD
 Show images from xkcd. With hydra.
 #+BEGIN_SRC emacs-lisp
   (use-package xkcd
@@ -457,7 +330,7 @@ Show images from xkcd. With hydra.
                 ("h" . hydra-xkcd/body))
     :hook (xkcd-mode . hydra-xkcd/body))
 #+END_SRC
-*** Copy-as-format
+** Copy-as-format
 Copy with formatting.
 #+BEGIN_SRC emacs-lisp
   (use-package copy-as-format
@@ -480,26 +353,18 @@ Copy with formatting.
     :bind ("C-c w" . hydra-copy-as-format/body)
     )
 #+END_SRC
-*** Cheatsheet
-My own cheatsheet.
-#+BEGIN_SRC emacs-lisp
-  (use-package cheatsheet
-    :bind (("C-h x" . cheatsheet-show)
-           :map cheatsheet-mode-map
-           ("C-q" . kill-this-buffer)))
-#+END_SRC
-*** Try
+** Try
 Use try to test packages.
 #+BEGIN_SRC emacs-lisp
   (use-package try
     :commands try)
 #+END_SRC
-*** htmlize
+** htmlize
 Needed by org-babel-export
 #+BEGIN_SRC emacs-lisp
 (use-package htmlize)
 #+END_SRC
-*** hackernews
+** hackernews
 Read hackernews in emacs.
 #+BEGIN_SRC emacs-lisp
   (use-package hackernews
@@ -509,7 +374,7 @@ Read hackernews in emacs.
     (setq hackernews-items-per-page 60)
     (setq hackernews-item-format "%-7s%-80t %15c\n"))
 #+END_SRC
-*** Twitter
+** Twitter
 Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswiki.org/emacs/TwitteringMode][manual]]
 #+BEGIN_SRC emacs-lisp
   (use-package twittering-mode
@@ -530,19 +395,13 @@ Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswi
           twittering-url-show-status nil
           twittering-edit-skeleton 'inherit-any))
 #+END_SRC
-*** ini-mode
-Windows ini-files.
-#+BEGIN_SRC emacs-lisp
-  (use-package ini-mode
-    :mode "\\.ini\\'")
-#+END_SRC
-*** ipcalc
+** ipcalc
 IP subnet calculation. To use it, evaluate (ipcalc "10.0.0.0/8") for example.
 #+BEGIN_SRC emacs-lisp
 (use-package ipcalc
   :bind ("C-c i" . ipcalc))
 #+END_SRC
-*** Treemacs
+** Treemacs
 Directory navigating explorer-style.
 #+BEGIN_SRC emacs-lisp
   (use-package treemacs
@@ -560,20 +419,15 @@ Directory navigating explorer-style.
                  (`(t . _)
                   (treemacs-git-mode 'simple)))))
 #+END_SRC
-*** ztree
+** ztree
 Cool directory package.
 #+BEGIN_SRC emacs-lisp
 (use-package ztree
   :bind ("C-x z" . ztree-dir)
   :config (setq-default ztree-dir-show-filtered-files t))
 #+END_SRC
-*** CSV
-Read csv-files.
-#+BEGIN_SRC emacs-lisp
-(use-package csv-mode)
-#+END_SRC
-*** Yasnippets
-**** Hydra for yasnippet
+** Yasnippets
+*** Hydra for yasnippet
 From https://github.com/abo-abo/hydra/wiki/YASnippet
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-yasnippet (:pre (yas-minor-mode t)
@@ -600,7 +454,7 @@ From https://github.com/abo-abo/hydra/wiki/YASnippet
     ("m" yas-minor-mode)
     ("a" yas-reload-all))
 #+END_SRC
-**** Yasnippet
+*** Yasnippet
 Load yasnippet and some templates.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
@@ -612,51 +466,24 @@ Load yasnippet and some templates.
            :map yas-minor-mode-map
            ("C-c i" . yas-expand)))
 #+END_SRC
-*** proportional
+** proportional
 Use proportional fonts everywhere.
 #+BEGIN_SRC emacs-lisp
 (use-package proportional)
 #+END_SRC
-*** Docker file mode
-Support Dockerfile.
-#+BEGIN_SRC emacs-lisp
-  (use-package dockerfile-mode)
-#+END_SRC
-*** Docker compose
-Support Docker Compose files.
-#+BEGIN_SRC emacs-lisp
-  (use-package docker-compose-mode)
-#+END_SRC
-*** Toml-Mode
-Support .toml-files, eg for Hugo.
-#+BEGIN_SRC emacs-lisp
-  (use-package toml-mode)
-#+END_SRC
-*** Verify-url
+** Verify-url
 Check urls in an file.
 #+BEGIN_SRC emacs-lisp
   (use-package verify-url)
 #+END_SRC
-*** Rainbows
+** Rainbows
 Use different colors for delimeters to increase readability.
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-delimiters
       :hook
       ((org-mode prog-mode) . rainbow-delimiters-mode))
 #+END_SRC
-*** Cheat.sh
-Check out stuff on https://cheat.sh/
-#+BEGIN_SRC emacs-lisp
-  (use-package cheat-sh
-    :commands cheat-sh)
-#+END_SRC
-*** Free keys
-To list what keys are free in different modes. Very useful.
-#+BEGIN_SRC emacs-lisp
-  (use-package free-keys
-    :commands free-keys)
-#+END_SRC
-*** Restclient
+** Restclient
 A client to make REST-calls from emacs and Org-mode. 
 #+BEGIN_SRC emacs-lisp
   (use-package restclient
@@ -671,30 +498,7 @@ A client to make REST-calls from emacs and Org-mode.
                                (set (make-local-variable 'company-backends)
                                     '(company-restclient))))))
 #+END_SRC
-*** X509
-Support for certificate files, with a hydra to navigate options.
-#+BEGIN_SRC emacs-lisp
-  (use-package x509-mode
-    :config
-    (add-to-list 'auto-mode-alist '("\\.cer\\'" . x509-mode))
-    (add-to-list 'auto-mode-alist '("\\.crt\\'" . x509-mode))
-    (add-to-list 'auto-mode-alist '("\\.crl\\'" . x509-mode))
-    (add-to-list 'auto-mode-alist '("\\.csr\\'" . x509-mode))
-    (add-to-list 'auto-mode-alist '("\\.pem\\'" . x509-mode))
-    (add-to-list 'auto-mode-alist '("\\.key\\'" . x509-mode))
-    (defhydra hydra-x509 (:color blue :columns 2)
-      "X509 commands"
-      ("a" x509-viewasn1 "View ASN1")
-      ("c" x509-viewcert "View certificate")
-      ("d" x509-viewdh "View DH")
-      ("k" x509-viewkey "View key")
-      ("r" x509-viewcrl "View CRL")
-      ("q" nil "cancel"))
-    :bind (:map x509-mode-map
-                ("h" . hydra-x509/body))
-    )
-#+END_SRC
-*** Smart parenthesis
+** Smart parenthesis
 Automatically insert parenthesis.
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
@@ -702,7 +506,7 @@ Automatically insert parenthesis.
   :hook
   ((org-mode prog-mode) . smartparens-mode))
 #+END_SRC
-*** Undo-tree
+** Undo-tree
 Make undo more intuitive.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
@@ -715,7 +519,7 @@ Make undo more intuitive.
            ("C-S-z" . undo-tree-redo))
     :chords ("uu" . undo-tree-visualize))
 #+END_SRC
-*** Projectile
+** Projectile
 Find or switch to projects easy, and use ~counsel-projectile~.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
@@ -772,7 +576,7 @@ Find or switch to projects easy, and use ~counsel-projectile~.
            (:map projectile-mode-map
                  ("C-c P" . projectile-command-map)))) ;; Keep counsel-projectile for now
 #+END_SRC
-**** Fix
+*** Fix
 From https://github.com/bbatsov/projectile/issues/1165.
 #+BEGIN_SRC emacs-lisp
 (defun projectile-discover-projects-in-directory (directory)
@@ -792,9 +596,9 @@ at the top level of DIRECTORY."
              (projectile-add-known-project (projectile-project-root))))))
      subdirs)))
 #+END_SRC
-*** RSS stuff
+** RSS stuff
 Use elfeed ass RSS-reader, plus extras.
-**** Elfeed
+*** Elfeed
 Read RSS-feeds.
 From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
 #+BEGIN_SRC emacs-lisp
@@ -871,7 +675,7 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
            ("q" . bjm/elfeed-save-db-and-bury))
     )
 #+END_SRC
-**** Elfeed-org
+*** Elfeed-org
 Organise RSS with org-mode.
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-org
@@ -879,14 +683,14 @@ Organise RSS with org-mode.
     :config (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org"))
                   rmh-elfeed-org-auto-ignore-invalid-feeds t))
 #+END_SRC
-**** Elfeed-goodies
+*** Elfeed-goodies
 Some extras
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-goodies
     :commands elfeed
     :config (elfeed-goodies/setup))
 #+END_SRC
-**** Hydra
+*** Hydra
 A ~hydra~ for elfeed.
 #+BEGIN_SRC emacs-lisp
 (defhydra my/hydra-elfeed (:color blue :hint nil :columns 4)
@@ -913,14 +717,14 @@ A ~hydra~ for elfeed.
    ("q" nil "quit")
    )
 #+END_SRC
-*** hungry-mode
+** hungry-mode
 Delete whitespace more efficiently.
 #+BEGIN_SRC emacs-lisp
 (use-package hungry-delete
 :config
 (global-hungry-delete-mode t))
 #+END_SRC
-*** avy
+** avy
 Jump to any character.
 #+BEGIN_SRC emacs-lisp
   (use-package avy
@@ -928,24 +732,19 @@ Jump to any character.
            ("C-:" . avy-goto-char-2))
     :chords ("kk" . avy-goto-line))
 #+END_SRC
-*** JSON-mode
-Edit JSON-files.
-#+BEGIN_SRC emacs-lisp
-  (use-package json-mode)
-#+END_SRC
-*** Silversearcher
+** Silversearcher
 Use ~ag~ to search for stuff. Requires ~silversearcher-ag~ to be installed in the system.
 #+begin_src emacs-lisp
   (use-package ag
     :commands counsel-ag)
 #+end_src
-*** Macrostep
+** Macrostep
 To check the expanded macro. Useful with ~use-package~.
 #+begin_src emacs-lisp
   (use-package macrostep
     :bind ("C-c e" . macrostep-mode))
 #+end_src
-*** StackExchange
+** StackExchange
 Query Stackexchange from emacs.
 #+begin_src emacs-lisp
   (use-package sx
@@ -964,17 +763,17 @@ Query Stackexchange from emacs.
 
     :bind ("C-c x" . hydra-sx/body))
 #+end_src
-*** docker
+** docker
 #+begin_src emacs-lisp
 (use-package docker
 :bind ("C-c d" . docker))
 #+end_src
-*** apib-mode
+** apib-mode
 Support files in apib format, [[https://apiblueprint.org/][API Blueprint]]
 #+begin_src emacs-lisp
   (use-package apib-mode)
 #+end_src
-*** json-navigator
+** json-navigator
 Navigate JSON-files. Also use tree-mode for navigation.
 #+begin_src emacs-lisp
   (use-package json-navigator
@@ -1544,7 +1343,7 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
     (load-theme 'material))
 #+END_SRC
 
-***  Load different theme if in gui or terminal
+*** Load different theme if in gui or terminal
 #+BEGIN_SRC emacs-lisp
 (unless (not (display-graphic-p))
 (load-theme 'tango-dark)
@@ -1787,12 +1586,6 @@ Unique buffernames with uniquify.
     :config
     (setq uniquify-buffer-name-style 'forward))
 #+END_SRC
-*** javascript
-Add proxy .pac-files to javascript-mode.
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.pac\\'" . javascript-mode))
-(add-to-list 'auto-mode-alist '("wpad\\.dat\\'" . javascript-mode))
-#+END_SRC
 *** Time
 Display time as 24-hour format
 #+BEGIN_SRC emacs-lisp
@@ -1904,6 +1697,16 @@ Save a history of edited files.
     regexp-search-ring))
 #+END_SRC
 
+** Super-save
+Save buffers when idle
+#+BEGIN_SRC emacs-lisp
+  (use-package super-save
+    :diminish super-save-mode
+    :config
+    (super-save-mode +1)
+    (setq super-save-auto-save-when-idle t)
+    (setq super-save-idle-duration 5))
+#+END_SRC
 * Org-mode stuff
 Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Beginners Customization Guide]] for info about this.
 ** Org-mode variables
@@ -2200,6 +2003,202 @@ To make it possible to write in org and publish as jekyll.
 #+BEGIN_SRC emacs-lisp
   (use-package auto-org-md
     :after ox)
+#+END_SRC
+
+* Language support
+Add support for different programming languages and configuration files.
+** Powershell mode
+Powershell-mode is useful.
+#+BEGIN_SRC emacs-lisp
+  (use-package powershell
+    :commands powershell
+    :config
+    (setq powershell-eldoc-def-files (list (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
+    (when (eq system-type 'gnu/linux)
+      (setq powershell-location-of-exe "/usr/bin/pwsh")))
+#+END_SRC
+** Dos-mode
+Only in windows.
+#+BEGIN_SRC emacs-lisp
+  (use-package bat-mode)
+#+END_SRC
+** Markdown-mode
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :commands
+    (markdown-mode gfm-mode)
+  :mode
+    (("README\\.md\\'" . gfm-mode)
+    ("\\.md\\'" . markdown-mode)
+    ("\\.markdown\\'" . markdown-mode))
+  :init
+    (setq markdown-command "multimarkdown")
+  :config
+    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)))
+#+END_SRC
+** Markdown preview mode
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-preview-mode
+    :commands markdown-preview)
+#+END_SRC
+** Mediawiki
+#+BEGIN_SRC emacs-lisp
+  (use-package mediawiki
+    :disabled
+    :config
+    (setq mediawiki-site-alist
+          (append
+           '(("Charlottendal" "https://www.charlottendal.net/mwiki/" "username" "password" "Main Page"))
+           mediawiki-site-alist)))
+#+END_SRC
+** SSH-config
+Add mode for configuring .ssh/config and other related to SSH.
+#+BEGIN_SRC emacs-lisp
+(use-package ssh-config-mode
+:config
+ (add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
+ (add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
+ (add-to-list 'auto-mode-alist '("/known_hosts\\'"       . ssh-known-hosts-mode))
+ (add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
+ (add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
+)
+#+END_SRC
+** Git
+Modes for editing git-files
+*** gitconfig
+#+BEGIN_SRC emacs-lisp
+(use-package gitconfig-mode
+:config
+(add-to-list 'auto-mode-alist '("/\\.gitconfig\\..*\\'" . gitconfig-mode)))
+#+END_SRC
+*** gitignore
+Use this to get support for .gitignore-files
+#+BEGIN_SRC emacs-lisp
+(use-package gitignore-mode)
+#+END_SRC
+*** gitattributes
+Edit gitattributes-files.
+#+BEGIN_SRC emacs-lisp
+(use-package gitattributes-mode)
+#+END_SRC
+
+** Autohotkey-mode
+#+BEGIN_SRC emacs-lisp
+(use-package ahk-mode)
+#+END_SRC
+** Yara-files
+Mode that supports editing of Yara-files.
+#+BEGIN_SRC emacs-lisp
+  (use-package yara-mode)
+#+END_SRC
+** Elastic search mode
+#+BEGIN_SRC emacs-lisp
+  (use-package es-mode
+        :config
+    (add-to-list 'auto-mode-alist '("\\.es$" . es-mode)))
+#+END_SRC
+** Logstash-mode
+Use logstash-mode for conf-files in logstash-directories.
+#+BEGIN_SRC emacs-lisp
+  (use-package logstash-conf
+    :mode  (("logstash.*\\.conf\\'" . logstash-conf-mode)
+            ("pipeline.*\\.conf\\'" . logstash-conf-mode)))
+#+END_SRC
+** ini-mode
+Windows ini-files.
+#+BEGIN_SRC emacs-lisp
+  (use-package ini-mode
+    :mode "\\.ini\\'")
+#+END_SRC
+** CSV
+Read csv-files.
+#+BEGIN_SRC emacs-lisp
+(use-package csv-mode)
+#+END_SRC
+** Docker file mode
+Support Dockerfile.
+#+BEGIN_SRC emacs-lisp
+  (use-package dockerfile-mode)
+#+END_SRC
+** Docker compose
+Support Docker Compose files.
+#+BEGIN_SRC emacs-lisp
+  (use-package docker-compose-mode)
+#+END_SRC
+** Toml-Mode
+Support .toml-files, eg for Hugo.
+#+BEGIN_SRC emacs-lisp
+  (use-package toml-mode)
+#+END_SRC
+** X509
+Support for certificate files, with a hydra to navigate options.
+#+BEGIN_SRC emacs-lisp
+  (use-package x509-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.cer\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.crt\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.crl\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.csr\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.pem\\'" . x509-mode))
+    (add-to-list 'auto-mode-alist '("\\.key\\'" . x509-mode))
+    (defhydra hydra-x509 (:color blue :columns 2)
+      "X509 commands"
+      ("a" x509-viewasn1 "View ASN1")
+      ("c" x509-viewcert "View certificate")
+      ("d" x509-viewdh "View DH")
+      ("k" x509-viewkey "View key")
+      ("r" x509-viewcrl "View CRL")
+      ("q" nil "cancel"))
+    :bind (:map x509-mode-map
+                ("h" . hydra-x509/body))
+    )
+#+END_SRC
+** JSON-mode
+Edit JSON-files.
+#+BEGIN_SRC emacs-lisp
+  (use-package json-mode)
+#+END_SRC
+** javascript
+Add proxy .pac-files to javascript-mode.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.pac\\'" . javascript-mode))
+(add-to-list 'auto-mode-alist '("wpad\\.dat\\'" . javascript-mode))
+#+END_SRC
+* Help systems
+** Package-archives
+Use Melpa only to list packages and read about them.
+#+begin_src emacs-lisp
+(require 'package)
+(add-to-list 'package-archives
+  '("melpa" .		"https://melpa.org/packages/") t)
+#+end_src
+** Cheatsheet
+My own cheatsheet.
+#+BEGIN_SRC emacs-lisp
+  (use-package cheatsheet
+    :bind (("C-h x" . cheatsheet-show)
+           :map cheatsheet-mode-map
+           ("C-q" . kill-this-buffer)))
+#+END_SRC
+** Cheat.sh
+Check out stuff on https://cheat.sh/
+#+BEGIN_SRC emacs-lisp
+  (use-package cheat-sh
+    :commands cheat-sh)
+#+END_SRC
+** Free keys
+To list what keys are free in different modes. Very useful.
+#+BEGIN_SRC emacs-lisp
+  (use-package free-keys
+    :commands free-keys)
+#+END_SRC
+** wiki-summary
+Use wiki search from emacs
+#+BEGIN_SRC emacs-lisp
+  (use-package wiki-summary
+    :commands wiki-summary)
 #+END_SRC
 * Links
 ** Manuals
