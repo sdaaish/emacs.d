@@ -635,43 +635,6 @@ This was slow before, in emacs 25.1, but seems to work now in version 25.2.
       ("RET" nil))
     :bind ("C-c s" . hydra-better-shell/body))
 #+END_SRC
-** XKCD
-Show images from xkcd. With hydra.
-#+BEGIN_SRC emacs-lisp
-  (use-package xkcd
-    :commands xkcd
-    :config
-    (defhydra hydra-xkcd (:color pink :hint nil)
-      "
-   ^Navigate^              ^Move^             ^Extra^
-   -----------------------------------------------------------
-   _b_: Browse             ^_k_ ↑^            _e_: Explanation
-   _r_: Random         ← _h_    _l_ →         _c_: Copy link
-   _g_: Update             ^_j_ ↓^            _a_: Alternate text
-   _G_: Get                  ^^             ^^_q_: Quit
-   "
-      ("b"       xkcd-open-browser)
-      ("r"       xkcd-rand)
-      ("a"       xkcd-alt-text)
-      ("g"       xkcd-get-latest)
-      ("S-g"     xkcd-get)
-      ("G"       xkcd-get)
-      ("j"       scroll-up-command)
-      ("SPC"     scroll-up-command)
-      ("k"       scroll-down-command)
-      ("S-SPC"   scroll-up-command)
-      ("<left>"  xkcd-prev)
-      ("h"       xkcd-prev)
-      ("<right>" xkcd-next)
-      ("l"       xkcd-next)
-      ("e"       xkcd-open-explanation-browser)
-      ("c"       xkcd-copy-link)
-      ("q"       xkcd-kill-buffer :color blue)
-      )
-    :bind (:map xkcd-mode-map
-                ("h" . hydra-xkcd/body))
-    :hook (xkcd-mode . hydra-xkcd/body))
-#+END_SRC
 ** Copy-as-format
 Copy with formatting.
 #+BEGIN_SRC emacs-lisp
@@ -705,37 +668,6 @@ Use try to test packages.
 Needed by org-babel-export
 #+BEGIN_SRC emacs-lisp
 (use-package htmlize)
-#+END_SRC
-** hackernews
-Read hackernews in emacs.
-#+BEGIN_SRC emacs-lisp
-  (use-package hackernews
-    :commands hackernews
-    :config
-    (setq hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el"))
-    (setq hackernews-items-per-page 60)
-    (setq hackernews-item-format "%-7s%-80t %15c\n"))
-#+END_SRC
-** Twitter
-Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswiki.org/emacs/TwitteringMode][manual]]
-#+BEGIN_SRC emacs-lisp
-  (use-package twittering-mode
-    :commands twit
-    :config
-    (setq twittering-use-master-password t
-          twittering-private-info-file (concat my/emacs-shared-dir ".twittering-mode.gpg")
-          twittering-user-id-db-file (expand-file-name ".cache/.twit-user-db.gz" my/init-dir)
-          twittering-icon-storage-file (expand-file-name ".cache/.twit-icons.gz" my/init-dir)
-          twittering-use-icon-storage t
-          twittering-icon-storage-limit 1000
-          twittering-icon-mode t
-          twittering-reverse-mode t
-          twittering-display-remaining t
-          twittering-convert-fix-size 48
-          twittering-number-of-tweets-on-retrieval 100
-          twittering-timer-interval 300
-          twittering-url-show-status nil
-          twittering-edit-skeleton 'inherit-any))
 #+END_SRC
 ** ipcalc
 IP subnet calculation. To use it, evaluate (ipcalc "10.0.0.0/8") for example.
@@ -938,25 +870,6 @@ To check the expanded macro. Useful with ~use-package~.
 #+begin_src emacs-lisp
   (use-package macrostep
     :bind ("C-c e" . macrostep-mode))
-#+end_src
-** StackExchange
-Query Stackexchange from emacs.
-#+begin_src emacs-lisp
-  (use-package sx
-    :config
-    (setq sx-cache-directory (expand-file-name ".sx/" my/emacs-shared-dir))
-
-    (defhydra hydra-sx (:color blue :columns 4)
-      "Stack Exchange"
-      ("t" sx-tab-all-questions "All questions")
-      ("i" sx-inbox "Inbox")
-      ("o" sx-open-link "Open link")
-      ("u" sx-tab-unanswered-my-tags "Unanswered")
-      ("a" sx-ask "Ask")
-      ("s" sx-search "Search")
-      ("q" nil "Cancel"))
-
-    :bind ("C-c x" . hydra-sx/body))
 #+end_src
 ** docker
 #+begin_src emacs-lisp
@@ -2195,11 +2108,99 @@ To list what keys are free in different modes. Very useful.
   (use-package free-keys
     :commands free-keys)
 #+END_SRC
+* External utilities
+** hackernews
+Read hackernews in emacs.
+#+BEGIN_SRC emacs-lisp
+  (use-package hackernews
+    :commands hackernews
+    :config
+    (setq hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el"))
+    (setq hackernews-items-per-page 60)
+    (setq hackernews-item-format "%-7s%-80t %15c\n"))
+#+END_SRC
+** StackExchange
+Query Stackexchange from emacs.
+#+begin_src emacs-lisp
+  (use-package sx
+    :config
+    (setq sx-cache-directory (expand-file-name ".sx/" my/emacs-shared-dir))
+
+    (defhydra hydra-sx (:color blue :columns 4)
+      "Stack Exchange"
+      ("t" sx-tab-all-questions "All questions")
+      ("i" sx-inbox "Inbox")
+      ("o" sx-open-link "Open link")
+      ("u" sx-tab-unanswered-my-tags "Unanswered")
+      ("a" sx-ask "Ask")
+      ("s" sx-search "Search")
+      ("q" nil "Cancel"))
+
+    :bind ("C-c x" . hydra-sx/body))
+#+end_src
+** Twitter
+Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswiki.org/emacs/TwitteringMode][manual]]
+#+BEGIN_SRC emacs-lisp
+  (use-package twittering-mode
+    :commands twit
+    :config
+    (setq twittering-use-master-password t
+          twittering-private-info-file (concat my/emacs-shared-dir ".twittering-mode.gpg")
+          twittering-user-id-db-file (expand-file-name ".cache/.twit-user-db.gz" my/init-dir)
+          twittering-icon-storage-file (expand-file-name ".cache/.twit-icons.gz" my/init-dir)
+          twittering-use-icon-storage t
+          twittering-icon-storage-limit 1000
+          twittering-icon-mode t
+          twittering-reverse-mode t
+          twittering-display-remaining t
+          twittering-convert-fix-size 48
+          twittering-number-of-tweets-on-retrieval 100
+          twittering-timer-interval 300
+          twittering-url-show-status nil
+          twittering-edit-skeleton 'inherit-any))
+#+END_SRC
 ** wiki-summary
 Use wiki search from emacs
 #+BEGIN_SRC emacs-lisp
   (use-package wiki-summary
     :commands wiki-summary)
+#+END_SRC
+** XKCD
+Show images from xkcd. With hydra.
+#+BEGIN_SRC emacs-lisp
+  (use-package xkcd
+    :commands xkcd
+    :config
+    (defhydra hydra-xkcd (:color pink :hint nil)
+      "
+   ^Navigate^              ^Move^             ^Extra^
+   -----------------------------------------------------------
+   _b_: Browse             ^_k_ ↑^            _e_: Explanation
+   _r_: Random         ← _h_    _l_ →         _c_: Copy link
+   _g_: Update             ^_j_ ↓^            _a_: Alternate text
+   _G_: Get                  ^^             ^^_q_: Quit
+   "
+      ("b"       xkcd-open-browser)
+      ("r"       xkcd-rand)
+      ("a"       xkcd-alt-text)
+      ("g"       xkcd-get-latest)
+      ("S-g"     xkcd-get)
+      ("G"       xkcd-get)
+      ("j"       scroll-up-command)
+      ("SPC"     scroll-up-command)
+      ("k"       scroll-down-command)
+      ("S-SPC"   scroll-up-command)
+      ("<left>"  xkcd-prev)
+      ("h"       xkcd-prev)
+      ("<right>" xkcd-next)
+      ("l"       xkcd-next)
+      ("e"       xkcd-open-explanation-browser)
+      ("c"       xkcd-copy-link)
+      ("q"       xkcd-kill-buffer :color blue)
+      )
+    :bind (:map xkcd-mode-map
+                ("h" . hydra-xkcd/body))
+    :hook (xkcd-mode . hydra-xkcd/body))
 #+END_SRC
 * Links
 ** Manuals
