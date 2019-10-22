@@ -381,7 +381,8 @@ Magit is a Git-tool, probably the best porcelain in the world!
 ** Magit Forge
 Manage github things from emacs.
 #+begin_src emacs-lisp
-(straight-use-package 'forge)
+  (use-package forge
+    :after gh)
 #+end_src
 ** Magit-gitflow
 Enable support for git-flow. Why? See https://jeffkreeftmeijer.com/git-flow/.
@@ -397,14 +398,6 @@ Package to support *git ls-files*.
   (use-package magit-find-file
     :after magit
     :bind ("C-c m" . magit-find-file-completing-read))
-#+END_SRC
-** magit-gh-pulls
-Pull requests on Github.
-#+BEGIN_SRC emacs-lisp
-  (use-package magit-gh-pulls
-    :after magit
-    :hook
-    (magit-mode . turn-on-magit-gh-pulls))
 #+END_SRC
 ** Gist
 Create and download gists from emacs.
