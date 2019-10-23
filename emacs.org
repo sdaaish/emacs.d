@@ -333,6 +333,41 @@ Use a hydra to move text. M-<up> or M-<down>.
     ("u" move-text-up "up")
     ("d" move-text-down "down")))
 #+END_SRC
+*** Straight
+Hydra for ~straight~, from [[https://github.com/abo-abo/hydra/wiki/straight.el][Hydra Wiki]].
+#+begin_src emacs-lisp
+  (defhydra hydra-straight-helper (:hint nil)
+    "
+  _c_heck all       |_f_etch all     |_m_erge all      |_n_ormalize all   |p_u_sh all
+  _C_heck package   |_F_etch package |_M_erge package  |_N_ormlize package|p_U_sh package
+  ----------------^^+--------------^^+---------------^^+----------------^^+------------||_q_uit||
+  _r_ebuild all     |_p_ull all      |_v_ersions freeze|_w_atcher start   |_g_et recipe
+  _R_ebuild package |_P_ull package  |_V_ersions thaw  |_W_atcher quit    |prun_e_ build
+  _h_ Describe package"
+    ("c" straight-check-all)
+    ("C" straight-check-package)
+    ("r" straight-rebuild-all)
+    ("R" straight-rebuild-package)
+    ("f" straight-fetch-all)
+    ("F" straight-fetch-package)
+    ("p" straight-pull-all)
+    ("P" straight-pull-package)
+    ("m" straight-merge-all)
+    ("M" straight-merge-package)
+    ("n" straight-normalize-all)
+    ("N" straight-normalize-package)
+    ("u" straight-push-all)
+    ("U" straight-push-package)
+    ("v" straight-freeze-versions)
+    ("V" straight-thaw-versions)
+    ("w" straight-watcher-start)
+    ("W" straight-watcher-quit)
+    ("g" straight-get-recipe)
+    ("e" straight-prune-build)
+    ("h" describe-package)
+    ("q" nil))
+(global-set-key (kbd "C-h P") 'hydra-straight-helper/body)
+#+end_src
 * Git and projects
 ** Magit
 Magit is a Git-tool, probably the best porcelain in the world!
@@ -343,15 +378,11 @@ Magit is a Git-tool, probably the best porcelain in the world!
     (setq magit-completing-read-function 'ivy-completing-read)
     (setq-default with-editor-emacsclient-executable "emacsclient"))
 #+END_SRC
-** Magithub
+** Magit Forge
 Manage github things from emacs.
 #+begin_src emacs-lisp
-  (use-package magithub
-    :disabled
-    :after magit
-    :config
-    (magithub-feature-autoinject t)
-    (setq magithub-clone-default-directory my/repo-dir))
+  (use-package forge
+    :after gh)
 #+end_src
 ** Magit-gitflow
 Enable support for git-flow. Why? See https://jeffkreeftmeijer.com/git-flow/.
@@ -367,14 +398,6 @@ Package to support *git ls-files*.
   (use-package magit-find-file
     :after magit
     :bind ("C-c m" . magit-find-file-completing-read))
-#+END_SRC
-** magit-gh-pulls
-Pull requests on Github.
-#+BEGIN_SRC emacs-lisp
-  (use-package magit-gh-pulls
-    :after magit
-    :hook
-    (magit-mode . turn-on-magit-gh-pulls))
 #+END_SRC
 ** Gist
 Create and download gists from emacs.
@@ -984,9 +1007,23 @@ This part dont work yet.
 *** Authinfo file
 Define path for .authinfo-file
 #+BEGIN_SRC emacs-lisp
-  (setq auth-source-debug t)
-  (setq auth-sources (list (expand-file-name "emacs/.authinfo.gpg" my/dropbox-dir)))
+  (use-package auth-source-pass
+    :config
+    (setq auth-sources (list (expand-file-name "emacs/.authinfo.gpg" my/dropbox-dir)))
+    (setq auth-source-pass-port-separator "#")
+    (setq auth-source-debug t)
+    (add-to-list 'auth-source-protocols '(scp "scp" "22") t)
+    (auth-source-pass-enable))
 #+END_SRC
+*** password-store
+Use unix password-store
+#+begin_src emacs-lisp
+  (use-package password-store
+    :after auth-source-pass)
+  (use-package pass
+    :after password-store
+    :bind ("C-x p" . pass))
+#+end_src
 ** Custom file for customize
 Use a separate file for emacs "customize".
 #+BEGIN_SRC emacs-lisp
@@ -1169,12 +1206,6 @@ Replaced IDO with Ivy.
     ("M-x" . counsel-M-x))
   (use-package ivy-hydra)
 #+END_SRC
-** ivy-pass
-Manage passwords from password-store.
-#+begin_src emacs-lisp
-  (use-package ivy-pass
-    :bind ("C-x p" . ivy-pass))
-#+end_src
 * Counsel-tramp
 Use counsel to navigate hosts.
 #+BEGIN_SRC emacs-lisp
