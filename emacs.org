@@ -2125,6 +2125,27 @@ Add proxy .pac-files to javascript-mode.
 (add-to-list 'auto-mode-alist '("\\.pac\\'" . javascript-mode))
 (add-to-list 'auto-mode-alist '("wpad\\.dat\\'" . javascript-mode))
 #+END_SRC
+** C# and .NET
+*** C#
+Support for C#, C-sharp.
+#+begin_src emacs-lisp
+  (use-package csharp-mode
+    :config
+    (defun my/csharp-hook()
+      (electric-pair-local-mode 1))
+    :hook (csharp-mode . my/csharp-hook))
+#+end_src
+*** Dotnet
+Interface to dotnet.
+#+begin_src emacs-lisp
+  (use-package dotnet
+    :hook (csharp-mode . dotnet-mode))
+#+end_src
+*** .NET-files
+Support for dotnet-files.
+#+begin_src emacs-lisp
+  (use-package csproj-mode)
+#+end_src
 * Help systems
 ** Package-archives
 Use Melpa only to list packages and read about them.
