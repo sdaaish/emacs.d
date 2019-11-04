@@ -5,7 +5,13 @@
 ;; This loads everything that are needed for a clean install to work.
 
 ;; 2017-03-07/SDAA
+(defvar start-time (float-time (current-time)))
+(message "*** Started emacs @ %s" (format-time-string "%Y-%m-%d %H:%M:%S" start-time))
 (message "*** Reading configuration from init.el...")
+
+;; Debug startup
+(setq debug-on-error t)
+(setq debug-on-quit t)
 
 ;; Garbage collection
 ;; Increase the garbage collection threshold to make startup faster
@@ -99,6 +105,5 @@
 ;; Load the el-file
 (load-file my/emacs-elfile)
 
-;; Garbage collector - decrease threshold
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
-;;EOF
+(provide 'init)
+;;; init.el ends here

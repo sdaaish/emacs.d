@@ -2316,5 +2316,19 @@ Show images from xkcd. With hydra.
 * The end
 Just record a last message, to know that the whole file has been loaded.
 #+BEGIN_SRC emacs-lisp
-(message "*** This is the last line of the config. Startup time=%s ***" (emacs-init-time))
+;; Garbage collector - decrease threshold
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
+
+;; Turn of debug
+(setq debug-on-error nil)
+(setq debug-on-quit nil)
+
+;;; Measure the startup time
+(defvar stop-time (float-time (current-time)))
+(message "*** Finished emacs @ %s in %s" (format-time-string "%Y-%m-%d %H:%M:%S" stop-time) (format-time-string "%M:%S.%3N" (- stop-time start-time)))
+(message "*** This is the last line of the config. Startup time=%3.5s ***" (emacs-init-time))
+
+;;; Please flycheck
+(provide 'emacs)
+;;; emacs.el ends here
 #+END_SRC
