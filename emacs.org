@@ -2131,17 +2131,20 @@ Support for C#, C-sharp.
 #+begin_src emacs-lisp
   (use-package csharp-mode
     :config
-    :hook (csharp-mode . smartparens-mode))
+    (defun my/csharp-hook()
+      (electric-pair-local-mode 1))
+    :hook (csharp-mode . my/csharp-hook))
 #+end_src
 *** Dotnet
 Interface to dotnet.
 #+begin_src emacs-lisp
-(use-package dotnet)
+  (use-package dotnet
+    :hook (csharp-mode . dotnet-mode))
 #+end_src
 *** .NET-files
 Support for dotnet-files.
 #+begin_src emacs-lisp
-(use-package csproj-mode)
+  (use-package csproj-mode)
 #+end_src
 * Help systems
 ** Package-archives
