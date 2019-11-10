@@ -35,9 +35,14 @@ Setting variables and constants for my directories and files.
   (cond ((eq system-type 'gnu/linux)(defconst my/dropbox-dir (expand-file-name "Dropbox/" "~")))
         ((eq system-type 'windows-nt)(defconst my/dropbox-dir (expand-file-name  "Dropbox/" (getenv "UserProfile")))))
 #+END_SRC
+** OneDrive
+#+BEGIN_SRC emacs-lisp
+  (cond ((eq system-type 'gnu/linux)(defconst my/onedrive-dir (expand-file-name "OneDrive/" "~")))
+        ((eq system-type 'windows-nt)(defconst my/onedrive-dir (expand-file-name  "OneDrive/" (getenv "UserProfile")))))
+#+END_SRC
 ** Emacs synced files
 #+BEGIN_SRC emacs-lisp
-  (defconst my/emacs-shared-dir (concat my/dropbox-dir "emacs/"))
+  (defconst my/emacs-shared-dir (concat my/onedrive-dir "emacs/"))
 #+END_SRC
 ** Private emacs-file
 File with personal stuff.
@@ -76,7 +81,7 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
         (setq value (cons fullpath value)))))
 
   ;; Define constants
-  (defconst my/org-directory (expand-file-name "emacs/org/" my/dropbox-dir))
+  (defconst my/org-directory (expand-file-name "emacs/org/" my/onedrive-dir))
   (defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
   (defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
   (defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
@@ -1009,7 +1014,7 @@ Define path for .authinfo-file
 #+BEGIN_SRC emacs-lisp
   (use-package auth-source-pass
     :config
-    (setq auth-sources (list (expand-file-name "emacs/.authinfo.gpg" my/dropbox-dir)))
+    (setq auth-sources (list (expand-file-name "emacs/.authinfo.gpg" my/onedrive-dir)))
     (setq auth-source-pass-port-separator "#")
     (setq auth-source-debug t)
     (add-to-list 'auth-source-protocols '(scp "scp" "22") t)
@@ -1491,7 +1496,7 @@ Save bookmarks all the time.
 #+BEGIN_SRC emacs-lisp
 (setq bookmark-save-flag t)
 (setq bookmark-version-control t)
-(setq bookmark-default-file (concat my/dropbox-dir "emacs/bookmarks"))
+(setq bookmark-default-file (concat my/onedrive-dir "emacs/bookmarks"))
 #+END_SRC
 *** Language
 Spellchecking. I use Hunspell.
@@ -1895,7 +1900,7 @@ Use backtick "`" and comma "," to use variable-expansion in the alist. See [[htt
 ("org-notes"
 :base-directory ,my/org-directory
 :base-extension "org"
-:publishing-directory ,(concat my/dropbox-dir "emacs/html")
+:publishing-directory ,(concat my/onedrive-dir "emacs/html")
 :recursive t
 :publishing-function org-html-publish-to-html
 :headline-levels 4
@@ -1904,7 +1909,7 @@ Use backtick "`" and comma "," to use variable-expansion in the alist. See [[htt
 ("org-static"
  :base-directory ,my/org-directory
  :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
- :publishing-directory ,(concat my/dropbox-dir "emacs/html")
+ :publishing-directory ,(concat my/onedrive-dir "emacs/html")
  :recursive t
  :publishing-function org-publish-attachment
  )
