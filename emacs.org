@@ -2160,6 +2160,27 @@ Support for dotnet-files.
 #+begin_src emacs-lisp
   (use-package csproj-mode)
 #+end_src
+** LSP-mode
+Language Server Mode, to interact with different languages.
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :commands lsp
+    :hook (sh-mode . lsp)
+    )
+
+  (use-package lsp-pwsh
+    :straight (lsp-pwsh
+               :host github
+               :repo "kiennq/lsp-powershell")
+    :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp)))
+    )
+
+  ;; UI for LSP
+  (use-package lsp-ui
+    :commands lsp-ui-mode)
+
+  (use-package lsp-ivy)
+#+end_src
 * Help systems
 ** Package-archives
 Use Melpa only to list packages and read about them.
