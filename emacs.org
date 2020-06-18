@@ -195,6 +195,7 @@ Switch between org-buffers, "<f8> o".
     ("g" my/org-mobile-sync "Synchronize mobile")
     ("P" org-publish-project "org-publish-project")
     ("o" org-iswitchb "Switch org-buffer")
+    ("r" org-revert-all-org-buffers "Refresh all org-buffers")
     ("s" org-save-all-org-buffers "Save Org buffers")
     ("q" nil "cancel"))
   (bind-key "<f8> o" 'hydra-org-stuff/body)
@@ -973,6 +974,11 @@ Automatically insert parenthesis.
   :hook
   ((org-mode prog-mode) . smartparens-mode))
 #+END_SRC
+** rfc-mode
+#+begin_src emacs-lisp
+  (use-package rfc-mode
+    :config (setq rfc-mode-directory (expand-file-name ".cache/rfc/" user-emacs-directory)))
+#+end_src
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
