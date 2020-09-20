@@ -30,11 +30,6 @@ This is my version of an configuration file for GNU Emacs. I now use ~straight~ 
 #+END_SRC
 * Variables
 Setting variables and constants for my directories and files.
-** Dropbox
-#+BEGIN_SRC emacs-lisp
-  (cond ((eq system-type 'gnu/linux)(defconst my/dropbox-dir (expand-file-name "Dropbox/" "~")))
-        ((eq system-type 'windows-nt)(defconst my/dropbox-dir (expand-file-name  "Dropbox/" (getenv "UserProfile")))))
-#+END_SRC
 ** OneDrive
 #+BEGIN_SRC emacs-lisp
   (cond ((eq system-type 'gnu/linux)(defconst my/onedrive-dir (expand-file-name "OneDrive/" "~")))
@@ -1888,7 +1883,7 @@ Use swedish calendar, from [[http://bigwalter.net/daniel/elisp/sv-kalender.el][S
 (load "sv-kalender" noerror)
 #+END_SRC
 ** Org-Mobile
-This copys files to Dropbox dir where the MobileOrg app can read/write data.
+This copys files to MobileOrg dir where the MobileOrg app can read/write data.
 #+BEGIN_SRC emacs-lisp
   (use-package org-mobile
     :straight (:type built-in)
@@ -1896,7 +1891,7 @@ This copys files to Dropbox dir where the MobileOrg app can read/write data.
     (autoload 'org-mobile-pull "org-mobile" nil t)
     (autoload 'org-mobile-push "org-mobile" nil t)
     :config
-    (setq org-mobile-directory (expand-file-name "Appar/MobileOrg/" my/dropbox-dir))
+    (setq org-mobile-directory (expand-file-name "mobileorg/" my/emacs-shared-dir))
     (setq org-mobile-inbox-for-pull (expand-file-name "sync.org" my/org-directory))
     (setq org-mobile-files my/mobile-files)
     (setq org-mobile-agendas 'default)
