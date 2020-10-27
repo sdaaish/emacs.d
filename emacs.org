@@ -772,13 +772,24 @@ Make undo more intuitive.
 #+END_SRC
 ** RSS stuff
 Use elfeed ass RSS-reader, plus extras.
+*** Elfeed-org
+Organise RSS with org-mode.
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed-org
+    :config (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" my/org-directory))
+                  rmh-elfeed-org-auto-ignore-invalid-feeds t))
+#+END_SRC
+*** Elfeed-goodies
+Some extras
+#+BEGIN_SRC emacs-lisp
+    (use-package elfeed-goodies
+      :config (elfeed-goodies/setup))
+#+END_SRC
 *** Elfeed
 Read RSS-feeds.
 From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
-    :commands elfeed
-    :functions elfeed-expose
     :config
     (setq elfeed-db-directory (expand-file-name ".cache/elfeeddb" user-emacs-directory))
     (setq elfeed-search-filter "@1-days-ago +unread")
@@ -816,10 +827,16 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
     (push '(network elfeed-network)
           elfeed-search-face-alist)
 
+    ;; Toggle star for post
+    (defalias 'elfeed-toggle-star
+      (elfeed-expose #'elfeed-search-toggle-all 'star))
+
     (defun bjm/elfeed-load-db-and-open ()
       "Wrapper to load the elfeed db from disk before opening"
       (interactive)
       (elfeed-db-load)
+      (elfeed-org)
+      (elfeed-goodies/setup)
       (elfeed)
       (elfeed-search-update--force)
       (elfeed-search-set-filter "@1-months-ago"))
@@ -837,32 +854,12 @@ From http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
       (mark-whole-buffer)
       (elfeed-search-untag-all-unread))
 
-    ;; Toggle star for post
-    (defalias 'elfeed-toggle-star
-      (elfeed-expose #'elfeed-search-toggle-all 'star))
-
     :bind (("C-x w" . bjm/elfeed-load-db-and-open)
            :map elfeed-search-mode-map
            ("h" . my/hydra-elfeed/body)
            ("m" . elfeed-toggle-star)
            ("R" . elfeed-mark-all-as-read)
-           ("q" . bjm/elfeed-save-db-and-bury))
-    )
-#+END_SRC
-*** Elfeed-org
-Organise RSS with org-mode.
-#+BEGIN_SRC emacs-lisp
-  (use-package elfeed-org
-    :commands elfeed
-    :config (setq rmh-elfeed-org-files (list (concat my/org-directory "/elfeed.org"))
-                  rmh-elfeed-org-auto-ignore-invalid-feeds t))
-#+END_SRC
-*** Elfeed-goodies
-Some extras
-#+BEGIN_SRC emacs-lisp
-  (use-package elfeed-goodies
-    :commands elfeed
-    :config (elfeed-goodies/setup))
+           ("q" . bjm/elfeed-save-db-and-bury)))
 #+END_SRC
 *** Hydra
 A ~hydra~ for elfeed.
