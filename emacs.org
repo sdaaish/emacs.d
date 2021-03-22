@@ -53,7 +53,7 @@ File with personal stuff.
 ** Backup-directory
 #+BEGIN_SRC emacs-lisp
   (defconst my/emacs-backup-dir
-    (expand-file-name (expand-file-name "backup/" no-littering-var-directory)))
+     (expand-file-name "backup/" no-littering-var-directory))
 #+END_SRC
 ** Repositories
 #+BEGIN_SRC emacs-lisp
@@ -2375,10 +2375,8 @@ Just record a last message, to know that the whole file has been loaded.
 (setq debug-on-quit nil)
 
 ;;; Measure the startup time
-(defvar stop-time (float-time (current-time)))
-(message "*** Finished emacs @ %s in %s" (format-time-string "%Y-%m-%d %H:%M:%S" stop-time) (format-time-string "%M:%S.%3N" (- stop-time start-time)))
+(message "*** Finished emacs @ %s in %s" (my/format-time (current-time)) (my/startup-timer))
 (message "*** This is the last line of the config. Startup time=%3.5s ***" (emacs-init-time))
-
 ;;; Please flycheck
 ;;;(provide 'emacs)
 ;;; emacs.el ends here
