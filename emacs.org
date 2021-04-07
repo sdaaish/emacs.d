@@ -1644,20 +1644,20 @@ Backup and autosave options, + history
 ** Backup of files
 Saves backup of files in emacs-homedir. Keeps several versions of the files.
 #+BEGIN_SRC emacs-lisp
-;; From https://github.com/magnars/.emacs.d
-;; Write backup files to own directory
-(setq backup-directory-alist
-      `((".*" . ,my/emacs-backup-dir)))
+  ;; From https://github.com/magnars/.emacs.d
+  ;; Write backup files to own directory
+  (setq backup-directory-alist
+        `((".*" . ,my/emacs-backup-dir)))
 
-;; Make backups of files, even when they're in version control
-(setq
-        delete-old-versions t
+  ;; Make backups of files, even when they're in version control
+  (setq delete-old-versions t
         version-control t
         vc-make-backup-files t
         backup-by-copying t
         kept-old-versions 10
         kept-new-versions 20
-        auto-save-interval 50)
+        auto-save-interval 50
+        delete-by-moving-to-trash t)
 #+END_SRC
 ** Save current position
 Go back to where you last were in the file.
@@ -2225,6 +2225,23 @@ To list what keys are free in different modes. Very useful.
   (use-package free-keys
     :commands free-keys)
 #+END_SRC
+** Info-colors
+Colorisation of Info-text.
+#+begin_src emacs-lisp
+  (use-package info-colors
+    :hook (Info-selection-hook . info-colors-fontify-node))
+#+end_src
+** helpful
+A more helpful package for Emacs help.
+#+begin_src emacs-lisp
+  (use-package helpful
+    :config
+    (setq counsel-describe-function-function #'helpful-callable
+          counsel-describe-variable-function #'helpful-variable)
+    :bind (("C-h C" . #'helpful-command)
+           ("C-h k" . #'helpful-key)
+           ("C-c C-d" . #'helpful-at-point)))
+#+end_src
 * External utilities
 ** hackernews
 Read hackernews in emacs.
