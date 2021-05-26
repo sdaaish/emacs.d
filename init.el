@@ -67,7 +67,7 @@
 
 ;; Install latest version of org and org-plus-contrib
 (use-package org
-  :straight org-plus-contrib)
+  :straight org-contrib)
 
 ;; Read the rest from my org-babel enabled config-file
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
