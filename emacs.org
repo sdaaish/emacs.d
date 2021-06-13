@@ -383,10 +383,12 @@ Hydra for ~straight~, from [[https://github.com/abo-abo/hydra/wiki/straight.el][
 Magit is a Git-tool, probably the best porcelain in the world!
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-        :bind ("C-x g" . magit-status)
+    :bind ("C-x g" . magit-status)
     :config
     (setq magit-completing-read-function 'ivy-completing-read)
-    (setq-default with-editor-emacsclient-executable "emacsclient"))
+    (if (eq system-type 'windows-nt)
+        (setq-default with-editor-emacsclient-executable "emacsclientw.exe")
+      (setq-default with-editor-emacsclient-executable "emacsclient")))
 #+END_SRC
 ** Magit Forge
 Manage github things from emacs.
