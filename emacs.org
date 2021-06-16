@@ -104,10 +104,6 @@ Increase message-buffer
 #+BEGIN_SRC emacs-lisp
 (setq message-log-max (* 256 1024))
 #+END_SRC
-** Standard language
-#+BEGIN_SRC emacs-lisp
-(prefer-coding-system 'utf-8)
-#+END_SRC
 ** Bugfix for ELPA
 Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
 #+begin_src emacs-lisp
@@ -1089,13 +1085,14 @@ From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-thresh
 #+END_SRC
 ** File encoding settings
 #+BEGIN_SRC emacs-lisp
+(prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment   'utf-8)
-(setq buffer-file-coding-system 'utf-8)
-(setq locale-coding-system 'utf-8)
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+(setq-default buffer-file-coding-system 'utf-8)
+(setq-default locale-coding-system 'utf-8)
+(setq-default x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 ;; MS Windows clipboard is UTF-16LE
 (when (eq system-type 'windows-nt)
   (set-clipboard-coding-system 'utf-16le-dos))
