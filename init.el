@@ -64,6 +64,9 @@
 ;; Also install use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(setq straight-host-usernames
+      '((github . "sdaaish")
+        (gitlab . "sdaaish")))
 
 ;; Install latest version of org and org-plus-contrib
 (use-package org

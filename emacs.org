@@ -2001,11 +2001,15 @@ Add support for different programming languages and configuration files.
 Powershell-mode is useful.
 #+BEGIN_SRC emacs-lisp
   (use-package powershell
+    :straight (powershell :fork t)
     :commands powershell
     :config
     (setq powershell-eldoc-def-files (list (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
-    (when (eq system-type 'gnu/linux)
-      (setq powershell-location-of-exe "/usr/bin/pwsh")))
+    (if (eq system-type 'gnu/linux)
+        (setq powershell-location-of-exe "/usr/bin/pwsh")
+      (setq powershell-location-of-exe "pwsh.exe"))
+    (setq explicit-powershell\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-"))
+    (setq explicit-pwsh\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-")))
 #+END_SRC
 ** Dos-mode
 Only in windows.
