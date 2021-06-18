@@ -52,6 +52,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-overstrike ((t (:inherit bold :foreground "orange"))))
+ '(bookmark-face ((t (:background "LightSteelBlue1" :foreground "Black"))))
  '(flycheck-error-list-highlight ((t (:inherit rosy\ brown))))
  '(macrostep-expansion-highlight-face ((t (:foreground "light gray"))))
  '(package-status-avail-obso ((t (:inherit package-status-incompat :foreground "magenta"))))
