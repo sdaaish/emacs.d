@@ -1,13 +1,14 @@
 ;;; init.el --- Configuration of Emacs
-;;
+
+;;; Commentary:
+
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/init.el
 ;; Loads separate org-mode-file with the rest of the configuration
 ;; This loads everything that are needed for a clean install to work.
 
 ;; 2017-03-07/SDAA
-(defvar start-time (float-time (current-time)))
-(message "*** Started emacs @ %s" (format-time-string "%Y-%m-%d %H:%M:%S" start-time))
-(message "*** Reading configuration from init.el...")
+
+;;; Code:
 
 ;; Debug startup
 (setq debug-on-error t)
@@ -17,6 +18,30 @@
 ;; Increase the garbage collection threshold to make startup faster
 (setq gc-cons-threshold (* 50 1024 1024))
 (setq garbage-collection-messages nil)
+
+;; From emacs-from-scratch https://github.com/daviwil/emacs-from-scratch/blob/master/init.el
+(defun efs/display-startup-time ()
+  "Prints the startup time for Emacs."
+  (message "*** Emacs loaded in %s with %d garbage collections."
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time before-init-time)))
+           gcs-done))
+
+(add-hook 'emacs-startup-hook #'efs/display-startup-time)
+
+(defvar start-time (float-time (current-time)))
+
+(defun my/format-time (time)
+  "Displays formatted TIME."
+  (format-time-string "%Y-%m-%d %H:%M:%S" time))
+
+(defun my/startup-timer ()
+  "Measures time differences."
+  (format-time-string "%M:%S.%3N" (- (float-time (current-time)) start-time)))
+
+(message "*** Started emacs @ %s" (my/format-time start-time))
+(message "*** Reading configuration from init.el...")
 
 ;; Enable narrowing
 (put 'narrow-to-region 'disabled nil)
@@ -39,17 +64,19 @@
 ;; Also install use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(setq straight-host-usernames
+      '((github . "sdaaish")
+        (gitlab . "sdaaish")))
 
 ;; Install latest version of org and org-plus-contrib
 (use-package org
-  :straight org-plus-contrib)
+  :straight org-contrib)
 
 ;; Read the rest from my org-babel enabled config-file
 ;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
-(setq
- my/init-dir (file-name-directory (or load-file-name (buffer-file-name)))
- my/emacs-orgfile (expand-file-name "emacs.org" my/init-dir)
- my/emacs-elfile (expand-file-name "emacs.el" my/init-dir))
+(defvar my/init-dir (file-name-directory (or load-file-name (buffer-file-name))))
+(defvar my/emacs-orgfile (expand-file-name "emacs.org" my/init-dir))
+(defvar my/emacs-elfile (expand-file-name "emacs.el" my/init-dir))
 
 ;; Below is from http://www.holgerschurig.de/en/emacs-efficiently-untangling-elisp/
 ;; Optimize loading time by only untangling when needed
@@ -63,12 +90,11 @@
 ;; Tangle orgfile into elfile
 ;; Modified from http://www.holgerschurig.de/en/emacs-efficiently-untangling-elisp/
 (defun my/tangle-config-org (orgfile elfile)
-  "This function will write all source blocks from =orgfile= into
-=elfile= that are ...
+  "This function will write all source blocks from ORGFILE into ELFILE that are:
 
-- not marked as :tangle no
-- have a source-code of =emacs-lisp=
-- doesn't have the todo-marker CANCELED"
+  - not marked as :tangle no
+  - have a source-code of =emacs-lisp=
+  - doesn't have the todo-marker CANCELED"
   (let* ((body-list ())
          (gc-cons-threshold most-positive-fixnum)
          (org-babel-src-block-regexp   (concat
