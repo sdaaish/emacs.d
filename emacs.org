@@ -958,7 +958,7 @@ Colorize numbers and text.
 (use-package rainbow-mode)
 #+end_src
 ** Restclient
-A client to make REST-calls from emacs and Org-mode. 
+A client to make REST-calls from emacs and Org-mode.
 #+BEGIN_SRC emacs-lisp
   (use-package restclient
     :commands restclient
@@ -1093,7 +1093,7 @@ From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-thresh
 ** File encoding settings
 #+BEGIN_SRC emacs-lisp
 (setenv "LANG" "sv-SE.UTF-8")
-(prefer-coding-system 'utf-8)
+(prefer-coding-system 'utf-8-unix)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
@@ -1701,11 +1701,12 @@ Save buffers when idle
   (use-package super-save
     :diminish super-save-mode
     :config
-    (super-save-mode +1)
+    (super-save-mode t)
     (add-to-list 'super-save-triggers 'ace-window)
+    (add-to-list 'super-save-triggers 'magit-status)
     (add-to-list 'super-save-hook-triggers 'find-file-hook)
     (setq super-save-auto-save-when-idle t
-          super-save-idle-duration 20
+          super-save-idle-duration 8
           super-save-remote-files nil
           super-save-exclude '(".gpg")
           auto-save-default nil))
