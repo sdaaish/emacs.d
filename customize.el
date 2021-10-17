@@ -51,9 +51,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:family "CaskaydiaCove Nerd Font" :foundry "SAJA" :slant normal :weight normal :height 98 :width normal))))
  '(Man-overstrike ((t (:inherit bold :foreground "orange"))))
  '(bookmark-face ((t (:background "LightSteelBlue1" :foreground "Black"))))
  '(flycheck-error-list-highlight ((t (:inherit rosy\ brown))))
+ '(hl-line ((t (:extend t :background "#3d3d3d" :inverse-video nil))))
  '(macrostep-expansion-highlight-face ((t (:foreground "light gray"))))
  '(package-status-avail-obso ((t (:inherit package-status-incompat :foreground "magenta"))))
  '(package-status-dependency ((t (:inherit nil :foreground "cyan"))))
