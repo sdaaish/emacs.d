@@ -433,6 +433,24 @@ Copy git links to kill-ring.
     :bind ("C-c L" . hydra-git-link/body))
 #+end_src
 ** Yasnippets
+*** Yasnippet
+Load yasnippet and some templates.
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :init
+    (yas-global-mode 1)
+    :bind (("C-c y" . hydra-yasnippet/body)
+           :map yas-minor-mode-map
+           ("C-c i" . yas-expand))
+    :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
+  (use-package yasnippet-snippets
+    :after yasnippet)
+#+END_SRC
+*** ivy-yasnippet
+#+begin_src emacs-lisp
+  (use-package ivy-yasnippet
+    :bind ("C-x y" . ivy-yasnippet))
+#+end_src
 *** Hydra for yasnippet
 From https://github.com/abo-abo/hydra/wiki/YASnippet
 #+BEGIN_SRC emacs-lisp
@@ -460,24 +478,6 @@ From https://github.com/abo-abo/hydra/wiki/YASnippet
     ("m" yas-minor-mode)
     ("a" yas-reload-all))
 #+END_SRC
-*** Yasnippet
-Load yasnippet and some templates.
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :init
-    (yas-global-mode 1)
-    :bind (("C-c y" . hydra-yasnippet/body)
-           :map yas-minor-mode-map
-           ("C-c i" . yas-expand))
-    :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
-  (use-package yasnippet-snippets
-    :after yasnippet)
-#+END_SRC
-*** ivy-yasnippet
-#+begin_src emacs-lisp
-  (use-package ivy-yasnippet
-    :bind ("C-x y" . ivy-yasnippet))
-#+end_src
 ** Projectile
 Find or switch to projects easy, and use ~counsel-projectile~.
 #+BEGIN_SRC emacs-lisp
@@ -1316,7 +1316,7 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 
     (use-package material-theme
       :config
-      (load-theme 'material t t))
+      (load-theme 'material t nil))
 
     (use-package twilight-bright-theme
       :config
@@ -1334,7 +1334,7 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
     (use-package gruber-darker-theme
       :config(load-theme 'gruber-darker t t))
 
-    (load-theme 'material))
+    (load-theme 'material t nil))
 #+END_SRC
 
 *** Load different theme if in gui or terminal
@@ -1362,14 +1362,15 @@ Switch betweens selected themes with "C-<".
   ("C->" . theme-looper-enable-random-theme))
 #+END_SRC
 ** Fonts
-Use Source Code Pro as font
+Use Cascadia Code Nerd Font
 #+BEGIN_SRC emacs-lisp
 (set-face-attribute 'default nil
-                        :family "Source Code Pro for powerline"
+                        :family "CaskaydiaCove Nerd Font-11"
                         :height 100
                         :weight 'normal
                         :width  'condensed)
-(add-to-list 'default-frame-alist '(font . "Source Code Pro for powerline"))
+(add-to-list 'default-frame-alist '(font . "CaskaydiaCove Nerd Font-11"))
+(set-frame-font "CaskaydiaCove Nerd Font-11" nil t)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+END_SRC
 *** Cycle through fonts
@@ -2076,23 +2077,12 @@ Add mode for configuring .ssh/config and other related to SSH.
 #+END_SRC
 ** Git
 Modes for editing git-files
-*** gitconfig
+*** git-modes
 #+BEGIN_SRC emacs-lisp
-(use-package gitconfig-mode
-:config
-(add-to-list 'auto-mode-alist '("/\\.gitconfig\\..*\\'" . gitconfig-mode)))
+  (use-package git-modes
+    :config
+    (add-to-list 'auto-mode-alist (cons "/.dockerignore\\'" 'gitignore-mode)))
 #+END_SRC
-*** gitignore
-Use this to get support for .gitignore-files
-#+BEGIN_SRC emacs-lisp
-(use-package gitignore-mode)
-#+END_SRC
-*** gitattributes
-Edit gitattributes-files.
-#+BEGIN_SRC emacs-lisp
-(use-package gitattributes-mode)
-#+END_SRC
-
 ** Autohotkey-mode
 #+BEGIN_SRC emacs-lisp
 (use-package ahk-mode)
@@ -2257,7 +2247,7 @@ Colorisation of Info-text.
 A more helpful package for Emacs help.
 #+begin_src emacs-lisp
   (use-package helpful
-    :config
+    :commands counsel-describe-function-function
     :bind (("C-h C" . #'helpful-command)
            ("C-h k" . #'helpful-key)
            ("C-c C-h" . #'helpful-at-point)
