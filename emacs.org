@@ -1211,37 +1211,42 @@ Group buffers based on projectile.
 These are really useful packages. http://oremacs.com/swiper/
 Replaced IDO with Ivy.
 #+BEGIN_SRC emacs-lisp
-      (use-package ivy
-        :diminish
-        :config
-        (ivy-mode 1)
-        (setq	ivy-use-virtual-buffers t
-              ivy-count-format "(%d/%d) ")
-        :bind
-        ("C-x C-f" . counsel-find-file)
-        ("C-c C-S-F" . counsel-recentf)
-        ("C-c C-S-R" . ivy-resume)
-        ("C-s" . swiper)
-        ("C-r" . swiper)
-        ("C-c g" . counsel-git)
-        ("C-c j" . counsel-git-grep)
-        ("C-c k" . counsel-ag))
-      (use-package swiper
-        :config
-        (setq ivy-use-selectable-prompt t)
-        (set-face-background 'swiper-line-face "Light Slate Grey"))
-      (use-package counsel
-        :diminish
-        :config
-        (setq counsel-describe-function-function #'helpful-callable
-              counsel-describe-variable-function #'helpful-variable)
-        (counsel-mode 1)
-        (use-package smex)
-        :bind
-        ("M-x" . counsel-M-x)
-        ("C-h f" . counsel-describe-function)
-        ("C-h v" . counsel-describe-variable))
-      (use-package ivy-hydra)
+  (use-package ivy
+    :diminish
+    :config
+    (ivy-mode 1)
+    (setq	ivy-use-virtual-buffers t
+          ivy-count-format "(%d/%d) "
+          enable-recursive-minibuffers t)
+    :bind
+    ("C-x C-f" . counsel-find-file)
+    ("C-c C-S-F" . counsel-recentf)
+    ("C-c C-S-R" . ivy-resume)
+    ("C-s" . swiper)
+    ("C-r" . swiper)
+    ("C-c g" . counsel-git)
+    ("C-c j" . counsel-git-grep)
+    ("C-c k" . counsel-ag))
+  (use-package swiper
+    :config
+    (setq ivy-use-selectable-prompt t
+          swiper-action-recenter t
+          swiper-include-line-number-in-search t
+          swiper-goto-start-of-match t
+          swiper-stay-on-quit nil)
+    (set-face-background 'swiper-line-face "Light Slate Grey"))
+  (use-package counsel
+    :diminish
+    :config
+    (setq counsel-describe-function-function #'helpful-callable
+          counsel-describe-variable-function #'helpful-variable)
+    (counsel-mode 1)
+    (use-package smex)
+    :bind
+    ("M-x" . counsel-M-x)
+    ("C-h f" . counsel-describe-function)
+    ("C-h v" . counsel-describe-variable))
+  (use-package ivy-hydra)
 #+END_SRC
 * Counsel-tramp
 Use counsel to navigate hosts.
