@@ -1,7 +1,9 @@
-;; my-cheats.el
+;;; my-cheats.el --- Summary
 
-;; Cheatsheet for emacs and commands
+;;; Commentary:
+;; Cheatsheet for Emacs and commands
 
+;;; Code:
 (cheatsheet-add-group 'Common
                       '(:key "C-x C-c" :description "leave Emacs")
                       '(:key "C-x C-f" :description "find file")
@@ -71,3 +73,6 @@
 (cheatsheet-add-group 'avy
                       '(:key "C-." :description "Goto char")
                       '(:key "C-:" :description "Goto char 2"))
+
+(provide 'my-cheats)
+;;; my-cheats.el ends here
