@@ -1,5 +1,5 @@
 #+TITLE: My GNU Emacs configuration
-#+STARTUP: indent
+#+STARTUP: show2levels indent
 #+OPTIONS: H:5 num:nil tags:nil toc:3 timestamps:t
 #+LAYOUT: post
 #+DESCRIPTION: Loading emacs configuration using org-babel
@@ -433,6 +433,24 @@ Copy git links to kill-ring.
     :bind ("C-c L" . hydra-git-link/body))
 #+end_src
 ** Yasnippets
+*** Yasnippet
+Load yasnippet and some templates.
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :init
+    (yas-global-mode 1)
+    :bind (("C-c y" . hydra-yasnippet/body)
+           :map yas-minor-mode-map
+           ("C-c i" . yas-expand))
+    :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
+  (use-package yasnippet-snippets
+    :after yasnippet)
+#+END_SRC
+*** ivy-yasnippet
+#+begin_src emacs-lisp
+  (use-package ivy-yasnippet
+    :bind ("C-x y" . ivy-yasnippet))
+#+end_src
 *** Hydra for yasnippet
 From https://github.com/abo-abo/hydra/wiki/YASnippet
 #+BEGIN_SRC emacs-lisp
@@ -460,24 +478,6 @@ From https://github.com/abo-abo/hydra/wiki/YASnippet
     ("m" yas-minor-mode)
     ("a" yas-reload-all))
 #+END_SRC
-*** Yasnippet
-Load yasnippet and some templates.
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :init
-    (yas-global-mode 1)
-    :bind (("C-c y" . hydra-yasnippet/body)
-           :map yas-minor-mode-map
-           ("C-c i" . yas-expand))
-    :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
-  (use-package yasnippet-snippets
-    :after yasnippet)
-#+END_SRC
-*** ivy-yasnippet
-#+begin_src emacs-lisp
-  (use-package ivy-yasnippet
-    :bind ("C-x y" . ivy-yasnippet))
-#+end_src
 ** Projectile
 Find or switch to projects easy, and use ~counsel-projectile~.
 #+BEGIN_SRC emacs-lisp
@@ -621,11 +621,11 @@ Auto completion.
 *** Company-mode
 Complete anything
 #+BEGIN_SRC emacs-lisp
-(use-package company
-:diminish
-:config
-  (global-company-mode t)
-  (setq company-idle-delay 0))
+  (use-package company
+  :diminish
+  :config
+    (global-company-mode t)
+    (setq company-idle-delay 0))
 #+END_SRC
 *** Company-shell
 Add more functions to company
@@ -985,6 +985,13 @@ Automatically insert parenthesis.
   (use-package rfc-mode
     :config (setq rfc-mode-directory (expand-file-name "rfc/cache" no-littering-var-directory)))
 #+end_src
+** Disable-mouse
+No mice!
+#+begin_example
+  (use-package disable-mouse
+  :diminish
+  :config (global-disable-mouse-mode))
+#+end_example
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
@@ -1204,37 +1211,42 @@ Group buffers based on projectile.
 These are really useful packages. http://oremacs.com/swiper/
 Replaced IDO with Ivy.
 #+BEGIN_SRC emacs-lisp
-      (use-package ivy
-        :diminish
-        :config
-        (ivy-mode 1)
-        (setq	ivy-use-virtual-buffers t
-              ivy-count-format "(%d/%d) ")
-        :bind
-        ("C-x C-f" . counsel-find-file)
-        ("C-c C-S-F" . counsel-recentf)
-        ("C-c C-S-R" . ivy-resume)
-        ("C-s" . swiper)
-        ("C-r" . swiper)
-        ("C-c g" . counsel-git)
-        ("C-c j" . counsel-git-grep)
-        ("C-c k" . counsel-ag))
-      (use-package swiper
-        :config
-        (setq ivy-use-selectable-prompt t)
-        (set-face-background 'swiper-line-face "Light Slate Grey"))
-      (use-package counsel
-        :diminish
-        :config
-        (setq counsel-describe-function-function #'helpful-callable
-              counsel-describe-variable-function #'helpful-variable)
-        (counsel-mode 1)
-        (use-package smex)
-        :bind
-        ("M-x" . counsel-M-x)
-        ("C-h f" . counsel-describe-function)
-        ("C-h v" . counsel-describe-variable))
-      (use-package ivy-hydra)
+  (use-package ivy
+    :diminish
+    :config
+    (ivy-mode 1)
+    (setq	ivy-use-virtual-buffers t
+          ivy-count-format "(%d/%d) "
+          enable-recursive-minibuffers t)
+    :bind
+    ("C-x C-f" . counsel-find-file)
+    ("C-c C-S-F" . counsel-recentf)
+    ("C-c C-S-R" . ivy-resume)
+    ("C-s" . swiper)
+    ("C-r" . swiper)
+    ("C-c g" . counsel-git)
+    ("C-c j" . counsel-git-grep)
+    ("C-c k" . counsel-ag))
+  (use-package swiper
+    :config
+    (setq ivy-use-selectable-prompt t
+          swiper-action-recenter t
+          swiper-include-line-number-in-search t
+          swiper-goto-start-of-match t
+          swiper-stay-on-quit nil)
+    (set-face-background 'swiper-line-face "Light Slate Grey"))
+  (use-package counsel
+    :diminish
+    :config
+    (setq counsel-describe-function-function #'helpful-callable
+          counsel-describe-variable-function #'helpful-variable)
+    (counsel-mode 1)
+    (use-package smex)
+    :bind
+    ("M-x" . counsel-M-x)
+    ("C-h f" . counsel-describe-function)
+    ("C-h v" . counsel-describe-variable))
+  (use-package ivy-hydra)
 #+END_SRC
 * Counsel-tramp
 Use counsel to navigate hosts.
@@ -1316,7 +1328,7 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 
     (use-package material-theme
       :config
-      (load-theme 'material t t))
+      (load-theme 'material t nil))
 
     (use-package twilight-bright-theme
       :config
@@ -1334,7 +1346,7 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
     (use-package gruber-darker-theme
       :config(load-theme 'gruber-darker t t))
 
-    (load-theme 'material))
+    (load-theme 'material t nil))
 #+END_SRC
 
 *** Load different theme if in gui or terminal
@@ -1362,14 +1374,15 @@ Switch betweens selected themes with "C-<".
   ("C->" . theme-looper-enable-random-theme))
 #+END_SRC
 ** Fonts
-Use Source Code Pro as font
+Use Cascadia Code Nerd Font
 #+BEGIN_SRC emacs-lisp
 (set-face-attribute 'default nil
-                        :family "Source Code Pro for powerline"
+                        :family "CaskaydiaCove Nerd Font-11"
                         :height 100
                         :weight 'normal
                         :width  'condensed)
-(add-to-list 'default-frame-alist '(font . "Source Code Pro for powerline"))
+(add-to-list 'default-frame-alist '(font . "CaskaydiaCove Nerd Font-11"))
+(set-frame-font "CaskaydiaCove Nerd Font-11" nil t)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+END_SRC
 *** Cycle through fonts
@@ -1589,6 +1602,7 @@ Display time as 24-hour format
 Some eldoc settings.
 #+begin_src emacs-lisp
 (setq eldoc-idle-delay 0.1)
+(diminish 'eldoc-mode)
 #+end_src
 *** Help-settings
 From [[https://emacsredux.com/blog/2014/06/18/quickly-find-emacs-lisp-sources/][Find-func]].
@@ -2076,23 +2090,12 @@ Add mode for configuring .ssh/config and other related to SSH.
 #+END_SRC
 ** Git
 Modes for editing git-files
-*** gitconfig
+*** git-modes
 #+BEGIN_SRC emacs-lisp
-(use-package gitconfig-mode
-:config
-(add-to-list 'auto-mode-alist '("/\\.gitconfig\\..*\\'" . gitconfig-mode)))
+  (use-package git-modes
+    :config
+    (add-to-list 'auto-mode-alist (cons "/.dockerignore\\'" 'gitignore-mode)))
 #+END_SRC
-*** gitignore
-Use this to get support for .gitignore-files
-#+BEGIN_SRC emacs-lisp
-(use-package gitignore-mode)
-#+END_SRC
-*** gitattributes
-Edit gitattributes-files.
-#+BEGIN_SRC emacs-lisp
-(use-package gitattributes-mode)
-#+END_SRC
-
 ** Autohotkey-mode
 #+BEGIN_SRC emacs-lisp
 (use-package ahk-mode)
@@ -2257,7 +2260,7 @@ Colorisation of Info-text.
 A more helpful package for Emacs help.
 #+begin_src emacs-lisp
   (use-package helpful
-    :config
+    :commands counsel-describe-function-function
     :bind (("C-h C" . #'helpful-command)
            ("C-h k" . #'helpful-key)
            ("C-c C-h" . #'helpful-at-point)
