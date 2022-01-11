@@ -1,33 +1,114 @@
 #+TITLE: My GNU Emacs configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :results silent
 #+STARTUP: show2levels indent
 #+OPTIONS: H:5 num:nil tags:nil toc:3 timestamps:t
 #+LAYOUT: post
 #+DESCRIPTION: Loading emacs configuration using org-babel
 #+TAGS: emacs
 #+CATEGORIES: editing
-* Todos
-Things that needs to be done.
-** TODO Sort this file!
-This file is not very structured or descriptive either...
-Someday I need to fix this.
-** DONE Change theme for linux when in console
-CLOSED: [2017-08-21 mån 16:25]
-- color-theme
-** DONE windmove keys dont work
-CLOSED: [2017-04-07 fre 11:32]
-** DONE Troubleshoot
-CLOSED: [2017-04-07 fre 11:32]
-** DONE magit on some Windows-clients
-CLOSED: [2017-04-07 fre 11:32]
-** DONE Configure local variables and files
-CLOSED: [2019-02-05 Tue 22:38]
-** DONE Emacsclient dont load theme and settings
-CLOSED: [2017-08-21 mån 16:25]
 * Introduction
-This is my version of an configuration file for GNU Emacs. I now use ~straight~ to install packages and ~use-package~ to configure them. Previously I used ~package.el~, the built-in package-handling system with ~use-package~ but it became a bit akward and slow when I wanted to upgrade installed packages. This configuration should start without problems but will take a very long time the first time, since ~straight~ needs to clone and build all packages. And ~Git~is needed before this to work.
-#+BEGIN_SRC emacs-lisp
+This is my version of an configuration file for GNU Emacs. I now use ~straight~ to install packages and ~use-package~ to configure them. Previously I used ~package.el~, the built-in package-handling system with ~use-package~ but it became a bit akward and slow when I wanted to upgrade installed packages. This configuration should start without problems but will take a very long time the first time, since ~straight~ needs to clone and build all packages. And ~Git~ is needed before this to work.
+Load [[file:emacs.org][./emacs.org]] in emacs and run ~org-babel-tangle~ to create startup files the first time. Restart emacs.
+** Inspiration
+All config in one file from [[https://github.com/daviwil/emacs-from-scratch/tree/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1][System Crafters Emacs from Scratch]].
+** Early init
+The file to load before ~init.el~. This will be created after ~org-babel-tangle~.
+#+begin_src emacs-lisp :tangle ./early-init.el
+;;; early-init.el --- Startup file before init.el to disable settings.
+
+;;; Commentary:
+
+;; From https://github.com/raxod502/straight.el#getting-started
+;; Disable stuff before init.el gets loaded.
+;; See https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
+
+;;; Code:
+
+(message "*** Reading early-init.el @ %s" (format-time-string "%Y-%m-%d %H:%M:%S" (current-time)))
+(setq package-enable-at-startup nil)
+
+(provide 'early-init)
+;;; early-init.el ends here
+#+end_src
+** init.el
+#+begin_src emacs-lisp
+;;; init.el --- Configuration of Emacs
+
+;;; Commentary:
+
+;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/init.el
+
+;;; Code:
 (message "*** Reading from %s ***" (buffer-name))
-#+END_SRC
+
+;; Debug startup
+(setq debug-on-error t)
+(setq debug-on-quit t)
+
+;; Garbage collection
+;; Increase the garbage collection threshold to make startup faster
+(setq gc-cons-threshold (* 50 1024 1024))
+(setq garbage-collection-messages nil)
+
+;; From emacs-from-scratch https://github.com/daviwil/emacs-from-scratch/blob/master/init.el
+(defun efs/display-startup-time ()
+  "Prints the startup time for Emacs."
+  (message "*** Emacs loaded in %s with %d garbage collections."
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time before-init-time)))
+           gcs-done))
+
+(add-hook 'emacs-startup-hook #'efs/display-startup-time)
+
+(defvar start-time (float-time (current-time)))
+
+(defun my/format-time (time)
+  "Displays formatted TIME."
+  (format-time-string "%Y-%m-%d %H:%M:%S" time))
+
+(defun my/startup-timer ()
+  "Measures time differences."
+  (format-time-string "%M:%S.%3N" (- (float-time (current-time)) start-time)))
+
+(message "*** Started emacs @ %s" (my/format-time start-time))
+(message "*** Reading configuration from init.el...")
+
+;; Enable narrowing
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page   'disabled nil)
+
+;; install straight package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Also install use-package
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+(setq straight-host-usernames
+      '((github . "sdaaish")
+        (gitlab . "sdaaish")))
+
+;; Install latest version of org and org-plus-contrib
+(use-package org
+  :straight org-contrib)
+
+;; Read the rest from my org-babel enabled config-file
+;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
+(defvar my/init-dir (file-name-directory (or load-file-name (buffer-file-name))))
+(defvar my/emacs-orgfile (expand-file-name "emacs.org" my/init-dir))
+(defvar my/emacs-elfile (expand-file-name "init.el" my/init-dir))
+#+end_src
 * Variables
 Setting variables and constants for my directories and files.
 ** No littering
@@ -169,7 +250,7 @@ Hydra for quick access to emacs files, "<f8> i".
   "Emacs config files"
     ("c" (find-file custom-file) "customize.el")
     ("e" (find-file my/emacs-orgfile) "emacs.org")
-    ("E" (find-file my/emacs-elfile) "emacs.el")
+    ("E" (find-file my/emacs-elfile) "init.el")
     ("i" (find-file user-init-file) "init.el")
     ("k" my/server-shutdown "Save&kill")
     ("p" (find-file my/private-orgfile) "private.org")
@@ -1307,10 +1388,6 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 #+BEGIN_SRC emacs-lisp
 (setq read-buffer-completion-ignore-case t)
 #+END_SRC
-
-#+RESULTS:
-: t
-
 * Theme and settings
 ** Theme
 *** Load themes
@@ -2429,7 +2506,7 @@ Just record a last message, to know that the whole file has been loaded.
 ;;; Measure the startup time
 (message "*** Finished emacs @ %s in %s" (my/format-time (current-time)) (my/startup-timer))
 (message "*** This is the last line of the config. Startup time=%3.5s ***" (emacs-init-time))
-;;; Please flycheck
-;;;(provide 'emacs)
-;;; emacs.el ends here
+
+(provide 'init)
+;;; init.el ends here
 #+END_SRC
