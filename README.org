@@ -1,20 +1,22 @@
 * emacs.d
 My universal emacs configuration directory.
-- [[https://github.com/sdaaish/emacs.d/blob/master/emacs.el][init.el]]
-- [[https://github.com/sdaaish/emacs.d/blob/master/customize.el][customize.el]]
-- [[https://github.com/sdaaish/emacs.d/blob/master/emacs.org][emacs.org]]
-- [[https://github.com/sdaaish/emacs.d/blob/master/README.org][README]]
+- [[./customize.el][customize.el]]
+- [[./emacs.org][emacs.org]]
+- [[./README.org][README]]
 
+Loading /emacs.org/ in emacs and running ~org-babel-tangle~ generates both ~early-init.el~ and ~init.el~. This is based on information from *System Crafters Emacs config, Emacs from scratch*, especially [[https://github.com/daviwil/emacs-from-scratch/tree/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1][Configure everything with Org Babel]].
 ** Linux info
-Clone git repo to a folder and make a symlink to that directory by running ~make~ in this folder. Or clone it directly to ~~/.emacs.d~.
-*** Manual
-#+begin_src shell
-ln -s <path-to-repo> ~/.emacs.d
+Clone this to a folder, I'm using ~~/.config/.emacs.default~ nowadays since I also use *Chemacs2*, but default for emacs is ~~/.emacs.d~ or ~~/.config/emacs~.
+The code for my linux setup is in [[https://github.com/sdaaish/dotfiles][dotfiles]].
+#+begin_src sh
+git clone https://github.com/sdaaish/emacs.d ~/.emacs.d
 #+end_src
 ** Windows info
 Create symlinks that points to the repo, or clone repo to ~%AppData%\.emacs.d~
-Normally emacs looks in ~%AppData%~, but make a link in ~%UserProfile%~ to be sure. Some programs set the ~HOME~-variable to the same as ~%UserProfile%~. Cmder eg.
+Normally emacs looks in ~%AppData%~, but make a link in ~%UserProfile%~ to be sure. Some programs set the ~HOME~-variable to the same as ~%UserProfile%~.
 You probably need to run these commands as a privileged user.
+
+Nowadays I use *Chemacs2* also in Windows and therefore I install the config in ~%USERPFOFILE%\.config\emacs.default~. This setup is in [[https://github.com/sdaaish/windotfiles][windotfiles]].
 *** Powershell
 #+begin_src powershell
 New-Item -Path ~ -Value <path-to-the-emacs.d> -Name .emacs.d -ItemType SymbolicLink
