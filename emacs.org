@@ -2343,11 +2343,13 @@ Colorisation of Info-text.
 A more helpful package for Emacs help.
 #+begin_src emacs-lisp
   (use-package helpful
-    :commands counsel-describe-function-function
+    :commands (counsel-describe-function-function
+               counsel-describe-variable-function)
     :bind (("C-h C" . #'helpful-command)
-           ("C-h k" . #'helpful-key)
            ("C-c C-h" . #'helpful-at-point)
-           ("C-h F" . #'helpful-function)))
+           ([remap describe-key] . helpful-key)
+           ([remap describe-variable] . counsel-describe-variable)
+           ([remap describe-function] . counsel-describe-function)))
 #+end_src
 * External utilities
 ** hackernews
