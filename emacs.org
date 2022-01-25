@@ -73,11 +73,10 @@ The file to load before ~init.el~. This will be created after ~org-babel-tangle~
 
 (message "*** Started emacs @ %s" (my/format-time start-time))
 (message "*** Reading configuration from init.el...")
-
-;; Enable narrowing
-(put 'narrow-to-region 'disabled nil)
-(put 'narrow-to-page   'disabled nil)
-
+#+end_src
+*** Straight
+Bootstrap straight.
+#+begin_src emacs-lisp
 ;; install straight package manager
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -98,19 +97,22 @@ The file to load before ~init.el~. This will be created after ~org-babel-tangle~
 (setq straight-host-usernames
       '((github . "sdaaish")
         (gitlab . "sdaaish")))
-
+#+end_src
+*** Org mode
+Install org mode and contrib.
+#+begin_src emacs-lisp
 ;; Install latest version of org and org-plus-contrib
 (use-package org
   :straight org-contrib)
-
-;; Read the rest from my org-babel enabled config-file
-;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
+#+end_src
+* Variables
+Setting variables and constants for my directories and files.
+** My variables
+#+begin_src emacs-lisp
 (defvar my/init-dir (file-name-directory (or load-file-name (buffer-file-name))))
 (defvar my/emacs-orgfile (expand-file-name "emacs.org" my/init-dir))
 (defvar my/emacs-elfile (expand-file-name "init.el" my/init-dir))
 #+end_src
-* Variables
-Setting variables and constants for my directories and files.
 ** No littering
 Try to keep user-emacs-directory clean with the package ~no-littering~.
 #+begin_src emacs-lisp
@@ -1707,6 +1709,12 @@ Customizations for Info.
 #+begin_src emacs-lisp
 (bind-key "'" 'Info-up Info-mode-map)
 #+end_src
+*** Narrowing
+Enable narrowing.
+#+begin_src emacs-lisp
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page   'disabled nil)
+#+end_src
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
@@ -2106,7 +2114,17 @@ To make it possible to write in org and publish as jekyll.
   (use-package auto-org-md
     :after ox)
 #+END_SRC
+** Org tangle init files
+Untangle init files automatically when save with org-babel.
+From [[https://github.com/daviwil/emacs-from-scratch/blob/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1/init.el][Emacs From Scratch: Everything in Babel]].
+#+begin_src emacs-lisp
+(defun my/org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name) my/emacs-orgfile)
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
 
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/org-babel-tangle-config)))
+#+end_src
 * Language support
 Add support for different programming languages and configuration files.
 ** Powershell mode
@@ -2349,11 +2367,14 @@ Colorisation of Info-text.
 A more helpful package for Emacs help.
 #+begin_src emacs-lisp
   (use-package helpful
-    :commands counsel-describe-function-function
+    :commands (counsel-describe-function-function
+               counsel-describe-variable-function)
+    :custom-face (helpful-heading ((t (:foreground "GreenYellow" :weight bold))))
     :bind (("C-h C" . #'helpful-command)
-           ("C-h k" . #'helpful-key)
            ("C-c C-h" . #'helpful-at-point)
-           ("C-h F" . #'helpful-function)))
+           ([remap describe-key] . helpful-key)
+           ([remap describe-variable] . counsel-describe-variable)
+           ([remap describe-function] . counsel-describe-function)))
 #+end_src
 * External utilities
 ** hackernews
