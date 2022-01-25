@@ -202,7 +202,7 @@ Hydras is keyboard mapping through menus.
 Use "C-c v" to toggle values.
 #+BEGIN_SRC emacs-lisp
   (require 'whitespace)
-  (defhydra hydra-toggle (:color pink)
+  (defhydra hydra-toggle (:color pink :timeout 3)
     "
         _a_ abbrev-mode:       %`abbrev-mode
         _d_ debug-on-error:    %`debug-on-error
@@ -229,19 +229,25 @@ Use "C-c v" to toggle values.
 *** Zoom font
 Use <F2> to zoom in or out of fonts
 #+BEGIN_SRC emacs-lisp
-(defhydra hydra-zoom (global-map "<f2>")
-  "zoom"
-    ("g" text-scale-increase "in")
-    ("l" text-scale-decrease "out"))
- (setq text-scale-mode-step 1.1)
+  (defhydra hydra-zoom (global-map "<f2> z" :hint nil :timeout 3)
+    "
+    Change text-scale.
+    Press _g_ to zoom in, _l_ out.
+    _q_ to quit.
+    "
+    ("g" text-scale-increase nil)
+    ("l" text-scale-decrease nil)
+    ("q" nil :color blue))
+  (setq text-scale-mode-step 1.1)
 #+END_SRC
 *** Font size changes
 Change fonts with C-<f2>.
 #+BEGIN_SRC emacs-lisp
-(defhydra hydra-font (global-map "C-<f2>")
-  "Change fonts to next/previous"
+  (defhydra hydra-font (global-map "C-<f2>" :timeout 3)
+    "Change fonts to next/previous"
     ("n" my/cycle-font-next "next font")
-    ("p" my/cycle-font-previous "out"))
+    ("p" my/cycle-font-previous "previous font")
+    ("q" nil "cancel" :color blue))
 #+END_SRC
 *** Emacs init files.
 Hydra for quick access to emacs files, "<f8> i".
