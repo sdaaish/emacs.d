@@ -572,9 +572,14 @@ Find or switch to projects easy, and use ~counsel-projectile~.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :diminish
+    :init (when (file-directory-p "~/repos")
+            (setq projectile-project-search-path '("~/repos")))
+
     :config
     (projectile-mode t)
     (setq projectile-completion-system 'ivy)
+    (setq projectile-switch-project-action 'projectile-dired)
+
     (use-package counsel-projectile
       :init (counsel-projectile-mode 1))
 
@@ -588,17 +593,17 @@ Find or switch to projects easy, and use ~counsel-projectile~.
 
     (defhydra hydra-projectile (:color teal :hint nil)
       "
-           PROJECTILE: %(projectile-project-root)
+                   PROJECTILE: %(projectile-project-root)
 
-           Find File            Search/Tags          Buffers                Cache
-      ------------------------------------------------------------------------------------------
-        _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
-       _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
-       _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
-        _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
-        _d_: dir
+                   Find File            Search/Tags          Buffers                Cache
+              ------------------------------------------------------------------------------------------
+                _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+               _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+               _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
+                _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
+                _d_: dir
 
-      "
+              "
       ("a"   projectile-ag)
       ("b"   projectile-switch-to-buffer)
       ("c"   projectile-invalidate-cache)
