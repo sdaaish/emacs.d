@@ -524,17 +524,22 @@ Copy git links to kill-ring.
 ** Yasnippets
 *** Yasnippet
 Load yasnippet and some templates.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package yasnippet
     :init
     (yas-global-mode 1)
     :bind (("C-c y" . hydra-yasnippet/body)
            :map yas-minor-mode-map
            ("C-c i" . yas-expand))
-    :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory)))
+    :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory))
+    :commands (yasnippet))
+#+end_src
+*** Extra snippets
+Load more snippets
+#+begin_src emacs-lisp
   (use-package yasnippet-snippets
     :after yasnippet)
-#+END_SRC
+#+end_src
 *** ivy-yasnippet
 #+begin_src emacs-lisp
   (use-package ivy-yasnippet
@@ -1321,6 +1326,9 @@ Replaced IDO with Ivy.
     ("C-c g" . counsel-git)
     ("C-c j" . counsel-git-grep)
     ("C-c k" . counsel-ag))
+#+end_src
+** Swiper
+#+begin_src emacs-lisp
   (use-package swiper
     :config
     (setq ivy-use-selectable-prompt t
@@ -1329,6 +1337,9 @@ Replaced IDO with Ivy.
           swiper-goto-start-of-match t
           swiper-stay-on-quit nil)
     (set-face-background 'swiper-line-face "Light Slate Grey"))
+#+end_src
+** Counsel
+#+begin_src emacs-lisp
   (use-package counsel
     :diminish
     :config
@@ -1340,8 +1351,18 @@ Replaced IDO with Ivy.
     ("M-x" . counsel-M-x)
     ("C-h f" . counsel-describe-function)
     ("C-h v" . counsel-describe-variable))
+#+end_src
+** Ivy hydra
+#+begin_src emacs-lisp
   (use-package ivy-hydra)
-#+END_SRC
+#+end_src
+** Ivy rich
+#+begin_src emacs-lisp
+  (use-package ivy-rich
+    :config (ivy-rich-mode 1)
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+    (setq ivy-rich-path-style 'abbrev))
+#+end_src
 * Counsel-tramp
 Use counsel to navigate hosts.
 #+BEGIN_SRC emacs-lisp
