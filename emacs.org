@@ -193,6 +193,13 @@ Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 #+end_src
+*** Certificates
+Add some extra CA's for Emacs that are missing on Windows et al.
+[[https://letsencrypt.org/certificates/][Let's Encrypt]] as an example.
+#+begin_src emacs-lisp
+  (require 'gnutls)
+  (add-to-list 'gnutls-trustfiles (expand-file-name "SSL/customCA.pem" user-emacs-directory))
+#+end_src
 * Hydra config
 Hydras is keyboard mapping through menus.
 *** Hydra
