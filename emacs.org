@@ -269,7 +269,7 @@ Hydra for quick access to emacs files, "<f8> i".
     ("c" (find-file custom-file) "customize.el")
     ("e" (find-file my/emacs-orgfile) "emacs.org")
     ("E" (find-file my/emacs-elfile) "init.el")
-    ("i" (find-file user-init-file) "init.el")
+    ("i" (find-file my/emacs-elfile) "init.el")
     ("k" my/server-shutdown "Save&kill")
     ("p" (find-file my/private-orgfile) "private.org")
     ("r" (load-file user-init-file) "Reload emacs")
@@ -1099,8 +1099,15 @@ No mice!
 #+begin_example
   (use-package disable-mouse
   :diminish
-  :config (global-disable-mouse-mode))
+  :hook (after-init-hook)
+  :config (global-disable-mouse-mode t))
 #+end_example
+** Whitespace butler 
+Help to keep config clean.
+#+begin_src emacs-lisp
+(use-package ws-butler
+:hook (prog-mode . ws-butler-mode))
+#+end_src
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
