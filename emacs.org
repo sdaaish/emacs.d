@@ -27,8 +27,17 @@ The file to load before ~init.el~. This will be created after ~org-babel-tangle~
 (message "*** Reading early-init.el @ %s" (format-time-string "%Y-%m-%d %H:%M:%S" (current-time)))
 (setq package-enable-at-startup nil)
 
-;; From Doom early-init
+;; From Doom early-init.
 (set-language-environment "UTF-8")
+
+;; From Doom, shaves off a second from startup.
+(setq-default inhibit-redisplay t
+              inhibit-message t)
+(add-hook 'window-setup-hook
+          (lambda ()
+            (setq-default inhibit-redisplay nil
+                          inhibit-message nil)
+            (redisplay)))
 
 (provide 'early-init)
 ;;; early-init.el ends here
@@ -266,15 +275,15 @@ Hydra for quick access to emacs files, "<f8> i".
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-config-files (:color blue :columns 3)
   "Emacs config files"
-    ("c" (find-file custom-file) "customize.el")
-    ("e" (find-file my/emacs-orgfile) "emacs.org")
-    ("E" (find-file my/emacs-elfile) "init.el")
-    ("i" (find-file my/emacs-elfile) "init.el")
-    ("k" my/server-shutdown "Save&kill")
-    ("p" (find-file my/private-orgfile) "private.org")
-    ("r" (load-file user-init-file) "Reload emacs")
-    ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "lisp"))) "Cheat sheet")
-    ("q" nil "cancel"))
+  ("c" (find-file custom-file) "customize.el")
+  ("e" (find-file my/emacs-orgfile) "emacs.org")
+  ("i" (find-file my/emacs-elfile) "init.el")
+  ("j" (find-file (expand-file-name "early-init.el" user-emacs-directory)) "early-init.el")
+  ("k" my/server-shutdown "Save&kill")
+  ("p" (find-file my/private-orgfile) "private.org")
+  ("r" (load-file user-init-file) "Reload emacs")
+  ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "lisp"))) "Cheat sheet")
+  ("q" nil "cancel"))
 (bind-key "<f8> i" 'hydra-config-files/body)
 (defun my/server-shutdown ()
   "Save buffers, Quit, and Shutdown (kill) server"
@@ -1427,9 +1436,9 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 #+BEGIN_SRC emacs-lisp
 (setq-default case-fold-search t)
 #+END_SRC
-** Turn off case sensitivity för buffers
+** Turn off case sensitivity for buffers
 #+BEGIN_SRC emacs-lisp
-(setq read-buffer-completion-ignore-case t)
+(customize-set-variable 'read-buffer-completion-ignore-case t)
 #+END_SRC
 * Theme and settings
 ** Theme
