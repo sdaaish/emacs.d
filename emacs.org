@@ -27,6 +27,9 @@ The file to load before ~init.el~. This will be created after ~org-babel-tangle~
 (message "*** Reading early-init.el @ %s" (format-time-string "%Y-%m-%d %H:%M:%S" (current-time)))
 (setq package-enable-at-startup nil)
 
+;; From Doom early-init
+(set-language-environment "UTF-8")
+
 (provide 'early-init)
 ;;; early-init.el ends here
 #+end_src
@@ -1204,17 +1207,8 @@ From https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-thresh
 (add-hook 'projectile-before-switch-project-hook #'my-projectile-before-switch-project-hook)
 #+END_SRC
 ** File encoding settings
+Windows Clipboard uses different encoding.
 #+BEGIN_SRC emacs-lisp
-  ;;  (setenv "LANG" "sv-SE.UTF-8")
-  (prefer-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-language-environment   'Swedish)
-  (setq-default buffer-file-coding-system 'utf-8)
-  ;;(setq-default locale-coding-system 'utf-8)
-  (setq-default x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-  ;; MS Windows clipboard is UTF-16LE
   (when (eq system-type 'windows-nt)
     (set-clipboard-coding-system 'utf-16le-dos))
 #+END_SRC
