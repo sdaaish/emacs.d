@@ -2434,12 +2434,15 @@ A more helpful package for Emacs help.
 ** hackernews
 Read hackernews in emacs.
 #+BEGIN_SRC emacs-lisp
-  (use-package hackernews
-    :commands hackernews
-    :config
-    (setq hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el"))
-    (setq hackernews-items-per-page 60)
-    (setq hackernews-item-format "%-7s%-80t %15c\n"))
+(use-package hackernews
+  :commands hackernews
+  :custom-face
+  (hackernews-link ((t (:foreground "gold" :weight normal))))
+  (hackernews-link-visited ((t (:foreground "LimeGreen" :weight normal))))
+  :config
+  (customize-set-variable 'hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el"))
+  (customize-set-variable 'hackernews-items-per-page 60)
+  (customize-set-variable 'hackernews-item-format "%-7s%-80t %15c\n"))
 #+END_SRC
 ** StackExchange
 Query Stackexchange from emacs.
