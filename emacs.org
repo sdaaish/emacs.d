@@ -1507,7 +1507,7 @@ Use Cascadia Code Nerd Font
 #+BEGIN_SRC emacs-lisp
 (set-face-attribute 'default nil
                         :family "CaskaydiaCove Nerd Font-11"
-                        :height 100
+                        :height 110
                         :weight 'normal
                         :width  'condensed)
 (add-to-list 'default-frame-alist '(font . "CaskaydiaCove Nerd Font-11"))
@@ -1658,6 +1658,11 @@ Map <F5> to revert-buffer. But only revert if the file is not modified.
   (revert-buffer :ignore-auto :noconfirm)
   (error "The buffer has been modified"))))
 #+END_SRC
+Setup autorevert.
+#+begin_src emacs-lisp
+(customize-set-variable 'global-auto-revert-mode t)
+(customize-set-variable 'global-auto-revert-non-file-buffers t)
+#+end_src
 *** Bookmarks
 Save bookmarks all the time.
 #+BEGIN_SRC emacs-lisp
@@ -1759,6 +1764,11 @@ Enable narrowing.
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page   'disabled nil)
 #+end_src
+*** User interface
+No popup dialog.
+#+begin_src emacs-lisp
+(customize-set-variable 'use-dialog-box nil)
+#+end_src
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
@@ -1825,7 +1835,6 @@ Go back to where you last were in the file.
   ;; Save point position between sessions
   (use-package saveplace
     :config
-    (setq-default save-place t)
     (save-place-mode 1)
     (setq save-place-file (expand-file-name ".places" no-littering-var-directory)))
 #+END_SRC
@@ -1835,7 +1844,7 @@ Save a history of edited files.
   (setq savehist-file (expand-file-name ".savehist" no-littering-var-directory))
   (savehist-mode 1)
   (setq
-   history-length t
+   history-length 50
    history-delete-duplicates t
    savehist-save-minibuffer-history 1
    savehist-additional-variables
