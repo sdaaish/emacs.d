@@ -1666,9 +1666,8 @@ Setup autorevert.
 *** Bookmarks
 Save bookmarks all the time.
 #+BEGIN_SRC emacs-lisp
-(setq bookmark-save-flag t)
-(setq bookmark-version-control t)
-(setq bookmark-default-file (concat my/onedrive-dir "emacs/bookmarks"))
+(customize-set-variable 'bookmark-save-flag 1)
+(customize-set-variable 'bookmark-version-control t)
 #+END_SRC
 *** Language
 Spellchecking. I use Hunspell.
@@ -1856,18 +1855,18 @@ Save a history of edited files.
 ** Super-save
 Save buffers when idle
 #+BEGIN_SRC emacs-lisp
-  (use-package super-save
-    :diminish super-save-mode
-    :config
-    (super-save-mode t)
-    (add-to-list 'super-save-triggers 'ace-window)
-    (add-to-list 'super-save-triggers 'magit-status)
-    (add-to-list 'super-save-hook-triggers 'find-file-hook)
-    (setq super-save-auto-save-when-idle t
-          super-save-idle-duration 8
-          super-save-remote-files nil
-          super-save-exclude '(".gpg")
-          auto-save-default nil))
+(use-package super-save
+  :diminish super-save-mode
+  :custom
+  (add-to-list 'super-save-triggers 'ace-window)
+  (add-to-list 'super-save-triggers 'magit-status)
+  (add-to-list 'super-save-hook-triggers 'find-file-hook)
+  (super-save-auto-save-when-idle t)
+  (super-save-idle-duration 8)
+  (super-save-remote-files nil)
+  (super-save-exclude '(".gpg"))
+  (auto-save-default nil)
+  :config (super-save-mode t))
 #+END_SRC
 * Org-mode stuff
 Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Beginners Customization Guide]] for info about this.
