@@ -1440,6 +1440,19 @@ Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 #+BEGIN_SRC emacs-lisp
 (customize-set-variable 'read-buffer-completion-ignore-case t)
 #+END_SRC
+** Scrolling hydra
+Key bindings for scrolling.
+#+begin_src emacs-lisp
+(defhydra hydra-scroll (:color pink)
+  "Scroll buffers"
+  ("v" scroll-up-command "Up")
+  ("b" scroll-down-command "Down")
+  ("M-v" scroll-down-command)
+  ("V" scroll-other-window "Other window up")
+  ("B" scroll-other-window-down "Other window down")
+  ("q" nil "cancel"))
+(bind-key "M-v" 'hydra-scroll/body)
+#+end_src
 * Theme and settings
 ** Theme
 *** Load themes
