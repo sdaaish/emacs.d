@@ -1344,6 +1344,15 @@ Replaced IDO with Ivy.
     ("C-c j" . counsel-git-grep)
     ("C-c k" . counsel-ag))
 #+end_src
+** Amx
+Use ~amx~ instead of ~smex~ for smart executionlist. But keep the old save-filename for now.
+#+begin_src emacs-lisp
+(use-package amx
+  :custom
+  (amx-save-file (expand-file-name "smex-save.el" no-littering-var-directory))
+  :config
+  (amx-mode t))
+#+end_src
 ** Swiper
 #+begin_src emacs-lisp
   (use-package swiper
@@ -1363,7 +1372,6 @@ Replaced IDO with Ivy.
     (setq counsel-describe-function-function #'helpful-callable
           counsel-describe-variable-function #'helpful-variable)
     (counsel-mode 1)
-    (use-package smex)
     :bind
     ("M-x" . counsel-M-x)
     ("C-h f" . counsel-describe-function)
