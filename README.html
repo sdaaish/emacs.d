@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-03-12 Sat 18:59 -->
+<!-- 2022-03-12 Sat 19:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -192,6 +192,12 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
 </style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
 </head>
 <body>
 <div id="content" class="content">
@@ -199,22 +205,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgde3c1dd">1. emacs.d</a>
+<li><a href="#org46b60a4">1. emacs.d</a>
 <ul>
-<li><a href="#orgb3fa88e">1.1. Linux info</a></li>
-<li><a href="#org24ee61d">1.2. Windows info</a>
+<li><a href="#orgd45fa11">1.1. Linux info</a></li>
+<li><a href="#org99c93c4">1.2. Windows info</a>
 <ul>
-<li><a href="#org2dbe608">1.2.1. Powershell</a></li>
-<li><a href="#orgbda977c">1.2.2. Cmd</a></li>
+<li><a href="#orgb6564d5">1.2.1. Powershell</a></li>
 </ul>
 </li>
+<li><a href="#orgbff248c">1.3. Example file layout</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgde3c1dd" class="outline-2">
-<h2 id="orgde3c1dd"><span class="section-number-2">1.</span> emacs.d</h2>
+
+<div id="org1951820" class="figure">
+<p><a href="https://github.com/sdaaish/emacs.d/actions/workflows/main.yml"><a href="https://github.com/sdaaish/emacs.d/actions/workflows/main.yml/badge.svg">https://github.com/sdaaish/emacs.d/actions/workflows/main.yml/badge.svg</a></a>
+</p>
+</div>
+<div id="outline-container-org46b60a4" class="outline-2">
+<h2 id="org46b60a4"><span class="section-number-2">1.</span> emacs.d</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 My universal emacs configuration directory.
@@ -228,9 +239,13 @@ My universal emacs configuration directory.
 <p>
 Loading <i>emacs.org</i> in emacs and running <code>org-babel-tangle</code> generates both <code>early-init.el</code> and <code>init.el</code>. This is based on information from <b>System Crafters Emacs config, Emacs from scratch</b>, especially <a href="https://github.com/daviwil/emacs-from-scratch/tree/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1">Configure everything with Org Babel</a>.
 </p>
+
+<p>
+This file is also published as <a href="https://blog.charlottendal.net/emacs.d/emacs.html">Read-The-Docs</a>.
+</p>
 </div>
-<div id="outline-container-orgb3fa88e" class="outline-3">
-<h3 id="orgb3fa88e"><span class="section-number-3">1.1.</span> Linux info</h3>
+<div id="outline-container-orgd45fa11" class="outline-3">
+<h3 id="orgd45fa11"><span class="section-number-3">1.1.</span> Linux info</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Clone this to a folder, I'm using <code>~/.config/.emacs.default</code> nowadays since I also use <b>Chemacs2</b>, but default for emacs is <code>~/.emacs.d</code> or <code>~/.config/emacs</code>.
@@ -242,43 +257,46 @@ The code for my linux setup is in <a href="https://github.com/sdaaish/dotfiles">
 </div>
 </div>
 </div>
-<div id="outline-container-org24ee61d" class="outline-3">
-<h3 id="org24ee61d"><span class="section-number-3">1.2.</span> Windows info</h3>
+<div id="outline-container-org99c93c4" class="outline-3">
+<h3 id="org99c93c4"><span class="section-number-3">1.2.</span> Windows info</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
-Create symlinks that points to the repo, or clone repo to <code>%AppData%\.emacs.d</code>
-Normally emacs looks in <code>%AppData%</code>, but make a link in <code>%UserProfile%</code> to be sure. Some programs set the <code>HOME</code>-variable to the same as <code>%UserProfile%</code>.
-You probably need to run these commands as a privileged user.
+To make Emacs work as good as possible make sure to set the <b>HOME-variable</b> in Windows. If this doesn't exist Emacs looks in <code>$env:AppData\.emacs.d</code> for it's configuration files. I have setup <code>$env:HOME</code> to <code>$env:UserProfile</code> so that I have the same file strcuture as in Linux. That files is in <code>$HOME/config</code> in most cases.
 </p>
 
 <p>
-Nowadays I use <b>Chemacs2</b> also in Windows and therefore I install the config in <code>%USERPFOFILE%\.config\emacs.default</code>. This setup is in <a href="https://github.com/sdaaish/windotfiles">windotfiles</a>.
+Nowadays I use <b>Chemacs2</b> also in Windows and therefore I install the config in <code>$env:UserProfile\.config\emacs.default</code>. This setup is described in <a href="https://github.com/sdaaish/windotfiles">windotfiles</a>.
 </p>
 </div>
-<div id="outline-container-org2dbe608" class="outline-4">
-<h4 id="org2dbe608"><span class="section-number-4">1.2.1.</span> Powershell</h4>
+<div id="outline-container-orgb6564d5" class="outline-4">
+<h4 id="orgb6564d5"><span class="section-number-4">1.2.1.</span> Powershell</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <div class="org-src-container">
-<pre class="src src-powershell">New-Item -Path ~ -Value &lt;path-to-the-emacs.d&gt; -Name .emacs.d -ItemType SymbolicLink
-New-Item -Path $AppData -Value &lt;path-to-the-emacs.d&gt; -Name .emacs.d -ItemType SymbolicLink
+<pre class="src src-powershell">git clone https://github.com/plexus/chemacs2.git $env:HOME
+git clone https://github.com/sdaaish/emacs.d.git $env:HOME/.config/emacs.default
+git -C $env:HOME/.config/emacs.default submodule update --init
 </pre>
 </div>
+<p>
+Edit <code>$env:HOME/.emacs-profiles.el for chemacs2</code>
+</p>
 </div>
 </div>
-<div id="outline-container-orgbda977c" class="outline-4">
-<h4 id="orgbda977c"><span class="section-number-4">1.2.2.</span> Cmd</h4>
-<div class="outline-text-4" id="text-1-2-2">
-<pre class="example">
-mklink /d %AppData%\.emacs.d path-to-git-repo\emacs.d
-mklink /d %UserProfile%\.emacs.d path-to-git-repo\emacs.d
-</pre>
+</div>
+<div id="outline-container-orgbff248c" class="outline-3">
+<h3 id="orgbff248c"><span class="section-number-3">1.3.</span> Example file layout</h3>
+<div class="outline-text-3" id="text-1-3">
+
+<div id="org12a56d3" class="figure">
+<p><a href="images/files.png">images/files.png</a>
+</p>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2022-03-12 Sat 18:59</p>
+<p class="date">Created: 2022-03-12 Sat 19:51</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
