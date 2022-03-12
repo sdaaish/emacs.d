@@ -1,0 +1,4759 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-03-12 Sat 16:40 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My GNU Emacs configuration</title>
+<meta name="generator" content="Org mode" />
+<meta name="description" content="Loading emacs configuration using org-babel"
+ />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">My GNU Emacs configuration
+<br />
+<span class="subtitle">A personal emacs configuration</span>
+</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6e125e9">Introduction</a>
+<ul>
+<li><a href="#org75e0469">Inspiration</a></li>
+<li><a href="#orgd464718">Early init</a></li>
+<li><a href="#org3f87a71">init.el</a>
+<ul>
+<li><a href="#orgcd1bca8">Straight</a></li>
+<li><a href="#org93ffeb8">Org mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org5112799">Variables</a>
+<ul>
+<li><a href="#org55f0380">My variables</a></li>
+<li><a href="#org8ec6f44">No littering</a></li>
+<li><a href="#orge52d4c5">OneDrive</a></li>
+<li><a href="#org5e48d36">Emacs synced files</a></li>
+<li><a href="#org98316a3">Private emacs-file</a></li>
+<li><a href="#org99d1ac2">Backup-directory</a></li>
+<li><a href="#org8fc3f46">Repositories</a></li>
+<li><a href="#org57c56e2">Org-mode variables</a></li>
+</ul>
+</li>
+<li><a href="#org61cfcd7">Initializing</a>
+<ul>
+<li><a href="#org6ed2f8a">Message-buffer</a></li>
+<li><a href="#org00ec991">Bugfix for ELPA</a>
+<ul>
+<li><a href="#org7541264">Certificates</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgfedfe0d">Hydra config</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org2505fe4">Hydra</a></li>
+<li><a href="#orgfad6e7b">Toggle stuff</a></li>
+<li><a href="#org865bac5">Zoom font</a></li>
+<li><a href="#org73d1d0e">Font size changes</a></li>
+<li><a href="#org5687c0f">Emacs init files.</a></li>
+<li><a href="#orgc48c12b">Hydra for org</a></li>
+<li><a href="#org7e18feb">Launcher</a></li>
+<li><a href="#orgd0c0d66">Expand text</a></li>
+<li><a href="#orgb307fd0">Move text</a></li>
+<li><a href="#orgf91c56e">Straight</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org4660bf0">Git and projects</a>
+<ul>
+<li><a href="#org8612025">Magit</a></li>
+<li><a href="#org6dd7a9c">Magit Forge</a></li>
+<li><a href="#org1a1f622">Magit-gitflow</a></li>
+<li><a href="#org08f077b">magit-find-file</a></li>
+<li><a href="#org2fd8307">Gist</a></li>
+<li><a href="#org95171e1">Git-link</a></li>
+<li><a href="#orge163a30">Yasnippets</a>
+<ul>
+<li><a href="#org153ceec">Yasnippet</a></li>
+<li><a href="#org83849ca">Extra snippets</a></li>
+<li><a href="#orgd76fc9f">ivy-yasnippet</a></li>
+<li><a href="#org51f88d0">Hydra for yasnippet</a></li>
+</ul>
+</li>
+<li><a href="#org8c1bd9a">Projectile</a>
+<ul>
+<li><a href="#orgb2590b2">Fix</a></li>
+</ul>
+</li>
+<li><a href="#org3c7dbdb">Flycheck</a></li>
+</ul>
+</li>
+<li><a href="#org07000ae">Packages</a>
+<ul>
+<li><a href="#org91d2c80">Use-package chords</a></li>
+<li><a href="#org2bf35d0">Diminish</a></li>
+<li><a href="#org6e566dd">Winner-mode</a></li>
+<li><a href="#orgbef3cbc">Bind-key</a></li>
+<li><a href="#orgafa35d0">diff-hl</a></li>
+<li><a href="#orge20d655">line-numbers</a></li>
+<li><a href="#org54b7c68">Indentation</a></li>
+<li><a href="#orgf59caaf">which-key</a></li>
+<li><a href="#org1e543b4">Company</a>
+<ul>
+<li><a href="#org8967edb">Company-mode</a></li>
+<li><a href="#orgb613cdb">Company-shell</a></li>
+<li><a href="#orgdae2476">Company-keymapfix</a></li>
+</ul>
+</li>
+<li><a href="#org21fb224">ace-window</a></li>
+<li><a href="#org1e97423">Resize windows</a></li>
+<li><a href="#org25f64c7">Pretty bullets</a></li>
+<li><a href="#orga150cfd">Better shell</a></li>
+<li><a href="#org0b686e7">Copy-as-format</a></li>
+<li><a href="#orgff86f48">Try</a></li>
+<li><a href="#org1a04a9b">htmlize</a></li>
+<li><a href="#orgdbcc2a8">ipcalc</a></li>
+<li><a href="#org4dd6f2d">Treemacs</a></li>
+<li><a href="#orgda4a548">ztree</a></li>
+<li><a href="#orge98a50b">proportional</a></li>
+<li><a href="#orgd42fb66">Verify-url</a></li>
+<li><a href="#orgcebd22c">Undo-tree</a></li>
+<li><a href="#org8e9d991">RSS stuff</a>
+<ul>
+<li><a href="#orgc71c02d">Elfeed-org</a></li>
+<li><a href="#orgb596d2c">Elfeed-goodies</a></li>
+<li><a href="#org24e3ea6">Elfeed</a></li>
+<li><a href="#org34dfd5f">Hydra</a></li>
+</ul>
+</li>
+<li><a href="#org3e0345a">hungry-mode</a></li>
+<li><a href="#orgd23fef2">avy</a></li>
+<li><a href="#org5f75175">Silversearcher</a></li>
+<li><a href="#orgb32deab">Macrostep</a></li>
+<li><a href="#org128129b">docker</a></li>
+<li><a href="#orgf68f05d">apib-mode</a></li>
+<li><a href="#org8683fac">json-navigator</a></li>
+<li><a href="#org68478ef">Rainbows</a></li>
+<li><a href="#org538704b">Rainbow colors</a></li>
+<li><a href="#orgfe439e1">Restclient</a></li>
+<li><a href="#org497f33f">Smart parenthesis</a></li>
+<li><a href="#orga7968c8">rfc-mode</a></li>
+<li><a href="#org3c240c1">Disable-mouse</a></li>
+<li><a href="#orgfa2dd91">Whitespace butler</a></li>
+</ul>
+</li>
+<li><a href="#orga717839">Private and local stuff</a>
+<ul>
+<li><a href="#org6ca8afe">Load private stuff</a></li>
+<li><a href="#org81893c6">Load secret stuff</a>
+<ul>
+<li><a href="#org50fc20b">EasyPG</a></li>
+<li><a href="#orga8ce22c">Org-crypt</a></li>
+<li><a href="#org50be66a">Load secrets from this file</a></li>
+<li><a href="#org79d120d">Authinfo file</a></li>
+<li><a href="#org9f9a69d">password-store</a></li>
+</ul>
+</li>
+<li><a href="#org4c0f09a">Custom file for customize</a></li>
+<li><a href="#org85718b8">Lisp</a></li>
+</ul>
+</li>
+<li><a href="#org288d3d8">Tuning</a>
+<ul>
+<li><a href="#org7a07ccc">Garbage collection</a></li>
+<li><a href="#org5587270">File encoding settings</a></li>
+<li><a href="#org2e9f47c">Sentence</a></li>
+</ul>
+</li>
+<li><a href="#orga7d1817">Keyboard settings</a>
+<ul>
+<li><a href="#orge88ec43">Windows keys (W32)</a></li>
+<li><a href="#org1bb970c">Set-mark for lxss</a></li>
+<li><a href="#org349838b">ibuffer</a></li>
+<li><a href="#org55473e5">ibuffer-vc</a></li>
+<li><a href="#orgeb86c37">ibuffer-projectile</a></li>
+</ul>
+</li>
+<li><a href="#org0b43ffe">ivy, swiper and counsel</a>
+<ul>
+<li><a href="#org832a360">Amx</a></li>
+<li><a href="#orgbc37c52">Swiper</a></li>
+<li><a href="#org24fc7f7">Counsel</a></li>
+<li><a href="#org299c8ac">Ivy hydra</a></li>
+<li><a href="#orgbab3167">Ivy rich</a></li>
+</ul>
+</li>
+<li><a href="#orgd036b12">Counsel-tramp</a></li>
+<li><a href="#org25ba860">Windmove</a>
+<ul>
+<li><a href="#org2298c0a">Orgmode customizations</a></li>
+</ul>
+</li>
+<li><a href="#org3dc02f9">Own stuff</a>
+<ul>
+<li><a href="#org2d21b29">Toggle truncate lines</a></li>
+<li><a href="#org2ae1bb3">Wrap long lines</a></li>
+<li><a href="#org3f1c72f">No case-sensitive for search</a></li>
+<li><a href="#orgdc78ca2">Turn off case sensitivity for buffers</a></li>
+<li><a href="#orgf29d07f">Scrolling hydra</a></li>
+</ul>
+</li>
+<li><a href="#orgf9d17ea">Theme and settings</a>
+<ul>
+<li><a href="#org8e633fa">Theme</a>
+<ul>
+<li><a href="#org5191a26">Load themes</a></li>
+<li><a href="#orgc3693fd">Load different theme if in gui or terminal</a></li>
+<li><a href="#orgb85cc11">Theme when emacs run as daemon.</a></li>
+<li><a href="#orge5b22e4">Theme-chooser</a></li>
+</ul>
+</li>
+<li><a href="#orgceb1336">Fonts</a>
+<ul>
+<li><a href="#orgb48c559">Cycle through fonts</a></li>
+</ul>
+</li>
+<li><a href="#orge5c0a45">Startup settings</a></li>
+<li><a href="#org9b1fe9c">Powerline-mode</a></li>
+<li><a href="#org2cc1bd0">Customisations</a>
+<ul>
+<li><a href="#org545aff3">Initial settings</a></li>
+<li><a href="#org5597f92">Indents and tabs</a></li>
+<li><a href="#org5c0df76">Newline settings</a></li>
+<li><a href="#org4701b36">Global highlight mode</a></li>
+<li><a href="#org2b4930f">Recent files</a></li>
+<li><a href="#org8a7afa0">Reverting</a></li>
+<li><a href="#org433d2ae">Bookmarks</a></li>
+<li><a href="#org5dba91d">Language</a></li>
+<li><a href="#orgaa4aafd">Dired customizations</a></li>
+<li><a href="#orgec07692">Dired+</a></li>
+<li><a href="#orgf9fc5b0">No beeps</a></li>
+<li><a href="#orgc7111b3">Buffer setup</a></li>
+<li><a href="#org795a01e">Time</a></li>
+<li><a href="#org84a8a2f">Eldoc</a></li>
+<li><a href="#orgcbd0385">Help-settings</a></li>
+<li><a href="#org62c61f3">Regular expressions</a></li>
+<li><a href="#orgc3e0c17">Info mode</a></li>
+<li><a href="#org49eff9f">Narrowing</a></li>
+<li><a href="#org0a3a9f8">User interface</a></li>
+</ul>
+</li>
+<li><a href="#org50116ae">Change yes-or-no to y-n</a></li>
+<li><a href="#orgd96785b">Eshell</a></li>
+<li><a href="#org7645fdb">TRAMP</a></li>
+</ul>
+</li>
+<li><a href="#org1a3f643">Backup</a>
+<ul>
+<li><a href="#org810289a">Backup of files</a></li>
+<li><a href="#orgee0d5b7">Save current position</a></li>
+<li><a href="#orgfe0eed3">Save history</a></li>
+<li><a href="#orgcf69dbd">Super-save</a></li>
+</ul>
+</li>
+<li><a href="#org952088b">Org-mode stuff</a>
+<ul>
+<li><a href="#org052d35e">Org-mode variables</a>
+<ul>
+<li><a href="#org665e417">Other variables</a></li>
+<li><a href="#org3c5696c">Refile</a></li>
+</ul>
+</li>
+<li><a href="#orgb01438f">Org-modules</a></li>
+<li><a href="#orge99fb74">Org-files</a>
+<ul>
+<li><a href="#orge4e12eb">Keywords</a></li>
+<li><a href="#orge0dd2c3">Org Archiving</a></li>
+</ul>
+</li>
+<li><a href="#org464f474">Org custom agenda</a></li>
+<li><a href="#org27d7810">Org-templates</a></li>
+<li><a href="#orgaf9b84a">Localized calender</a></li>
+<li><a href="#org3365d8a">Org-Mobile</a></li>
+<li><a href="#orgc757947">Org-projects</a></li>
+<li><a href="#org98a0a77">Org exports</a>
+<ul>
+<li><a href="#orgd1ac8c3">ox-reveal</a></li>
+<li><a href="#org1ca6a23">ox-hugo</a></li>
+<li><a href="#org6bd9a8f">Export GHF markdown</a></li>
+<li><a href="#org3af6d15">Export Jira</a></li>
+<li><a href="#org51276af">Export Confluence</a></li>
+<li><a href="#org523d677">org2jekyll</a></li>
+<li><a href="#org0fa3ad8">Export mediawiki</a></li>
+<li><a href="#orgf356def">Export Trac-wiki</a></li>
+<li><a href="#orgc5d2b08">Export markdown</a></li>
+</ul>
+</li>
+<li><a href="#orgc3f036a">Org tangle init files</a></li>
+</ul>
+</li>
+<li><a href="#org741d264">Language support</a>
+<ul>
+<li><a href="#orgadfb5b4">Powershell mode</a></li>
+<li><a href="#org9f8608c">Dos-mode</a></li>
+<li><a href="#orgb81da66">Markdown-mode</a></li>
+<li><a href="#org311387b">Markdown preview mode</a></li>
+<li><a href="#org2ceb3ba">Mediawiki</a></li>
+<li><a href="#orgc05431e">SSH-config</a></li>
+<li><a href="#orgcb1d78f">Git</a>
+<ul>
+<li><a href="#org708c2ae">git-modes</a></li>
+</ul>
+</li>
+<li><a href="#orge73b01c">Autohotkey-mode</a></li>
+<li><a href="#orgffc3d8e">Yara-files</a></li>
+<li><a href="#org449794c">Elastic search mode</a></li>
+<li><a href="#orgb9e34c0">Logstash-mode</a></li>
+<li><a href="#orge04fda3">ini-mode</a></li>
+<li><a href="#orge0dfc11">CSV</a></li>
+<li><a href="#org34ea476">Docker file mode</a></li>
+<li><a href="#org8052bc0">Docker compose</a></li>
+<li><a href="#org563d9f0">Toml-Mode</a></li>
+<li><a href="#org1594e42">X509</a></li>
+<li><a href="#org1866404">JSON-mode</a></li>
+<li><a href="#org53addf4">javascript</a></li>
+<li><a href="#orgd6382de">C# and .NET</a>
+<ul>
+<li><a href="#orgc30cc5f">C#</a></li>
+<li><a href="#org095d437">Dotnet</a></li>
+<li><a href="#org89468de">.NET-files</a></li>
+<li><a href="#orge4419ce">Go language</a></li>
+</ul>
+</li>
+<li><a href="#orgf8b673e">LISP</a>
+<ul>
+<li><a href="#org427220f">Common LISP</a></li>
+</ul>
+</li>
+<li><a href="#org90bf8f5">LUA</a></li>
+<li><a href="#orge9141a9">Editorconfig</a></li>
+</ul>
+</li>
+<li><a href="#org36f168c">Help systems</a>
+<ul>
+<li><a href="#org5a5cf5f">Package-archives</a></li>
+<li><a href="#org0d1d25b">Cheatsheet</a></li>
+<li><a href="#org9a8eb6d">Cheat.sh</a></li>
+<li><a href="#orga6a664d">Free keys</a></li>
+<li><a href="#org3105339">Info-colors</a></li>
+<li><a href="#org46d436c">helpful</a></li>
+</ul>
+</li>
+<li><a href="#orgde87323">External utilities</a>
+<ul>
+<li><a href="#org4e3fd08">hackernews</a></li>
+<li><a href="#org15d6220">StackExchange</a></li>
+<li><a href="#org754544c">Twitter</a></li>
+<li><a href="#orgbba75e3">wiki-summary</a></li>
+<li><a href="#orgdc3d82c">XKCD</a></li>
+</ul>
+</li>
+<li><a href="#org632e479">Server</a></li>
+<li><a href="#org7ab04ca">Links</a>
+<ul>
+<li><a href="#org0b1c304">Manuals</a>
+<ul>
+<li><a href="#org4b97f5f">Magit manual</a></li>
+<li><a href="#org253435d">Use-package</a></li>
+</ul>
+</li>
+<li><a href="#org7951dd2">Generell info</a></li>
+<li><a href="#org1a6fa17">Books</a></li>
+<li><a href="#org668dbfb">Examples</a></li>
+<li><a href="#orgc4b541d">Information</a></li>
+<li><a href="#org7b2b96d">Performance</a></li>
+<li><a href="#org7d29478">Videos</a></li>
+</ul>
+</li>
+<li><a href="#org4191a35">The end</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6e125e9" class="outline-2">
+<h2 id="org6e125e9">Introduction</h2>
+<div class="outline-text-2" id="text-org6e125e9">
+<p>
+This is my version of an configuration file for GNU Emacs. I now use <code>straight</code> to install packages and <code>use-package</code> to configure them. Previously I used <code>package.el</code>, the built-in package-handling system with <code>use-package</code> but it became a bit akward and slow when I wanted to upgrade installed packages. This configuration should start without problems but will take a very long time the first time, since <code>straight</code> needs to clone and build all packages. And <code>Git</code> is needed before this to work.
+Load <a href="emacs.html">./emacs.org</a> in emacs and run <code>org-babel-tangle</code> to create startup files the first time. Restart emacs.
+</p>
+</div>
+<div id="outline-container-org75e0469" class="outline-3">
+<h3 id="org75e0469">Inspiration</h3>
+<div class="outline-text-3" id="text-org75e0469">
+<p>
+All config in one file from <a href="https://github.com/daviwil/emacs-from-scratch/tree/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1">System Crafters Emacs from Scratch</a>.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd464718" class="outline-3">
+<h3 id="orgd464718">Early init</h3>
+<div class="outline-text-3" id="text-orgd464718">
+<p>
+The file to load before <code>init.el</code>. This will be created after <code>org-babel-tangle</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;;; early-init.el --- Startup file before init.el to disable settings.
+
+;;; Commentary:
+
+;; From https://github.com/raxod502/straight.el#getting-started
+;; Disable stuff before init.el gets loaded.
+;; See https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
+
+;;; Code:
+
+(message "*** Reading early-init.el @ %s" (format-time-string "%Y-%m-%d %H:%M:%S" (current-time)))
+(setq package-enable-at-startup nil)
+
+;; From Doom early-init.
+(set-language-environment "UTF-8")
+
+;; From Doom, shaves off a second from startup.
+(setq-default inhibit-redisplay t
+	      inhibit-message t)
+(add-hook 'window-setup-hook
+	  (lambda ()
+	    (setq-default inhibit-redisplay nil
+			  inhibit-message nil)
+	    (redisplay)))
+
+(provide 'early-init)
+;;; early-init.el ends here
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3f87a71" class="outline-3">
+<h3 id="org3f87a71">init.el</h3>
+<div class="outline-text-3" id="text-org3f87a71">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;;; init.el --- Configuration of Emacs
+
+;;; Commentary:
+
+;; From https://gitlab.com/buildfunthings/emacs-config/blob/master/init.el
+
+;;; Code:
+(message "*** Reading from %s ***" (buffer-name))
+
+;; Debug startup
+(setq debug-on-error t)
+(setq debug-on-quit t)
+
+;; Garbage collection
+;; Increase the garbage collection threshold to make startup faster
+(setq gc-cons-threshold (* 50 1024 1024))
+(setq garbage-collection-messages nil)
+
+;; From emacs-from-scratch https://github.com/daviwil/emacs-from-scratch/blob/master/init.el
+(defun efs/display-startup-time ()
+  "Prints the startup time for Emacs."
+  (message "*** Emacs loaded in %s with %d garbage collections."
+	   (format "%.2f seconds"
+		   (float-time
+		    (time-subtract after-init-time before-init-time)))
+	   gcs-done))
+
+(add-hook 'emacs-startup-hook #'efs/display-startup-time)
+
+(defvar start-time (float-time (current-time)))
+
+(defun my/format-time (time)
+  "Displays formatted TIME."
+  (format-time-string "%Y-%m-%d %H:%M:%S" time))
+
+(defun my/startup-timer ()
+  "Measures time differences."
+  (format-time-string "%M:%S.%3N" (- (float-time (current-time)) start-time)))
+
+(message "*** Started emacs @ %s" (my/format-time start-time))
+(message "*** Reading configuration from init.el...")
+</pre>
+</div>
+</div>
+<div id="outline-container-orgcd1bca8" class="outline-4">
+<h4 id="orgcd1bca8">Straight</h4>
+<div class="outline-text-4" id="text-orgcd1bca8">
+<p>
+Bootstrap straight.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; install straight package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Also install use-package
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+(setq straight-host-usernames
+      '((github . "sdaaish")
+	(gitlab . "sdaaish")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org93ffeb8" class="outline-4">
+<h4 id="org93ffeb8">Org mode</h4>
+<div class="outline-text-4" id="text-org93ffeb8">
+<p>
+Install org mode and contrib.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Install latest version of org and org-plus-contrib
+(use-package org
+  :straight org-contrib)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org5112799" class="outline-2">
+<h2 id="org5112799">Variables</h2>
+<div class="outline-text-2" id="text-org5112799">
+<p>
+Setting variables and constants for my directories and files.
+</p>
+</div>
+<div id="outline-container-org55f0380" class="outline-3">
+<h3 id="org55f0380">My variables</h3>
+<div class="outline-text-3" id="text-org55f0380">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defvar my/init-dir (file-name-directory (or load-file-name (buffer-file-name))))
+(defvar my/emacs-orgfile (expand-file-name "emacs.org" my/init-dir))
+(defvar my/emacs-elfile (expand-file-name "init.el" my/init-dir))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8ec6f44" class="outline-3">
+<h3 id="org8ec6f44">No littering</h3>
+<div class="outline-text-3" id="text-org8ec6f44">
+<p>
+Try to keep user-emacs-directory clean with the package <code>no-littering</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package no-littering)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge52d4c5" class="outline-3">
+<h3 id="orge52d4c5">OneDrive</h3>
+<div class="outline-text-3" id="text-orge52d4c5">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(cond ((eq system-type 'gnu/linux)(defconst my/onedrive-dir (expand-file-name "OneDrive/" "~")))
+      ((eq system-type 'windows-nt)(defconst my/onedrive-dir (expand-file-name  "OneDrive/" (getenv "UserProfile")))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5e48d36" class="outline-3">
+<h3 id="org5e48d36">Emacs synced files</h3>
+<div class="outline-text-3" id="text-org5e48d36">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defconst my/emacs-shared-dir (concat my/onedrive-dir "emacs/"))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org98316a3" class="outline-3">
+<h3 id="org98316a3">Private emacs-file</h3>
+<div class="outline-text-3" id="text-org98316a3">
+<p>
+File with personal stuff.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defconst my/private-orgfile (expand-file-name "private.org" my/emacs-shared-dir))
+(defconst my/private-elfile (expand-file-name "private.el" my/emacs-shared-dir))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org99d1ac2" class="outline-3">
+<h3 id="org99d1ac2">Backup-directory</h3>
+<div class="outline-text-3" id="text-org99d1ac2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defconst my/emacs-backup-dir
+   (expand-file-name "backup/" no-littering-var-directory))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8fc3f46" class="outline-3">
+<h3 id="org8fc3f46">Repositories</h3>
+<div class="outline-text-3" id="text-org8fc3f46">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(if (eq system-type 'gnu/linux)
+    (defconst my/repo-dir (expand-file-name "repos/" "~")))
+(if (eq system-type 'windows-nt)
+    (defconst my/repo-dir (concat (getenv "UserProfile") "\\Repos\\")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org57c56e2" class="outline-3">
+<h3 id="org57c56e2">Org-mode variables</h3>
+<div class="outline-text-3" id="text-org57c56e2">
+<p>
+Set the variables for org-mode files. Use separate files to store agenda and refiling targets, to improve performance.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun my/read-lines (filePath)
+  "Return a list of lines of a file at filePath."
+  (if (file-exists-p filePath)
+      (with-temp-buffer
+	(insert-file-contents filePath)
+	(split-string (buffer-string) "\n" t))))
+
+(defun my/fullpath (filepath directory)
+  "Concatenate directory to names in filepath and return as list."
+  (let (value)
+    (setq list (my/read-lines filepath))
+    (dolist (shortfile list value)
+      (setq fullpath (concat directory shortfile))
+      (setq value (cons fullpath value)))))
+
+;; Define constants
+(defconst my/org-directory (expand-file-name "emacs/org/" my/onedrive-dir))
+(defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
+(defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
+(defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
+(defvar my/refile-targets (my/read-lines (expand-file-name ".target-files"  my/org-directory)))
+(defvar my/mobile-target-file (expand-file-name  ".mobile-files" my/org-directory))
+;; My org-files directory
+(setq org-directory my/org-directory)
+;; Org-agenda can read from a file
+(setq org-agenda-files my/org-agenda-files)
+;; Store notes here
+(setq org-default-notes-file my/notes-file)
+;; Choose targets for refile from this file
+(setq org-refile-targets '((my/refile-targets :maxlevel . 4)))
+;; Files for mobile sync
+(defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org61cfcd7" class="outline-2">
+<h2 id="org61cfcd7">Initializing</h2>
+<div class="outline-text-2" id="text-org61cfcd7">
+</div>
+<div id="outline-container-org6ed2f8a" class="outline-3">
+<h3 id="org6ed2f8a">Message-buffer</h3>
+<div class="outline-text-3" id="text-org6ed2f8a">
+<p>
+Increase message-buffer
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq message-log-max (* 256 1024))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org00ec991" class="outline-3">
+<h3 id="org00ec991">Bugfix for ELPA</h3>
+<div class="outline-text-3" id="text-org00ec991">
+<p>
+Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(if (and (version&lt; emacs-version "26.3") (&gt;= libgnutls-version 30604))
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+</pre>
+</div>
+</div>
+<div id="outline-container-org7541264" class="outline-4">
+<h4 id="org7541264">Certificates</h4>
+<div class="outline-text-4" id="text-org7541264">
+<p>
+Add some extra CA's for Emacs that are missing on Windows et al.
+<a href="https://letsencrypt.org/certificates/">Let's Encrypt</a> as an example.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'gnutls)
+(add-to-list 'gnutls-trustfiles (expand-file-name "SSL/customCA.pem" user-emacs-directory))
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfedfe0d" class="outline-2">
+<h2 id="orgfedfe0d">Hydra config</h2>
+<div class="outline-text-2" id="text-orgfedfe0d">
+<p>
+Hydras is keyboard mapping through menus.
+</p>
+</div>
+<div id="outline-container-org2505fe4" class="outline-4">
+<h4 id="org2505fe4">Hydra</h4>
+<div class="outline-text-4" id="text-org2505fe4">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Hydra keymapping support
+(use-package hydra)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfad6e7b" class="outline-4">
+<h4 id="orgfad6e7b">Toggle stuff</h4>
+<div class="outline-text-4" id="text-orgfad6e7b">
+<p>
+Use "C-c v" to toggle values.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'whitespace)
+(defhydra hydra-toggle (:color pink :timeout 3)
+  "
+      _a_ abbrev-mode:       %`abbrev-mode
+      _d_ debug-on-error:    %`debug-on-error
+      _f_ auto-fill-mode:    %`auto-fill-function
+      _t_ truncate-lines:    %`truncate-lines
+      _w_ whitespace-mode:   %`whitespace-mode
+      _l_ linum-mode:        %`linum-mode
+      _r_ relative-mode      %`linum-relative-mode
+      _R_ rainbow-delimiters %`rainbow-delimiters-mode
+      _C_ rainbow-mode       %`rainbow-mode
+"
+  ("a" abbrev-mode nil)
+  ("C" rainbow-mode nil)
+  ("d" toggle-debug-on-error nil)
+  ("f" auto-fill-mode nil)
+  ("l" linum-mode nil)
+  ("r" linum-relative-mode nil)
+  ("R" rainbow-delimiters-mode nil)
+  ("t" toggle-truncate-lines nil)
+  ("w" whitespace-mode nil)
+  ("q" nil "cancel" :color blue))
+(bind-key "C-c v" 'hydra-toggle/body)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org865bac5" class="outline-4">
+<h4 id="org865bac5">Zoom font</h4>
+<div class="outline-text-4" id="text-org865bac5">
+<p>
+Use &lt;F2&gt; to zoom in or out of fonts
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-zoom (global-map "&lt;f2&gt; z" :hint nil :timeout 3)
+  "
+  Change text-scale.
+  Press _g_ to zoom in, _l_ out.
+  _q_ to quit.
+  "
+  ("g" text-scale-increase nil)
+  ("l" text-scale-decrease nil)
+  ("q" nil :color blue))
+(setq text-scale-mode-step 1.1)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org73d1d0e" class="outline-4">
+<h4 id="org73d1d0e">Font size changes</h4>
+<div class="outline-text-4" id="text-org73d1d0e">
+<p>
+Change fonts with C-&lt;f2&gt;.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-font (global-map "C-&lt;f2&gt;" :timeout 3)
+  "Change fonts to next/previous"
+  ("n" my/cycle-font-next "next font")
+  ("p" my/cycle-font-previous "previous font")
+  ("q" nil "cancel" :color blue))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5687c0f" class="outline-4">
+<h4 id="org5687c0f">Emacs init files.</h4>
+<div class="outline-text-4" id="text-org5687c0f">
+<p>
+Hydra for quick access to emacs files, "&lt;f8&gt; i".
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-config-files (:color blue :columns 3)
+  "Emacs config files"
+  ("c" (find-file custom-file) "customize.el")
+  ("e" (find-file my/emacs-orgfile) "emacs.org")
+  ("i" (find-file my/emacs-elfile) "init.el")
+  ("j" (find-file (expand-file-name "early-init.el" user-emacs-directory)) "early-init.el")
+  ("k" my/server-shutdown "Save&amp;kill")
+  ("p" (find-file my/private-orgfile) "private.org")
+  ("r" (load-file user-init-file) "Reload emacs")
+  ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "lisp"))) "Cheat sheet")
+  ("q" nil "cancel"))
+(bind-key "&lt;f8&gt; i" 'hydra-config-files/body)
+(defun my/server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs)
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc48c12b" class="outline-4">
+<h4 id="orgc48c12b">Hydra for org</h4>
+<div class="outline-text-4" id="text-orgc48c12b">
+<p>
+Switch between org-buffers, "&lt;f8&gt; o".
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-org-stuff (:color blue :columns 3)
+  "Org mode stuff"
+  ("c" my/org-gcal-sync "Sync Google Calender")
+  ("g" my/org-mobile-sync "Synchronize mobile")
+  ("P" org-publish-project "org-publish-project")
+  ("o" org-iswitchb "Switch org-buffer")
+  ("r" org-revert-all-org-buffers "Refresh all org-buffers")
+  ("s" org-save-all-org-buffers "Save Org buffers")
+  ("q" nil "cancel"))
+(bind-key "&lt;f8&gt; o" 'hydra-org-stuff/body)
+(defun my/org-gcal-sync()
+  "Synchronizes Google calendar with Org"
+  (interactive)
+  (org-save-all-org-buffers)
+  (org-gcal-sync))
+(defun my/org-mobile-sync()
+  "Synchronizes agenda files with mobile app."
+  (interactive)
+  (org-save-all-org-buffers)
+  (org-mobile-pull)
+  (org-mobile-push)
+  (message "Synced mobile agendas."))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org7e18feb" class="outline-4">
+<h4 id="org7e18feb">Launcher</h4>
+<div class="outline-text-4" id="text-org7e18feb">
+<p>
+Launch various programs, "C-c b"
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-launcher (:color blue :columns 4)
+  "Launch programs"
+  ("b" hydra-better-shell/body "Better Shell")
+  ("c" cheat-sh "Cheat sheet")
+  ("e" eshell "Eshell")
+  ("E" eww "EWW")
+  ("f" free-keys "Free keys")
+  ("g" (browse-url "https://git-scm.com/docs/") "Git Book")
+  ("h" man "man")
+  ("H" (browse-url "http://localhost:1313/") "Local Hugo site")
+  ("n" hackernews "Hackernews")
+  ("p" (powershell) "Powershell")
+  ("r" (browse-url "http://www.reddit.com/r/emacs/") "Reddit")
+  ("t" (counsel-tramp) "Counsel-TRAMP")
+  ("T" twit "Twitter mode")
+  ("R" bjm/elfeed-load-db-and-open "RSS")
+  ("s" shell "Shell")
+  ("v" (shell-command (concat "code " buffer-file-name)) "VSCode")
+  ("w" (browse-url "http://www.emacswiki.org/") "Emacs Wiki")
+  ("W" wiki-summary "Wiki summary")
+  ("q" nil "quit"))
+(bind-key "C-c b" 'hydra-launcher/body)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd0c0d66" class="outline-4">
+<h4 id="orgd0c0d66">Expand text</h4>
+<div class="outline-text-4" id="text-orgd0c0d66">
+<p>
+Expand text in org mode
+;; From <a href="https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates">https://github.com/abo-abo/hydra/wiki/Org-mode-block-templates</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-org-template (:color blue :hint nil)
+  "
+ _c_enter  _q_uote     _e_macs-lisp    _L_aTeX:
+ _l_atex   _E_xample   _p_owershell    _i_ndex:
+ _a_scii   _v_erse     _S_hellsript    _I_NCLUDE:
+ _s_rc     _n_ote      _P_erl tangled  _H_TML:
+ _h_tml    _O_ptions   plant_u_ml      _A_SCII:
+"
+  ("s" (hot-expand "&lt;s"))
+  ("E" (hot-expand "&lt;e"))
+  ("q" (hot-expand "&lt;q"))
+  ("v" (hot-expand "&lt;v"))
+  ("n" (hot-expand "&lt;n"))
+  ("O" (let (text)
+	 (when (region-active-p)
+	   (setq text (buffer-substring (region-beginning) (region-end)))
+	   (delete-region (region-beginning) (region-end)))
+	 (insert "#+BEGIN_OPTIONS\n\n#+END_OPTIONS")
+	 (forward-line -1)
+	 (when text (insert text))))
+  ("c" (hot-expand "&lt;c"))
+  ("l" (hot-expand "&lt;l"))
+  ("h" (hot-expand "&lt;h"))
+  ("a" (hot-expand "&lt;a"))
+  ("L" (hot-expand "&lt;L"))
+  ("i" (hot-expand "&lt;i"))
+  ("e" (hot-expand "&lt;s" "emacs-lisp"))
+  ("p" (hot-expand "&lt;s" "powershell"))
+  ("S" (hot-expand "&lt;s" "sh"))
+  ("u" (hot-expand "&lt;s" "plantuml :file CHANGE.png"))
+  ("P" (hot-expand "&lt;s" "perl" ":results output :exports both :shebang \"#!/usr/bin/env perl\"\n"))
+  ("I" (hot-expand "&lt;I"))
+  ("H" (hot-expand "&lt;H"))
+  ("A" (hot-expand "&lt;A"))
+  ("&lt;" self-insert-command "ins")
+  ("o" nil "quit"))
+
+(require 'org-tempo) ; Required from org 9 onwards for old template expansion
+;; Reset the org-template expansion system, this is need after upgrading to org 9 for some reason
+(setq org-structure-template-alist (eval (car (get 'org-structure-template-alist 'standard-value))))
+
+(defun hot-expand (str &amp;optional mod header)
+  "Expand org template.
+
+STR is a structure template string recognised by org like &lt;s. MOD is a
+string with additional parameters to add the begin line of the
+structure element. HEADER string includes more parameters that are
+prepended to the element after the #+HEADER: tag."
+  (let (text)
+    (when (region-active-p)
+      (setq text (buffer-substring (region-beginning) (region-end)))
+      (delete-region (region-beginning) (region-end))
+      (deactivate-mark))
+    (when header (insert "#+HEADER: " header) (forward-line))
+    (insert str)
+    (org-tempo-complete-tag)
+    (when mod (insert mod) (forward-line))
+    (when text (insert text))))
+
+(define-key org-mode-map "&lt;"
+  (lambda () (interactive)
+    (if (or (region-active-p) (looking-back "^"))
+	(hydra-org-template/body)
+      (self-insert-command 1))))
+
+(eval-after-load "org"
+  '(cl-pushnew
+    '("not" . "note")
+    org-structure-template-alist))
+(eval-after-load "org-capture"
+  '(cl-pushnew
+    '("not" . "note")
+    org-structure-template-alist))
+</pre>
+</div>
+</div>
+<div id="outline-container-org3aabd44" class="outline-5">
+<h5 id="org3aabd44">Org-mode keybindings</h5>
+<div class="outline-text-5" id="text-org3aabd44">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-key org-mode-map "&lt;"
+  (lambda () (interactive)
+  (if (or (region-active-p) (looking-back "^"))
+  (hydra-org-template/body)
+  (self-insert-command 1))))
+
+(bind-key "C-c o" 'hydra-org-template/body)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb38cf1a" class="outline-5">
+<h5 id="orgb38cf1a">Org-mode link buffer keybindings</h5>
+<div class="outline-text-5" id="text-orgb38cf1a">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-hook 'org-load-hook
+  (lambda ()
+    (define-key org-mode-map "\C-n" 'org-next-link)
+    (define-key org-mode-map "\C-p" 'org-previous-link)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb307fd0" class="outline-4">
+<h4 id="orgb307fd0">Move text</h4>
+<div class="outline-text-4" id="text-orgb307fd0">
+<p>
+Use a hydra to move text. M-&lt;up&gt; or M-&lt;down&gt;.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package move-text
+  :config
+  (defhydra hydra-move-text ()
+    "Move text"
+    ("u" move-text-up "up")
+    ("d" move-text-down "down")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf91c56e" class="outline-4">
+<h4 id="orgf91c56e">Straight</h4>
+<div class="outline-text-4" id="text-orgf91c56e">
+<p>
+Hydra for <code>straight</code>, from <a href="https://github.com/abo-abo/hydra/wiki/straight.el">Hydra Wiki</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  (defhydra hydra-straight-helper (:hint nil)
+    "
+  _c_heck all       |_f_etch all     |_m_erge all      |_n_ormalize all   |p_u_sh all
+  _C_heck package   |_F_etch package |_M_erge package  |_N_ormlize package|p_U_sh package
+  ----------------^^+--------------^^+---------------^^+----------------^^+------------||_q_uit||
+  _r_ebuild all     |_p_ull all      |_v_ersions freeze|_w_atcher start   |_g_et recipe
+  _R_ebuild package |_P_ull package  |_V_ersions thaw  |_W_atcher quit    |prun_e_ build
+  _h_ Describe package"
+    ("c" straight-check-all)
+    ("C" straight-check-package)
+    ("r" straight-rebuild-all)
+    ("R" straight-rebuild-package)
+    ("f" straight-fetch-all)
+    ("F" straight-fetch-package)
+    ("p" straight-pull-all)
+    ("P" straight-pull-package)
+    ("m" straight-merge-all)
+    ("M" straight-merge-package)
+    ("n" straight-normalize-all)
+    ("N" straight-normalize-package)
+    ("u" straight-push-all)
+    ("U" straight-push-package)
+    ("v" straight-freeze-versions)
+    ("V" straight-thaw-versions)
+    ("w" straight-watcher-start)
+    ("W" straight-watcher-quit)
+    ("g" straight-get-recipe)
+    ("e" straight-prune-build)
+    ("h" describe-package)
+    ("q" nil))
+(global-set-key (kbd "C-h P") 'hydra-straight-helper/body)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org4660bf0" class="outline-2">
+<h2 id="org4660bf0">Git and projects</h2>
+<div class="outline-text-2" id="text-org4660bf0">
+</div>
+<div id="outline-container-org8612025" class="outline-3">
+<h3 id="org8612025">Magit</h3>
+<div class="outline-text-3" id="text-org8612025">
+<p>
+Magit is a Git-tool, probably the best porcelain in the world!
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package magit
+  :bind ("C-x g" . magit-status)
+  :config
+  (setq magit-completing-read-function 'ivy-completing-read)
+  (if (eq system-type 'windows-nt)
+      (setq-default with-editor-emacsclient-executable "emacsclientw.exe")
+    (setq-default with-editor-emacsclient-executable "emacsclient")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6dd7a9c" class="outline-3">
+<h3 id="org6dd7a9c">Magit Forge</h3>
+<div class="outline-text-3" id="text-org6dd7a9c">
+<p>
+Manage github things from emacs.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package forge
+  :after gh)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1a1f622" class="outline-3">
+<h3 id="org1a1f622">Magit-gitflow</h3>
+<div class="outline-text-3" id="text-org1a1f622">
+<p>
+Enable support for git-flow. Why? See <a href="https://jeffkreeftmeijer.com/git-flow/">https://jeffkreeftmeijer.com/git-flow/</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package magit-gitflow
+  :after magit
+  :hook
+  (magit-mode . turn-on-magit-gitflow)
+  :config
+  (setq magit-gitflow-release-finish-arguments '("--fetch" "--push")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org08f077b" class="outline-3">
+<h3 id="org08f077b">magit-find-file</h3>
+<div class="outline-text-3" id="text-org08f077b">
+<p>
+Package to support <b>git ls-files</b>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package magit-find-file
+  :after magit
+  :bind ("C-c m" . magit-find-file-completing-read))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2fd8307" class="outline-3">
+<h3 id="org2fd8307">Gist</h3>
+<div class="outline-text-3" id="text-org2fd8307">
+<p>
+Create and download gists from emacs.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package gh
+  :commands gist)
+(use-package gist
+  :config (setq gist-view-gist t)
+  :bind (("C-x j" . gist-list)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org95171e1" class="outline-3">
+<h3 id="org95171e1">Git-link</h3>
+<div class="outline-text-3" id="text-org95171e1">
+<p>
+Copy git links to kill-ring.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package git-link
+  :config
+  (defhydra hydra-git-link (:color blue)
+    "Copy git-link"
+    ("h" git-link-homepage "Copy homepage")
+    ("l" git-link "Copy link")
+    ("c" git-link-commit "Copy commit"))
+  :bind ("C-c L" . hydra-git-link/body))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge163a30" class="outline-3">
+<h3 id="orge163a30">Yasnippets</h3>
+<div class="outline-text-3" id="text-orge163a30">
+</div>
+<div id="outline-container-org153ceec" class="outline-4">
+<h4 id="org153ceec">Yasnippet</h4>
+<div class="outline-text-4" id="text-org153ceec">
+<p>
+Load yasnippet and some templates.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package yasnippet
+  :init
+  (yas-global-mode 1)
+  :bind (("C-c y" . hydra-yasnippet/body)
+	 :map yas-minor-mode-map
+	 ("C-c i" . yas-expand))
+  :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory))
+  :commands (yasnippet))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org83849ca" class="outline-4">
+<h4 id="org83849ca">Extra snippets</h4>
+<div class="outline-text-4" id="text-org83849ca">
+<p>
+Load more snippets
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package yasnippet-snippets
+  :after yasnippet)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd76fc9f" class="outline-4">
+<h4 id="orgd76fc9f">ivy-yasnippet</h4>
+<div class="outline-text-4" id="text-orgd76fc9f">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ivy-yasnippet
+  :bind ("C-x y" . ivy-yasnippet))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org51f88d0" class="outline-4">
+<h4 id="org51f88d0">Hydra for yasnippet</h4>
+<div class="outline-text-4" id="text-org51f88d0">
+<p>
+From <a href="https://github.com/abo-abo/hydra/wiki/YASnippet">https://github.com/abo-abo/hydra/wiki/YASnippet</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-yasnippet (:pre (yas-minor-mode t)
+				:color blue :hint nil)
+  "
+		    ^YASnippets^
+      -----------------------------------
+      Actions:    Load/Visit:   Modes:
+
+      _i_nsert     _d_irectory    _c_ompany-yas
+      _t_ryout     _f_ile         _g_lobal: %`yas-global-mode
+      _n_ew        _l_ist         _m_inor: %`yas-minor-mode
+      _e_xtra      _a_ll
+"
+  ("c" company-yasnippet)
+  ("d" yas-load-directory)
+  ("e" yas-activate-extra-mode)
+  ("i" yas-insert-snippet)
+  ("f" yas-visit-snippet-file :color blue)
+  ("n" yas-new-snippet)
+  ("t" yas-tryout-snippet)
+  ("l" yas-describe-tables)
+  ("g" yas-global-mode)
+  ("m" yas-minor-mode)
+  ("a" yas-reload-all))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org8c1bd9a" class="outline-3">
+<h3 id="org8c1bd9a">Projectile</h3>
+<div class="outline-text-3" id="text-org8c1bd9a">
+<p>
+Find or switch to projects easy, and use <code>counsel-projectile</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package projectile
+  :diminish
+  :init (when (file-directory-p "~/repos")
+	  (setq projectile-project-search-path '("~/repos")))
+
+  :config
+  (projectile-mode t)
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-switch-project-action 'projectile-dired)
+
+  (use-package counsel-projectile
+    :init (counsel-projectile-mode 1))
+
+  (defhydra hydra-projectile-other-window (:color teal)
+    "projectile-other-window"
+    ("f"  projectile-find-file-other-window        "file")
+    ("g"  projectile-find-file-dwim-other-window   "file dwim")
+    ("d"  projectile-find-dir-other-window         "dir")
+    ("b"  projectile-switch-to-buffer-other-window "buffer")
+    ("q"  nil                                      "cancel" :color blue))
+
+  (defhydra hydra-projectile (:color teal :hint nil)
+    "
+		 PROJECTILE: %(projectile-project-root)
+
+		 Find File            Search/Tags          Buffers                Cache
+	    ------------------------------------------------------------------------------------------
+	      _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+	     _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+	     _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
+	      _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
+	      _d_: dir
+
+	    "
+    ("a"   projectile-ag)
+    ("b"   projectile-switch-to-buffer)
+    ("c"   projectile-invalidate-cache)
+    ("d"   projectile-find-dir)
+    ("s-f" projectile-find-file)
+    ("F"   projectile-find-file)
+    ("ff"  projectile-find-file-dwim)
+    ("fd"  projectile-find-file-in-directory)
+    ("g"   ggtags-update-tags)
+    ("i"   projectile-ibuffer)
+    ("k"   projectile-kill-buffers)
+    ("m"   projectile-multi-occur)
+    ("p"   projectile-switch-project "switch project")
+    ("r"   projectile-recentf)
+    ("x"   projectile-remove-known-project)
+    ("X"   projectile-cleanup-known-projects)
+    ("z"   projectile-cache-current-file)
+    ("D"   projectile-discover-projects-in-directory)
+    ("'"   hydra-projectile-other-window/body "open other window")
+    ("q"   nil "cancel" :color blue))
+
+  :bind (("C-c p" . hydra-projectile/body)
+	 (:map projectile-mode-map
+	       ("C-c P" . projectile-command-map)))) ;; Keep counsel-projectile for now
+</pre>
+</div>
+</div>
+<div id="outline-container-orgb2590b2" class="outline-4">
+<h4 id="orgb2590b2">Fix</h4>
+<div class="outline-text-4" id="text-orgb2590b2">
+<p>
+From <a href="https://github.com/bbatsov/projectile/issues/1165">https://github.com/bbatsov/projectile/issues/1165</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun projectile-discover-projects-in-directory (directory)
+  "Discover any projects in DIRECTORY and add them to the projectile cache.
+This function is not recursive and only adds projects with roots
+at the top level of DIRECTORY."
+  (interactive
+   (list (read-directory-name "Starting directory: ")))
+  (let ((subdirs (directory-files directory t)))
+    (mapcar
+     (lambda (dir)
+       (when (and (file-directory-p dir)
+		  (not (member (file-name-nondirectory dir) '(".." "."))))
+	 (let ((default-directory dir)
+	       (projectile-cached-project-root dir))
+	   (when (projectile-project-p)
+	     (projectile-add-known-project (projectile-project-root))))))
+     subdirs)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org3c7dbdb" class="outline-3">
+<h3 id="org3c7dbdb">Flycheck</h3>
+<div class="outline-text-3" id="text-org3c7dbdb">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package flycheck
+  :config (global-flycheck-mode))
+(use-package avy-flycheck
+  :after avy
+  :config (avy-flycheck-setup))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org07000ae" class="outline-2">
+<h2 id="org07000ae">Packages</h2>
+<div class="outline-text-2" id="text-org07000ae">
+</div>
+<div id="outline-container-org91d2c80" class="outline-3">
+<h3 id="org91d2c80">Use-package chords</h3>
+<div class="outline-text-3" id="text-org91d2c80">
+<p>
+Use chords as keyboard shortcuts.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package use-package-chords
+      :config (key-chord-mode 1))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2bf35d0" class="outline-3">
+<h3 id="org2bf35d0">Diminish</h3>
+<div class="outline-text-3" id="text-org2bf35d0">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package diminish)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6e566dd" class="outline-3">
+<h3 id="org6e566dd">Winner-mode</h3>
+<div class="outline-text-3" id="text-org6e566dd">
+<p>
+Winner is used to restore windows.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package winner)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbef3cbc" class="outline-3">
+<h3 id="orgbef3cbc">Bind-key</h3>
+<div class="outline-text-3" id="text-orgbef3cbc">
+<p>
+Use the bind-key package (used by use-package).
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package bind-key
+    :bind ("C-h B" . describe-personal-keybindings))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgafa35d0" class="outline-3">
+<h3 id="orgafa35d0">diff-hl</h3>
+<div class="outline-text-3" id="text-orgafa35d0">
+<p>
+Highlight differences with diff-hl, which works better than git-gutter.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package diff-hl
+:hook ((prog-mode vc-dir-mode) . diff-hl-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge20d655" class="outline-3">
+<h3 id="orge20d655">line-numbers</h3>
+<div class="outline-text-3" id="text-orge20d655">
+<p>
+Use relative linenumbers.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package linum-relative
+:config
+  (setq linum-relative-current-symbol ""))
+</pre>
+</div>
+<p>
+Turn off line-numbers in minor mode.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package linum-off)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org54b7c68" class="outline-3">
+<h3 id="org54b7c68">Indentation</h3>
+<div class="outline-text-3" id="text-org54b7c68">
+<p>
+Use aggressive mode for indentation. Use to be auto-indent, but aggressive seems better.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package aggressive-indent
+  :config (global-aggressive-indent-mode t))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf59caaf" class="outline-3">
+<h3 id="orgf59caaf">which-key</h3>
+<div class="outline-text-3" id="text-orgf59caaf">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package which-key
+  :diminish
+  :config
+  (which-key-mode t)
+  (setq which-key-idle-delay 0))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1e543b4" class="outline-3">
+<h3 id="org1e543b4">Company</h3>
+<div class="outline-text-3" id="text-org1e543b4">
+<p>
+Auto completion.
+</p>
+</div>
+<div id="outline-container-org8967edb" class="outline-4">
+<h4 id="org8967edb">Company-mode</h4>
+<div class="outline-text-4" id="text-org8967edb">
+<p>
+Complete anything
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package company
+:diminish
+:config
+  (global-company-mode t)
+  (setq company-idle-delay 0))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb613cdb" class="outline-4">
+<h4 id="orgb613cdb">Company-shell</h4>
+<div class="outline-text-4" id="text-orgb613cdb">
+<p>
+Add more functions to company
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package company-shell
+  :config
+  (add-to-list 'company-backends '(company-shell company-shell-env))
+  (add-to-list 'company-shell-modes '(bat-mode powershell-mode)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdae2476" class="outline-4">
+<h4 id="orgdae2476">Company-keymapfix</h4>
+<div class="outline-text-4" id="text-orgdae2476">
+<p>
+A fix to enable [tab] to expand yasnippets etc in <code>company-mode-map</code>.
+From <a href="https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interference-between-company-mode-and-yasnippet">StackOverflow</a>. Another tip is in <a href="https://www.reddit.com/r/emacs/comments/5vhlws/using_tab_for_both_yasnippet_and_company">Reddit</a> .
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun company-yasnippet-or-completion ()
+  (interactive)
+  (let ((yas-fallback-behavior nil))
+    (unless (yas-expand)
+      (call-interactively #'company-complete-common))))
+
+(add-hook 'company-mode-hook (lambda ()
+			       (substitute-key-definition 'company-complete-common
+							  'company-yasnippet-or-completion
+							  company-active-map)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org21fb224" class="outline-3">
+<h3 id="org21fb224">ace-window</h3>
+<div class="outline-text-3" id="text-org21fb224">
+<p>
+Switch windows and frames quickly.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ace-window
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (setq aw-background nil)
+  (setq aw-dispatch-always t)
+  :bind (("M-o" . ace-window)
+	 ("C-x o" . aw-flip-window)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1e97423" class="outline-3">
+<h3 id="org1e97423">Resize windows</h3>
+<div class="outline-text-3" id="text-org1e97423">
+<p>
+Use <code>resize-window</code> for changing size.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package resize-window
+  :bind ("C-;" . resize-window))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org25f64c7" class="outline-3">
+<h3 id="org25f64c7">Pretty bullets</h3>
+<div class="outline-text-3" id="text-org25f64c7">
+<p>
+This was slow before, in emacs 25.1, but seems to work now in version 25.2.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga150cfd" class="outline-3">
+<h3 id="orga150cfd">Better shell</h3>
+<div class="outline-text-3" id="text-orga150cfd">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package better-shell
+      :config
+  (defhydra hydra-better-shell (:color blue :columns 2)
+    "Better Shell commands"
+    ("s" better-shell-shell "Cycle shell" :color red)
+    ("c" better-shell-for-current-dir  "New shell for current dir")
+    ("r" better-shell-remote-open "Open remote shell")
+    ("h" better-shell-sudo-here "Sudo here")
+    ("p" better-shell-for-projectile-root "Shell for Projectile root")
+    ("q" nil "cancel")
+    ("RET" nil))
+  :bind ("C-c s" . hydra-better-shell/body))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0b686e7" class="outline-3">
+<h3 id="org0b686e7">Copy-as-format</h3>
+<div class="outline-text-3" id="text-org0b686e7">
+<p>
+Copy with formatting.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package copy-as-format
+  :config
+  (defhydra hydra-copy-as-format (:color blue :columns 3)
+    "Copy as format"
+    ("a" copy-as-format-asciidoc "asciidoc")
+    ("d" copy-as-format-disqus   "disqus")
+    ("g" copy-as-format-github   "github/lab/bucket")
+    ("H" copy-as-format-hipchat  "hipchat")
+    ("h" copy-as-format-html     "html")
+    ("j" copy-as-format-jira     "jira")
+    ("m" copy-as-format-markdown "markdown")
+    ("M" copy-as-format-mediawik "mediawiki")
+    ("o" copy-as-format-org-mode "org-mode")
+    ("p" copy-as-format-pod      "pod")
+    ("r" copy-as-format-rst      "rst")
+    ("s" copy-as-format-slack    "slack")
+    ("q" nil "quit"))
+  :bind ("C-c w" . hydra-copy-as-format/body)
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgff86f48" class="outline-3">
+<h3 id="orgff86f48">Try</h3>
+<div class="outline-text-3" id="text-orgff86f48">
+<p>
+Use try to test packages.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package try
+  :commands try)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1a04a9b" class="outline-3">
+<h3 id="org1a04a9b">htmlize</h3>
+<div class="outline-text-3" id="text-org1a04a9b">
+<p>
+Needed by org-babel-export
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package htmlize)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdbcc2a8" class="outline-3">
+<h3 id="orgdbcc2a8">ipcalc</h3>
+<div class="outline-text-3" id="text-orgdbcc2a8">
+<p>
+IP subnet calculation. To use it, evaluate (ipcalc "10.0.0.0/8") for example.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ipcalc
+  :bind ("C-c i" . ipcalc))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4dd6f2d" class="outline-3">
+<h3 id="org4dd6f2d">Treemacs</h3>
+<div class="outline-text-3" id="text-org4dd6f2d">
+<p>
+Directory navigating explorer-style.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package treemacs
+  :bind (("C-x t" . treemacs)
+	 :map treemacs-mode-map
+	 ("C-x t" . treemacs-toggle))
+  :config
+  (setq treemacs-follow-after-init t
+	treemacs-show-hidden-files t)
+  (treemacs-follow-mode t)
+  (pcase (cons (not (null (executable-find "git")))
+	       (not (null (executable-find "python3")))
+	       (`(t . t)
+		(treemacs-git-mode 'extended))
+	       (`(t . _)
+		(treemacs-git-mode 'simple)))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgda4a548" class="outline-3">
+<h3 id="orgda4a548">ztree</h3>
+<div class="outline-text-3" id="text-orgda4a548">
+<p>
+Cool directory package.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ztree
+  :bind ("C-x z" . ztree-dir)
+  :config (setq-default ztree-dir-show-filtered-files t))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge98a50b" class="outline-3">
+<h3 id="orge98a50b">proportional</h3>
+<div class="outline-text-3" id="text-orge98a50b">
+<p>
+Use proportional fonts everywhere.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package proportional)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd42fb66" class="outline-3">
+<h3 id="orgd42fb66">Verify-url</h3>
+<div class="outline-text-3" id="text-orgd42fb66">
+<p>
+Check urls in an file.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package verify-url)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcebd22c" class="outline-3">
+<h3 id="orgcebd22c">Undo-tree</h3>
+<div class="outline-text-3" id="text-orgcebd22c">
+<p>
+Make undo more intuitive.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package undo-tree
+  :diminish
+  :demand
+  :config
+  (global-undo-tree-mode 1)
+  (setq undo-tree-visualizer-diff t)
+  :bind (("C-z" . undo)
+	 ("C-S-z" . undo-tree-redo))
+  :chords ("uu" . undo-tree-visualize))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8e9d991" class="outline-3">
+<h3 id="org8e9d991">RSS stuff</h3>
+<div class="outline-text-3" id="text-org8e9d991">
+<p>
+Use elfeed ass RSS-reader, plus extras.
+</p>
+</div>
+<div id="outline-container-orgc71c02d" class="outline-4">
+<h4 id="orgc71c02d">Elfeed-org</h4>
+<div class="outline-text-4" id="text-orgc71c02d">
+<p>
+Organise RSS with org-mode.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package elfeed-org
+  :after elfeed
+  :config (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" my/org-directory))
+		rmh-elfeed-org-auto-ignore-invalid-feeds nil))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb596d2c" class="outline-4">
+<h4 id="orgb596d2c">Elfeed-goodies</h4>
+<div class="outline-text-4" id="text-orgb596d2c">
+<p>
+Some extras
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package elfeed-goodies
+  :config (elfeed-goodies/setup))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org24e3ea6" class="outline-4">
+<h4 id="org24e3ea6">Elfeed</h4>
+<div class="outline-text-4" id="text-org24e3ea6">
+<p>
+Read RSS-feeds.
+From <a href="http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/">http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package elfeed
+  :config
+  (setq elfeed-db-directory (expand-file-name ".cache/elfeeddb" user-emacs-directory))
+  (setq elfeed-search-filter "@1-days-ago +unread")
+  (set-face-attribute 'elfeed-search-unread-title-face nil :weight 'normal :foreground "khaki2")
+
+  (defface elfeed-emacs
+    '((t :foreground "cyan"))
+    "Marks Emacs in Elfeed."
+    :group 'elfeed)
+
+  (push '(emacs elfeed-emacs)
+	elfeed-search-face-alist)
+
+  (defface elfeed-security
+    '((t :foreground "hot pink"))
+    "Marks Security in Elfeed."
+    :group 'elfeed)
+
+  (push '(security elfeed-security)
+	elfeed-search-face-alist)
+
+  (defface elfeed-windows
+    '((t :foreground "sky blue"))
+    "Marks Windows in Elfeed."
+    :group 'elfeed)
+
+  (push '(windows elfeed-windows)
+	elfeed-search-face-alist)
+
+  (defface elfeed-network
+    '((t :foreground "SpringGreen1"))
+    "Marks Network in Elfeed."
+    :group 'elfeed)
+
+  (push '(network elfeed-network)
+	elfeed-search-face-alist)
+
+  ;; Toggle star for post
+  (defalias 'elfeed-toggle-star
+    (elfeed-expose #'elfeed-search-toggle-all 'star))
+
+  (defun bjm/elfeed-load-db-and-open ()
+    "Wrapper to load the elfeed db from disk before opening"
+    (interactive)
+    (elfeed-db-load)
+    (elfeed-org)
+    (elfeed-goodies/setup)
+    (elfeed)
+    (elfeed-search-update--force)
+    (elfeed-search-set-filter "@1-months-ago"))
+
+  ;;write to disk when quiting
+  (defun bjm/elfeed-save-db-and-bury ()
+    "Wrapper to save the elfeed db to disk before burying buffer"
+    (interactive)
+    (elfeed-db-save)
+    (quit-window))
+
+  ;;Mark as read, from https://cestlaz.github.io/posts/using-emacs-29%20elfeed/
+  (defun elfeed-mark-all-as-read ()
+    (interactive)
+    (mark-whole-buffer)
+    (elfeed-search-untag-all-unread))
+
+  :bind (("C-x w" . bjm/elfeed-load-db-and-open)
+	 :map elfeed-search-mode-map
+	 ("h" . my/hydra-elfeed/body)
+	 ("m" . elfeed-toggle-star)
+	 ("R" . elfeed-mark-all-as-read)
+	 ("q" . bjm/elfeed-save-db-and-bury)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org34dfd5f" class="outline-4">
+<h4 id="org34dfd5f">Hydra</h4>
+<div class="outline-text-4" id="text-org34dfd5f">
+<p>
+A <code>hydra</code> for elfeed.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra my/hydra-elfeed (:color blue :hint nil :columns 4)
+   "Elfeed commands"
+   ("b" (elfeed-search-browse-url) "Browse")
+   ("fd" (elfeed-search-set-filter "@6-months-ago") "default")
+   ("fc" (elfeed-search-set-filter "@6-months-ago +code") "code")
+   ("fe" (elfeed-search-set-filter "@6-months-ago +emacs") "emacs")
+   ("fs" (elfeed-search-set-filter "@6-months-ago +security") "security")
+   ("ft" (elfeed-search-set-filter "@1-days-ago +unread") "today")
+   ("fw" (elfeed-search-set-filter "@7-days-ago +unread") "Week")
+   ("*" (elfeed-search-set-filter "@6-months-ago +star") "filter star")
+   ("g" elfeed-search-update--force "Update feed")
+   ("G" elfeed-search-fetch "Update all")
+   ("L" elfeed-goodies/toggle-logs "Logs")
+   ("m" (elfeed-toggle-star) "star")
+   ("R" (elfeed-mark-all-as-read) "Mark all as read")
+   ("T" (elfeed-search-set-filter "@1-day-ago") "Today")
+   ("S" elfeed-search-set-filter "Set filter")
+   ("s" elfeed-search-live-filter "Search")
+   ("p" previous-line "previous")
+   ("n" next-line "next")
+   ("Q" bjm/elfeed-save-db-and-bury  "Quit, save DB")
+   ("q" nil "quit")
+   )
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org3e0345a" class="outline-3">
+<h3 id="org3e0345a">hungry-mode</h3>
+<div class="outline-text-3" id="text-org3e0345a">
+<p>
+Delete whitespace more efficiently.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package hungry-delete
+:config
+(global-hungry-delete-mode t))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd23fef2" class="outline-3">
+<h3 id="orgd23fef2">avy</h3>
+<div class="outline-text-3" id="text-orgd23fef2">
+<p>
+Jump to any character.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package avy
+  :bind (("C-." . avy-goto-char)
+	 ("C-:" . avy-goto-char-2))
+  :chords ("kk" . avy-goto-line))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5f75175" class="outline-3">
+<h3 id="org5f75175">Silversearcher</h3>
+<div class="outline-text-3" id="text-org5f75175">
+<p>
+Use <code>ag</code> to search for stuff. Requires <code>silversearcher-ag</code> to be installed in the system.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ag
+  :commands counsel-ag)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb32deab" class="outline-3">
+<h3 id="orgb32deab">Macrostep</h3>
+<div class="outline-text-3" id="text-orgb32deab">
+<p>
+To check the expanded macro. Useful with <code>use-package</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package macrostep
+  :bind ("C-c e" . macrostep-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org128129b" class="outline-3">
+<h3 id="org128129b">docker</h3>
+<div class="outline-text-3" id="text-org128129b">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package docker
+:bind ("C-c d" . docker))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf68f05d" class="outline-3">
+<h3 id="orgf68f05d">apib-mode</h3>
+<div class="outline-text-3" id="text-orgf68f05d">
+<p>
+Support files in apib format, <a href="https://apiblueprint.org/">API Blueprint</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package apib-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8683fac" class="outline-3">
+<h3 id="org8683fac">json-navigator</h3>
+<div class="outline-text-3" id="text-org8683fac">
+<p>
+Navigate JSON-files. Also use tree-mode for navigation.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package json-navigator
+  :config
+  (use-package tree-mode
+    :bind (:map tree-minor-mode
+		("q" . quit-window)))
+  :chords
+  ("jj" . json-navigator-navigate-region)
+  ("jp" . json-navigator-navigate-after-point)
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org68478ef" class="outline-3">
+<h3 id="org68478ef">Rainbows</h3>
+<div class="outline-text-3" id="text-org68478ef">
+<p>
+Use different colors for delimeters to increase readability.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package rainbow-delimiters
+      :hook
+      ((org-mode prog-mode) . rainbow-delimiters-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org538704b" class="outline-3">
+<h3 id="org538704b">Rainbow colors</h3>
+<div class="outline-text-3" id="text-org538704b">
+<p>
+Colorize numbers and text.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package rainbow-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfe439e1" class="outline-3">
+<h3 id="orgfe439e1">Restclient</h3>
+<div class="outline-text-3" id="text-orgfe439e1">
+<p>
+A client to make REST-calls from emacs and Org-mode.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package restclient
+  :commands restclient
+  :config
+  (use-package ob-restclient
+    :after org)
+  (use-package company-restclient
+    :after company
+    :hook (restclient-mode .
+			   (lambda ()
+			     (set (make-local-variable 'company-backends)
+				  '(company-restclient))))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org497f33f" class="outline-3">
+<h3 id="org497f33f">Smart parenthesis</h3>
+<div class="outline-text-3" id="text-org497f33f">
+<p>
+Automatically insert parenthesis.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package smartparens
+  :diminish
+  :hook
+  ((org-mode prog-mode) . smartparens-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga7968c8" class="outline-3">
+<h3 id="orga7968c8">rfc-mode</h3>
+<div class="outline-text-3" id="text-orga7968c8">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package rfc-mode
+  :config (setq rfc-mode-directory (expand-file-name "rfc/cache" no-littering-var-directory)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3c240c1" class="outline-3">
+<h3 id="org3c240c1">Disable-mouse</h3>
+<div class="outline-text-3" id="text-org3c240c1">
+<p>
+No mice!
+</p>
+<pre class="example" id="org3b348b5">
+(use-package disable-mouse
+:diminish
+:hook (after-init-hook)
+:config (global-disable-mouse-mode t))
+</pre>
+</div>
+</div>
+<div id="outline-container-orgfa2dd91" class="outline-3">
+<h3 id="orgfa2dd91">Whitespace butler</h3>
+<div class="outline-text-3" id="text-orgfa2dd91">
+<p>
+Help to keep config clean.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ws-butler
+:hook (prog-mode . ws-butler-mode))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orga717839" class="outline-2">
+<h2 id="orga717839">Private and local stuff</h2>
+<div class="outline-text-2" id="text-orga717839">
+</div>
+<div id="outline-container-org6ca8afe" class="outline-3">
+<h3 id="org6ca8afe">Load private stuff</h3>
+<div class="outline-text-3" id="text-org6ca8afe">
+<p>
+This load a local file with private info.
+Untangle with function in <code>init.el</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(if (file-exists-p my/private-orgfile)
+    (when (not (and (file-exists-p my/private-elfile)
+		    (file-newer-than-file-p my/private-elfile my/private-orgfile)))
+      (my/tangle-config-org my/private-orgfile my/private-elfile)))
+
+;; Load the el-file
+(if (file-exists-p my/private-elfile)
+    (load-file my/private-elfile))
+</pre>
+</div>
+<p>
+See also: <a href="http://dotemacs.de/multiemacs.html">http://dotemacs.de/multiemacs.html</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org81893c6" class="outline-3">
+<h3 id="org81893c6">Load secret stuff</h3>
+<div class="outline-text-3" id="text-org81893c6">
+<p>
+Load secret stuff from this encrypted org-file.
+</p>
+</div>
+<div id="outline-container-org50fc20b" class="outline-4">
+<h4 id="org50fc20b">EasyPG</h4>
+<div class="outline-text-4" id="text-org50fc20b">
+<p>
+Since we use "use-package" to load builtin function, add ":ensure nil".
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package epa-file
+:straight (:type built-in)
+  :config
+  (setq epa-file-select-keys nil)
+  (setq epa-file-encrypt-to "8A114B0F26AA73E8")
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+  (setq epg-pinentry-mode 'loopback))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga8ce22c" class="outline-4">
+<h4 id="orga8ce22c">Org-crypt</h4>
+<div class="outline-text-4" id="text-orga8ce22c">
+<p>
+enable encryption of org-files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-crypt
+:straight (:type built-in)
+  :config
+  (org-crypt-use-before-save-magic)
+  (setq org-crypt-tag-matcher "encrypt")
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org50be66a" class="outline-4">
+<h4 id="org50be66a">Load secrets from this file</h4>
+<div class="outline-text-4" id="text-org50be66a">
+<p>
+This part dont work yet.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;;(if (file-exists-p (expand-file-name "secret.org.gpg" my/emacs-shared-dir))
+;; (org-babel-load-in-session-maybe (expand-file-name "secret.org.gpg" my/emacs-shared-dir)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org79d120d" class="outline-4">
+<h4 id="org79d120d">Authinfo file</h4>
+<div class="outline-text-4" id="text-org79d120d">
+<p>
+Define path for .authinfo-file
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package auth-source-pass
+  :config
+  (setq auth-sources (list (expand-file-name "emacs/.authinfo.gpg" my/onedrive-dir)))
+  (setq auth-source-pass-port-separator "#")
+  (setq auth-source-debug t)
+  (add-to-list 'auth-source-protocols '(scp "scp" "22") t)
+  (auth-source-pass-enable))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9f9a69d" class="outline-4">
+<h4 id="org9f9a69d">password-store</h4>
+<div class="outline-text-4" id="text-org9f9a69d">
+<p>
+Use unix password-store
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package password-store
+  :after auth-source-pass)
+(use-package pass
+  :after password-store
+  :bind ("C-x p" . pass))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org4c0f09a" class="outline-3">
+<h3 id="org4c0f09a">Custom file for customize</h3>
+<div class="outline-text-3" id="text-org4c0f09a">
+<p>
+Use a separate file for emacs "customize".
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq custom-file (expand-file-name "customize.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file 'noerror))
+</pre>
+</div>
+<p>
+Use only "'" instead of "quotes" for customize.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(advice-add 'custom-save-all :around
+	    (lambda (orig)
+	      (let ((print-quoted t))
+		(funcall orig))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org85718b8" class="outline-3">
+<h3 id="org85718b8">Lisp</h3>
+<div class="outline-text-3" id="text-org85718b8">
+<p>
+My own Lisp-files
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Local lisp-directory
+(when (not (file-exists-p "lisp"))
+      (make-directory (concat user-emacs-directory "lisp") t))
+(add-to-list 'load-path (concat user-emacs-directory "lisp"))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org288d3d8" class="outline-2">
+<h2 id="org288d3d8">Tuning</h2>
+<div class="outline-text-2" id="text-org288d3d8">
+</div>
+<div id="outline-container-org7a07ccc" class="outline-3">
+<h3 id="org7a07ccc">Garbage collection</h3>
+<div class="outline-text-3" id="text-org7a07ccc">
+<p>
+Tries to change the variable dynamic.
+From <a href="https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/">https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold (* 50 1024 1024)))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold (* 5 1024 1024)))
+
+(defun my-projectile-before-switch-project-hook ()
+  (setq gc-cons-threshold (* 50 1024 1024)))
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+(add-hook 'projectile-before-switch-project-hook #'my-projectile-before-switch-project-hook)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5587270" class="outline-3">
+<h3 id="org5587270">File encoding settings</h3>
+<div class="outline-text-3" id="text-org5587270">
+<p>
+Windows Clipboard uses different encoding.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(when (eq system-type 'windows-nt)
+  (set-clipboard-coding-system 'utf-16le-dos))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2e9f47c" class="outline-3">
+<h3 id="org2e9f47c">Sentence</h3>
+<div class="outline-text-3" id="text-org2e9f47c">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq sentence-end-double-space nil)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orga7d1817" class="outline-2">
+<h2 id="orga7d1817">Keyboard settings</h2>
+<div class="outline-text-2" id="text-orga7d1817">
+</div>
+<div id="outline-container-orge88ec43" class="outline-3">
+<h3 id="orge88ec43">Windows keys (W32)</h3>
+<div class="outline-text-3" id="text-orge88ec43">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(when (eq system-type 'windows-nt)
+     (setq w32-capslock-is-shiftlock nil)
+     (setq w32-enable-caps-lock nil))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1bb970c" class="outline-3">
+<h3 id="org1bb970c">Set-mark for lxss</h3>
+<div class="outline-text-3" id="text-org1bb970c">
+<p>
+Set mark-command for Windows env
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(bind-key "M-SPC" 'set-mark-command)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org349838b" class="outline-3">
+<h3 id="org349838b">ibuffer</h3>
+<div class="outline-text-3" id="text-org349838b">
+<p>
+Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command but use use-package for simpler configuration.
+<code>projectile-ibuffer</code> is also available with projectile.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ibuffer
+  :straight (:type built-in)
+  :bind ("C-x C-b" . ibuffer)
+  :config
+  (setq ibuffer-saved-filter-groups
+	(quote (("default"
+		 ("dired" (mode . dired-mode))
+		 ("shell" (or
+			   (mode . eshell-mode)
+			   (mode . shell-mode)))
+		 ("powershell" (mode . powershell-mode))
+		 ("code" (mode . prog-mode))
+		 ("magit" (or
+			   (name . "^magit")
+			   (name . "\\*magithub.*")))
+		 ("emacs" (or
+			   (name . "^\\*scratch\\*$")
+			   (name . "^\\*Messages\\*$")))
+		 ("Tramp" (or (filename . "^\\/scp:")
+			      (name . "^\\*tramp")))
+		 ("iBuffer" (mode . ibuffer-mode))
+		 ("Gists" (name . "^\\*gist.*")))
+		("Help"
+		 ("Man" (mode . Man-mode))
+		 ("Help" (or (name . "\\*Help\\*")
+			     (name . "\\*Apropos\\*")
+			     (name . "\\*info\\*")
+			     (mode . help-mode)))
+		 )
+		("Org"
+		 ("Org" (or
+			 (mode . org-mode)
+			 (name . "^\\*Org Agenda\\*$")))
+		 ))))
+  (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-expert t)
+  :hook (ibuffer-mode .
+		      (lambda ()
+			(ibuffer-auto-mode 1)
+			(ibuffer-switch-to-saved-filter-groups "default")
+			(unless (eq ibuffer-sorting-mode 'alphabetic)
+			  (ibuffer-do-sort-by-alphabetic))))
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org55473e5" class="outline-3">
+<h3 id="org55473e5">ibuffer-vc</h3>
+<div class="outline-text-3" id="text-org55473e5">
+<p>
+Get status by version-control.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ibuffer-vc
+  :config
+  (setq ibuffer-formats
+	'((mark modified read-only vc-status-mini " "
+		(name 18 18 :left :elide)
+		" "
+		(size 9 -1 :right)
+		" "
+		(mode 16 16 :left :elide)
+		" "
+		(vc-status 16 16 :left)
+		" "
+		filename-and-process)))
+  :hook (ibuffer-mode .
+		      (lambda ()
+			(ibuffer-vc-set-filter-groups-by-vc-root)
+			(unless (eq ibuffer-sorting-mode 'alphabetic)
+			  (ibuffer-do-sort-by-alphabetic))))
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgeb86c37" class="outline-3">
+<h3 id="orgeb86c37">ibuffer-projectile</h3>
+<div class="outline-text-3" id="text-orgeb86c37">
+<p>
+Group buffers based on projectile.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ibuffer-projectile
+  :bind (:map ibuffer-mode-map
+	      ("c" . ibuffer-projectile-set-filter-groups)
+	      ("/ -" . ibuffer-filter-by-directory)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org0b43ffe" class="outline-2">
+<h2 id="org0b43ffe">ivy, swiper and counsel</h2>
+<div class="outline-text-2" id="text-org0b43ffe">
+<p>
+These are really useful packages. <a href="http://oremacs.com/swiper/">http://oremacs.com/swiper/</a>
+Replaced IDO with Ivy.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ivy
+  :diminish
+  :config
+  (ivy-mode 1)
+  (setq	ivy-use-virtual-buffers t
+	ivy-count-format "(%d/%d) "
+	enable-recursive-minibuffers t)
+  :bind
+  ("C-x C-f" . counsel-find-file)
+  ("C-c C-S-F" . counsel-recentf)
+  ("C-c C-S-R" . ivy-resume)
+  ("C-s" . swiper)
+  ("C-r" . swiper)
+  ("C-c g" . counsel-git)
+  ("C-c j" . counsel-git-grep)
+  ("C-c k" . counsel-ag))
+</pre>
+</div>
+</div>
+<div id="outline-container-org832a360" class="outline-3">
+<h3 id="org832a360">Amx</h3>
+<div class="outline-text-3" id="text-org832a360">
+<p>
+Use <code>amx</code> instead of <code>smex</code> for smart executionlist. But keep the old save-filename for now.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package amx
+  :custom
+  (amx-save-file (expand-file-name "smex-save.el" no-littering-var-directory))
+  :config
+  (amx-mode t))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbc37c52" class="outline-3">
+<h3 id="orgbc37c52">Swiper</h3>
+<div class="outline-text-3" id="text-orgbc37c52">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package swiper
+  :config
+  (setq ivy-use-selectable-prompt t
+	swiper-action-recenter t
+	swiper-include-line-number-in-search t
+	swiper-goto-start-of-match t
+	swiper-stay-on-quit nil)
+  (set-face-background 'swiper-line-face "Light Slate Grey"))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org24fc7f7" class="outline-3">
+<h3 id="org24fc7f7">Counsel</h3>
+<div class="outline-text-3" id="text-org24fc7f7">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package counsel
+  :diminish
+  :config
+  (setq counsel-describe-function-function #'helpful-callable
+	counsel-describe-variable-function #'helpful-variable)
+  (counsel-mode 1)
+  :bind
+  ("M-x" . counsel-M-x)
+  ("C-h f" . counsel-describe-function)
+  ("C-h v" . counsel-describe-variable))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org299c8ac" class="outline-3">
+<h3 id="org299c8ac">Ivy hydra</h3>
+<div class="outline-text-3" id="text-org299c8ac">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ivy-hydra)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbab3167" class="outline-3">
+<h3 id="orgbab3167">Ivy rich</h3>
+<div class="outline-text-3" id="text-orgbab3167">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ivy-rich
+  :after counsel-M-x
+  :config (ivy-rich-mode 1)
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  (setq ivy-rich-path-style 'abbrev))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd036b12" class="outline-2">
+<h2 id="orgd036b12">Counsel-tramp</h2>
+<div class="outline-text-2" id="text-orgd036b12">
+<p>
+Use counsel to navigate hosts.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package counsel-tramp
+  :commands counsel-tramp
+  :hook
+  (counsel-tramp-pre-command-hook .
+				  (lambda ()
+				    (global-aggressive-indent-mode 0)
+				    (projectile-mode 0)
+				    (editorconfig-mode 0)
+				    (yas-minor-mode 0)
+				    (setq make-backup-files nil)
+				    (setq create-lockfiles nil)))
+  (counsel-tramp-quit-hook .
+			   (lambda ()
+			     (global-aggressive-indent-mode 1)
+			     (projectile-mode 1)
+			     (editorconfig-mode 1)
+			     (yas-minor-mode 1)
+			     (setq make-backup-files t)
+			     (setq create-lockfiles t))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org25ba860" class="outline-2">
+<h2 id="org25ba860">Windmove</h2>
+<div class="outline-text-2" id="text-org25ba860">
+<p>
+Move between windows quickly.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(when (fboundp 'windmove-default-keybindings)
+(windmove-default-keybindings))
+</pre>
+</div>
+</div>
+<div id="outline-container-org2298c0a" class="outline-3">
+<h3 id="org2298c0a">Orgmode customizations</h3>
+<div class="outline-text-3" id="text-org2298c0a">
+<p>
+Make windmove work in org-mode:
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+(setq org-support-shift-select t)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org3dc02f9" class="outline-2">
+<h2 id="org3dc02f9">Own stuff</h2>
+<div class="outline-text-2" id="text-org3dc02f9">
+</div>
+<div id="outline-container-org2d21b29" class="outline-3">
+<h3 id="org2d21b29">Toggle truncate lines</h3>
+<div class="outline-text-3" id="text-org2d21b29">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(set-default 'truncate-lines nil)
+(setq truncate-partial-width-windows 40)
+(bind-key "C-c t" 'toggle-truncate-lines)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2ae1bb3" class="outline-3">
+<h3 id="org2ae1bb3">Wrap long lines</h3>
+<div class="outline-text-3" id="text-org2ae1bb3">
+<p>
+Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(set-default 'word-wrap t)
+(setq-default visual-line-mode t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3f1c72f" class="outline-3">
+<h3 id="org3f1c72f">No case-sensitive for search</h3>
+<div class="outline-text-3" id="text-org3f1c72f">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq-default case-fold-search t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdc78ca2" class="outline-3">
+<h3 id="orgdc78ca2">Turn off case sensitivity for buffers</h3>
+<div class="outline-text-3" id="text-orgdc78ca2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(customize-set-variable 'read-buffer-completion-ignore-case t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf29d07f" class="outline-3">
+<h3 id="orgf29d07f">Scrolling hydra</h3>
+<div class="outline-text-3" id="text-orgf29d07f">
+<p>
+Key bindings for scrolling.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defhydra hydra-scroll (:color pink)
+  "Scroll buffers"
+  ("v" scroll-up-command "Up")
+  ("b" scroll-down-command "Down")
+  ("M-v" scroll-down-command)
+  ("V" scroll-other-window "Other window up")
+  ("B" scroll-other-window-down "Other window down")
+  ("q" nil "cancel"))
+(bind-key "M-v" 'hydra-scroll/body)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf9d17ea" class="outline-2">
+<h2 id="orgf9d17ea">Theme and settings</h2>
+<div class="outline-text-2" id="text-orgf9d17ea">
+</div>
+<div id="outline-container-org8e633fa" class="outline-3">
+<h3 id="org8e633fa">Theme</h3>
+<div class="outline-text-3" id="text-org8e633fa">
+</div>
+<div id="outline-container-org5191a26" class="outline-4">
+<h4 id="org5191a26">Load themes</h4>
+<div class="outline-text-4" id="text-org5191a26">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun my/load-themes ()
+  "Loads my themes if in windows"
+
+  (use-package afternoon-theme
+    :config
+    (load-theme 'afternoon t t))
+
+  (use-package base16-theme
+    :config
+    (load-theme 'base16 t t))
+
+  (use-package material-theme
+    :config
+    (load-theme 'material t nil))
+
+  (use-package twilight-bright-theme
+    :config
+    (load-theme 'twilight-bright t t))
+
+  (use-package zenburn-theme
+    :config
+    (load-theme 'zenburn t t))
+
+  (use-package org-beautify-theme
+    :disabled
+    :config
+    (load-theme 'org-beautify t t))
+
+  (use-package gruber-darker-theme
+    :config(load-theme 'gruber-darker t t))
+
+  (load-theme 'material t nil))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc3693fd" class="outline-4">
+<h4 id="orgc3693fd">Load different theme if in gui or terminal</h4>
+<div class="outline-text-4" id="text-orgc3693fd">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(unless (not (display-graphic-p))
+(load-theme 'tango-dark)
+(my/load-themes))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb85cc11" class="outline-4">
+<h4 id="orgb85cc11">Theme when emacs run as daemon.</h4>
+<div class="outline-text-4" id="text-orgb85cc11">
+<p>
+This loads theme when emacs starts up as a daemon
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-hook 'after-make-frame-functions
+	  (lambda (frame)
+	    (select-frame frame)
+	    (my/load-themes)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge5b22e4" class="outline-4">
+<h4 id="orge5b22e4">Theme-chooser</h4>
+<div class="outline-text-4" id="text-orge5b22e4">
+<p>
+Switch betweens selected themes with "C-&lt;".
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package theme-looper
+  :config
+  (theme-looper-set-theme-set '(afternoon twilight-bright tango-dark zenburn material gruber-darker))
+  :bind
+  ("C-&lt;" . theme-looper-enable-next-theme)
+  ("C-&gt;" . theme-looper-enable-random-theme))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgceb1336" class="outline-3">
+<h3 id="orgceb1336">Fonts</h3>
+<div class="outline-text-3" id="text-orgceb1336">
+<p>
+Use Cascadia Code Nerd Font
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(set-face-attribute 'default nil
+			:family "CaskaydiaCove Nerd Font-11"
+			:height 110
+			:weight 'normal
+			:width  'condensed)
+(add-to-list 'default-frame-alist '(font . "CaskaydiaCove Nerd Font-11"))
+(set-frame-font "CaskaydiaCove Nerd Font-11" nil t)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+</pre>
+</div>
+</div>
+<div id="outline-container-orgb48c559" class="outline-4">
+<h4 id="orgb48c559">Cycle through fonts</h4>
+<div class="outline-text-4" id="text-orgb48c559">
+<p>
+From Xah <a href="http://www.wilkesley.org/~ian/xah/emacs/emacs_switching_fonts.html">Xah Lee switch fonts</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defcustom my/font-list nil "A list of fonts for `my/cycle-font' to cycle from." :group 'font)
+(set-default 'my/font-list
+	     (cond
+	      ((string-equal system-type "windows-nt")
+	       '(
+		 "Source Sans Pro-12"
+		 "Source Code Pro-10"
+		 "Inconsolata-10"
+		 "Courier New-10"
+		 "DejaVu Sans Mono-9"
+		 "Lucida Console-10"
+		 "Segoe UI Symbol-10"
+		 "Lucida Sans Unicode-10"
+		 ))
+	      ((string-equal system-type "gnu/linux")
+	       '(
+		 "Source Code Pro for powerline-10"
+		 "DejaVu Sans Mono-9"
+		 "DejaVu Sans-9"
+		 "Fira Mono for Powerline-10"
+		 "Roboto Mono for Powerline-10"
+		 ))))
+
+(defun my/cycle-font (*n)
+  "Change font in current frame.
+  Each time this is called, font cycles thru a predefined list of fonts in the variable `my/font-list'."
+  (interactive "p")
+  ;; this function sets a property “state”. It is a integer. Possible values are any index to the fontList.
+  (let (-fontToUse -stateBefore -stateAfter )
+    (setq -stateBefore (if (get 'my/cycle-font 'state) (get 'my/cycle-font 'state) 0))
+    (setq -stateAfter (% (+ -stateBefore (length my/font-list) *n) (length my/font-list)))
+    (setq -fontToUse (nth -stateAfter my/font-list))
+    (set-frame-font -fontToUse t)
+    (message "Current font is: %s" -fontToUse )
+    (put 'my/cycle-font 'state -stateAfter)))
+
+(defun my/cycle-font-next ()
+  "Switch to the next font, in current window.
+  See `my/cycle-font'."
+  (interactive)
+  (my/cycle-font 1))
+
+(defun my/cycle-font-previous ()
+  "Switch to the previous font, in current window.
+  See `my/cycle-font'."
+  (interactive)
+  (my/cycle-font -1))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orge5c0a45" class="outline-3">
+<h3 id="orge5c0a45">Startup settings</h3>
+<div class="outline-text-3" id="text-orge5c0a45">
+<p>
+Things that we dont want during or after startup
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Startup settings
+(setq inhibit-splash-screen t
+      inhibit-startup-screen t
+      initial-scratch-message nil
+      initial-major-mode 'org-mode)
+
+;; No menubar, toolbar or scrollbar
+(defun my/no-toolbars ()
+  "Dont load toolbars or menubars, if in gui-mode"
+  (when (display-graphic-p)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (set-scroll-bar-mode nil)))
+
+;; Load this when started as server (daemon)
+(add-hook 'after-make-frame-functions
+  (lambda (frame)
+  (select-frame frame)
+  (my/no-toolbars)))
+
+;; Don't display toolbars when in gui-mode
+(when (display-graphic-p)
+  (my/no-toolbars))
+
+;; Start in fullscreen when server
+(set-frame-parameter nil 'fullscreen 'fullboth)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9b1fe9c" class="outline-3">
+<h3 id="org9b1fe9c">Powerline-mode</h3>
+<div class="outline-text-3" id="text-org9b1fe9c">
+<p>
+Use powerline in the message bar.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package powerline
+  :config
+  (powerline-default-theme))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2cc1bd0" class="outline-3">
+<h3 id="org2cc1bd0">Customisations</h3>
+<div class="outline-text-3" id="text-org2cc1bd0">
+</div>
+<div id="outline-container-org545aff3" class="outline-4">
+<h4 id="org545aff3">Initial settings</h4>
+<div class="outline-text-4" id="text-org545aff3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq-default major-mode 'text-mode)
+(line-number-mode t)
+(column-number-mode t)
+(transient-mark-mode t)
+(show-paren-mode t)
+(setq-default line-spacing 1)
+(setq-default show-trailing-whitespace nil)
+(setq-default indicate-empty-lines t)
+(setq apropos-do-all t)
+(global-subword-mode t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5597f92" class="outline-4">
+<h4 id="org5597f92">Indents and tabs</h4>
+<div class="outline-text-4" id="text-org5597f92">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq-default tab-always-indent 'complete)      ;;Use tabs as indents, 2ch width
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5c0df76" class="outline-4">
+<h4 id="org5c0df76">Newline settings</h4>
+<div class="outline-text-4" id="text-org5c0df76">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq mode-require-final-newline t)
+(setq next-line-add-newlines nil)
+(setq require-final-newline t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4701b36" class="outline-4">
+<h4 id="org4701b36">Global highlight mode</h4>
+<div class="outline-text-4" id="text-org4701b36">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(global-hl-line-mode nil)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2b4930f" class="outline-4">
+<h4 id="org2b4930f">Recent files</h4>
+<div class="outline-text-4" id="text-org2b4930f">
+<p>
+Record old openen files
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(add-to-list 'recentf-exclude no-littering-var-directory)
+(add-to-list 'recentf-exclude no-littering-etc-directory)
+(add-to-list 'recentf-exclude (expand-file-name "straight/" user-emacs-directory))
+(global-set-key (kbd "C-c C-r") 'recentf-open-files)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8a7afa0" class="outline-4">
+<h4 id="org8a7afa0">Reverting</h4>
+<div class="outline-text-4" id="text-org8a7afa0">
+<p>
+Map &lt;F5&gt; to revert-buffer. But only revert if the file is not modified.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(global-set-key
+  (kbd "&lt;f5&gt;")
+  (lambda (&amp;optional force-reverting)
+  "Interactive call to revert-buffer. Ignoring the auto-save
+  file and not requesting for confirmation. When the current buffer
+  is modified, the command refuses to revert it, unless you specify
+  the optional argument: force-reverting to true."
+  (interactive "P")
+  ;;(message "force-reverting value is %s" force-reverting)
+  (if (or force-reverting (not (buffer-modified-p)))
+  (revert-buffer :ignore-auto :noconfirm)
+  (error "The buffer has been modified"))))
+</pre>
+</div>
+<p>
+Setup autorevert.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(customize-set-variable 'global-auto-revert-mode t)
+(customize-set-variable 'global-auto-revert-non-file-buffers t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org433d2ae" class="outline-4">
+<h4 id="org433d2ae">Bookmarks</h4>
+<div class="outline-text-4" id="text-org433d2ae">
+<p>
+Save bookmarks all the time.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(customize-set-variable 'bookmark-save-flag 1)
+(customize-set-variable 'bookmark-version-control t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5dba91d" class="outline-4">
+<h4 id="org5dba91d">Language</h4>
+<div class="outline-text-4" id="text-org5dba91d">
+<p>
+Spellchecking. I use Hunspell.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ispell
+  :straight (:type built-in)
+  :config
+  (add-to-list 'ispell-local-dictionary-alist '("swedish-hunspell"
+						"[[:alpha:]]"
+						"[^[:alpha:]]"
+						"[']"
+						t
+						("-d" "sv_SE"); Dictionary file name
+						nil
+						iso-8859-1))
+
+  (add-to-list 'ispell-local-dictionary-alist '("english-hunspell"
+						"[[:alpha:]]"
+						"[^[:alpha:]]"
+						"[']"
+						t
+						("-d" "en_US")
+						nil
+						iso-8859-1))
+  (setq ispell-program-name "hunspell"
+	ispell-dictionary "swedish-hunspell"))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgaa4aafd" class="outline-4">
+<h4 id="orgaa4aafd">Dired customizations</h4>
+<div class="outline-text-4" id="text-orgaa4aafd">
+<p>
+Changes for local keyboard.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package dired
+  :straight (:type built-in)
+  :commands dired
+  :bind (:map dired-mode-map
+	      ("'" . diredp-up-directory-reuse-dir-buffer)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgec07692" class="outline-4">
+<h4 id="orgec07692">Dired+</h4>
+<div class="outline-text-4" id="text-orgec07692">
+<p>
+Use dired+ to not generate more buffers.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package dired+
+  :straight (:type built-in)
+  :after dired
+  :config
+  (diredp-toggle-find-file-reuse-dir 1))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf9fc5b0" class="outline-4">
+<h4 id="orgf9fc5b0">No beeps</h4>
+<div class="outline-text-4" id="text-orgf9fc5b0">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;;No beep
+(setq visible-bell t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc7111b3" class="outline-4">
+<h4 id="orgc7111b3">Buffer setup</h4>
+<div class="outline-text-4" id="text-orgc7111b3">
+<p>
+Unique buffernames with uniquify.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package uniquify
+  :straight (:type built-in)
+  :config
+  (setq uniquify-buffer-name-style 'forward))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org795a01e" class="outline-4">
+<h4 id="org795a01e">Time</h4>
+<div class="outline-text-4" id="text-org795a01e">
+<p>
+Display time as 24-hour format
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq display-time-24hr-format t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org84a8a2f" class="outline-4">
+<h4 id="org84a8a2f">Eldoc</h4>
+<div class="outline-text-4" id="text-org84a8a2f">
+<p>
+Some eldoc settings.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq eldoc-idle-delay 0.1)
+(diminish 'eldoc-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcbd0385" class="outline-4">
+<h4 id="orgcbd0385">Help-settings</h4>
+<div class="outline-text-4" id="text-orgcbd0385">
+<p>
+From <a href="https://emacsredux.com/blog/2014/06/18/quickly-find-emacs-lisp-sources/">Find-func</a>.
+Find function faster and jump to function directly.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-key 'help-command (kbd "C-l") 'find-library)
+(define-key 'help-command (kbd "C-k") 'find-function-on-key)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org62c61f3" class="outline-4">
+<h4 id="org62c61f3">Regular expressions</h4>
+<div class="outline-text-4" id="text-org62c61f3">
+<p>
+Use <code>string</code> as default syntax for <b>regexp-builder</b>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq reb-re-syntax 'string)
+(add-hook 'reb-mode-hook
+	  (lambda()
+	    (define-key reb-mode-map "C-c C-q" 'reb-quit)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc3e0c17" class="outline-4">
+<h4 id="orgc3e0c17">Info mode</h4>
+<div class="outline-text-4" id="text-orgc3e0c17">
+<p>
+Customizations for Info.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(bind-key "'" 'Info-up Info-mode-map)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org49eff9f" class="outline-4">
+<h4 id="org49eff9f">Narrowing</h4>
+<div class="outline-text-4" id="text-org49eff9f">
+<p>
+Enable narrowing.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page   'disabled nil)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0a3a9f8" class="outline-4">
+<h4 id="org0a3a9f8">User interface</h4>
+<div class="outline-text-4" id="text-org0a3a9f8">
+<p>
+No popup dialog.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(customize-set-variable 'use-dialog-box nil)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org50116ae" class="outline-3">
+<h3 id="org50116ae">Change yes-or-no to y-n</h3>
+<div class="outline-text-3" id="text-org50116ae">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Press y or n for yes or no
+(defalias 'yes-or-no-p 'y-or-n-p)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd96785b" class="outline-3">
+<h3 id="orgd96785b">Eshell</h3>
+<div class="outline-text-3" id="text-orgd96785b">
+<p>
+Use axtended shell.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setenv "PAGER" "cat")
+(bind-key "C-c RET" 'eshell)
+</pre>
+</div>
+<p>
+Use eshell built in functions for sudo. See <a href="https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes">this discussion</a> for details.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'em-tramp) ; to load eshell’s sudo
+  (require 'password-cache) ;Load password-cache
+  (setq eshell-prefer-lisp-functions t)
+  (setq eshell-prefer-lisp-variables t)
+  (setq password-cache t) ; enable password caching
+  (setq password-cache-expiry 3600) ; for one hour (time in secs)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org7645fdb" class="outline-3">
+<h3 id="org7645fdb">TRAMP</h3>
+<div class="outline-text-3" id="text-org7645fdb">
+<p>
+Use fakecygpty to login from Windows using openssh. See <a href="https://www.emacswiki.org/emacs/SshWithNTEmacs">https://www.emacswiki.org/emacs/SshWithNTEmacs</a> and <a href="https://github.com/d5884/fakecygpty">https://github.com/d5884/fakecygpty</a>.
+You must compile fakecygpty from <b>Cygwin</b>. Won't work in MSYS2, MINGW32/64. Copy <code>fakecygpty.exe</code> to <code>f_ssh.exe</code> and <code>f_scp.exe</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'tramp)
+(require 'fakecygpty)
+(when (eq system-type 'windows-nt)
+  (eval-after-load "tramp"
+    '(progn
+      (fakecygpty-activate)
+       (add-to-list 'tramp-methods
+		    (mapcar
+		     (lambda (x)
+		       (cond
+		       ((equal x "sshx") "cygssh")
+			((eq (car x) 'tramp-login-program) (list 'tramp-login-program "f_ssh"))
+			(t x)))
+		     (assoc "sshx" tramp-methods)))
+       (setq tramp-default-method "cygssh"))))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org1a3f643" class="outline-2">
+<h2 id="org1a3f643">Backup</h2>
+<div class="outline-text-2" id="text-org1a3f643">
+<p>
+Backup and autosave options, + history
+</p>
+</div>
+<div id="outline-container-org810289a" class="outline-3">
+<h3 id="org810289a">Backup of files</h3>
+<div class="outline-text-3" id="text-org810289a">
+<p>
+Saves backup of files in emacs-homedir. Keeps several versions of the files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; From https://github.com/magnars/.emacs.d
+;; Write backup files to own directory
+(setq backup-directory-alist
+      `((".*" . ,my/emacs-backup-dir)))
+
+;; Make backups of files, even when they're in version control
+(setq delete-old-versions t
+      version-control t
+      vc-make-backup-files t
+      backup-by-copying t
+      kept-old-versions 10
+      kept-new-versions 20
+      auto-save-interval 50
+      delete-by-moving-to-trash t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgee0d5b7" class="outline-3">
+<h3 id="orgee0d5b7">Save current position</h3>
+<div class="outline-text-3" id="text-orgee0d5b7">
+<p>
+Go back to where you last were in the file.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Save point position between sessions
+(use-package saveplace
+  :config
+  (save-place-mode 1)
+  (setq save-place-file (expand-file-name ".places" no-littering-var-directory)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfe0eed3" class="outline-3">
+<h3 id="orgfe0eed3">Save history</h3>
+<div class="outline-text-3" id="text-orgfe0eed3">
+<p>
+Save a history of edited files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq savehist-file (expand-file-name ".savehist" no-littering-var-directory))
+(savehist-mode 1)
+(setq
+ history-length 50
+ history-delete-duplicates t
+ savehist-save-minibuffer-history 1
+ savehist-additional-variables
+ '(kill-ring
+   search-ring
+   regexp-search-ring))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcf69dbd" class="outline-3">
+<h3 id="orgcf69dbd">Super-save</h3>
+<div class="outline-text-3" id="text-orgcf69dbd">
+<p>
+Save buffers when idle
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package super-save
+  :diminish super-save-mode
+  :custom
+  (add-to-list 'super-save-triggers 'ace-window)
+  (add-to-list 'super-save-triggers 'magit-status)
+  (add-to-list 'super-save-hook-triggers 'find-file-hook)
+  (super-save-auto-save-when-idle t)
+  (super-save-idle-duration 8)
+  (super-save-remote-files nil)
+  (super-save-exclude '(".gpg"))
+  (auto-save-default nil)
+  :config (super-save-mode t))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org952088b" class="outline-2">
+<h2 id="org952088b">Org-mode stuff</h2>
+<div class="outline-text-2" id="text-org952088b">
+<p>
+Read <a href="https://orgmode.org/worg/org-configs/org-customization-guide.html">Org Beginners Customization Guide</a> for info about this.
+</p>
+</div>
+<div id="outline-container-org052d35e" class="outline-3">
+<h3 id="org052d35e">Org-mode variables</h3>
+<div class="outline-text-3" id="text-org052d35e">
+</div>
+<div id="outline-container-org665e417" class="outline-4">
+<h4 id="org665e417">Other variables</h4>
+<div class="outline-text-4" id="text-org665e417">
+<p>
+Customize org-mode settings.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq org-use-sub-superscripts '{})
+(setq org-export-with-sub-superscripts '{})
+(setq org-export-coding-system 'utf-8)
+(setq org-export-backends '(ascii html latex odt org))
+(setq org-export-use-babel nil)
+(setq org-agenda-skip-deadline-prewarning-if-scheduled t)
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-skip-scheduled-if-deadline-is-shown "repeated-after-deadline")
+(setq org-agenda-include-diary nil)
+(setq org-agenda-span 14)
+(setq org-log-done 'time)
+(setq org-log-redeadline 'time)
+(setq org-log-reschedule 'time)
+(setq org-log-refile 'time)
+(setq org-log-into-drawer t)
+(setq org-enforce-todo-checkbox-dependencies t)
+(setq org-enforce-todo-dependencies t)
+(setq org-agenda-dim-blocked-tasks t)
+(setq org-fast-tag-selection-single-key t)
+(setq org-use-fast-todo-selection t)
+(setq org-enable-priority-commands nil)
+(setq org-src-preserve-indentation t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3c5696c" class="outline-4">
+<h4 id="org3c5696c">Refile</h4>
+<div class="outline-text-4" id="text-org3c5696c">
+<p>
+Refiling notes settings.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq org-refile-use-outline-path 'file)
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+(setq org-outline-path-complete-in-steps nil)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb01438f" class="outline-3">
+<h3 id="orgb01438f">Org-modules</h3>
+<div class="outline-text-3" id="text-orgb01438f">
+<p>
+To be able to execute code in org mode these should be loaded.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'ob-shell)
+(require 'ob-awk)
+(require 'ob-python)
+(require 'ob-C)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge99fb74" class="outline-3">
+<h3 id="orge99fb74">Org-files</h3>
+<div class="outline-text-3" id="text-orge99fb74">
+<p>
+My org-files for Todo-list and agenda. Store the filenames to use for agenda in a separate file.
+</p>
+</div>
+<div id="outline-container-orge4e12eb" class="outline-4">
+<h4 id="orge4e12eb">Keywords</h4>
+<div class="outline-text-4" id="text-orge4e12eb">
+<p>
+Keywords, keybindings and colors for headlines in org-mode.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq org-todo-keywords
+      '((sequence "TODO(t!)" "IN-PROGRESS(p!)" "NEXT(n!)" "WAITING(w@/!)" "|" "DONE(d@)")
+	(sequence "IDEA(i!)" "READ(r!)" "|")
+	(sequence "REPORT(z!)" "BUG(b!)" "|" "RESOLVED(x@)")
+	(sequence "|" "CANCELED(c@)" "DELEGATED(l@)" "SOMEDAY(s!)")))
+(setq org-todo-keyword-faces
+      '(("TODO" . (:foreground "cyan" :weight bold))
+	("IN-PROGRESS" . (:foreground "yellow" :weight bold))
+	("NEXT" . (:foreground "yellow" :weight bold))
+	("DONE" . (:foreground "green" :weight bold))
+	("WAITING" . (:foreground "red" :weight bold))
+	("SOMEDAY" . (:foreground "gray" :weight bold))
+	("IDEA" . (:foreground "dark orange" :weight bold))
+	("READ" . (:foreground "dark orange" :weight bold))
+	("BUG" . (:foreground "magenta" :weight bold))
+	("REPORT" . (:foreground "cyan" :weight bold))))
+(bind-key "C-c l" 'org-store-link)
+(bind-key "C-c a" 'org-agenda)
+(bind-key "C-c c" 'org-capture)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge0dd2c3" class="outline-4">
+<h4 id="orge0dd2c3">Org Archiving</h4>
+<div class="outline-text-4" id="text-orge0dd2c3">
+<p>
+Separate file for archiving stuff. Use datetree syntax.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq my/org-archive-file (expand-file-name "archive/archive.org" my/org-directory))
+(when (not (file-exists-p (file-name-directory my/org-archive-file)))
+      (make-directory (file-name-directory my/org-archive-file) t))
+(setq org-archive-location (concat my/org-archive-file "::datetree/* From %s"))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org464f474" class="outline-3">
+<h3 id="org464f474">Org custom agenda</h3>
+<div class="outline-text-3" id="text-org464f474">
+<p>
+For more info about this, see <a href="http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html">Org Agenda Custom Commands</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq org-agenda-custom-commands
+      '(("c" "Weekly schedule"
+	 ((agenda ""
+		  ((org-agenda-span 10)
+		   (org-agenda-start-on-weekday nil)
+		   (org-agenda-repeating-timestamp-show-all t)
+		   (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+	  (alltodo ""
+		   ((org-agenda-time-grid nil)
+		    (org-deadline-warning-days 90))))
+	 ((org-agenda-compact-blocks t)))
+
+	("d" "Upcoming dates"
+	 ((agenda ""
+		  ((org-agenda-entry-types '(:deadline))))
+	  (agenda ""
+		  ((org-agenda-entry-types '(:scheduled)))))
+	 ((org-agenda-time-grid nil)
+	  (org-agenda-start-on-weekday nil)
+	  (org-agenda-span 1)
+	  (org-deadline-warning-days 14)
+	  (org-agenda-time-grid nil)
+	  (org-agenda-compact-blocks t)))
+
+	("l" "Log for last week"
+	 ((agenda ""
+		  ((org-agenda-span 14)
+		   (org-agenda-start-day "-7d")
+		   (org-agenda-repeating-timestamp-show-all t)
+		   (org-agenda-include-inactive-timestamps t))))
+	 ((org-agenda-compact-blocks t)))
+
+	("h" . "Hemma|Huset")
+	("hh" "Agenda and Home-related tasks" tags-todo "Hemma|Huset"
+	 ((agenda "")
+	  (org-agenda-sorting-strategy '(priority-up effort-down))))
+	("hc" "Todo" tags-todo "Cyklar"
+	 ((agenda "")
+	  (todo "TODO|IN-PROGRESS")
+	  (org-agenda-sorting-strategy '(priority-up effort-down))))
+	("hf" "Todo" tags-todo "Fordon"
+	 ((agenda "")
+	  (todo "TODO|IN-PROGRESS")
+	  (org-agenda-sorting-strategy '(priority-up effort-down))))
+	("hu" "Todo" tags-todo "Huset"
+	 ((agenda "")
+	  (todo "TODO|IN-PROGRESS")
+	  (org-agenda-sorting-strategy '(priority-up effort-down))))
+
+	("w" "Agenda and Office-related tasks" tags-todo "work|office"
+	 ((agenda "")
+	  (todo "TODO|IN-PROGRESS")
+	  (org-agenda-sorting-strategy '(priority-up effort-down))))
+	))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org27d7810" class="outline-3">
+<h3 id="org27d7810">Org-templates</h3>
+<div class="outline-text-3" id="text-org27d7810">
+<p>
+A few templates to speed up capture.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(setq org-capture-templates
+      `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
+	 "* TODO %^{Description of todo}\nAdded: %U\n%?" :prepend t)
+
+	;; Multiline for blog-notes
+	("b" "Blog idea")
+	("be" "Emacs idea" entry (file+headline my/notes-file "Emacs")
+	 "* IDEA %^{Title} :Emacs:\nAdded: %U\n%?" :prepend t)
+	("bb" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
+	 "* IDEA %^{Title} :Blog:\nAdded: %U\n%?" :prepend t)
+
+	;;Links
+	("l" "Link" entry (file+headline my/notes-file "Links")
+	 "* [[%^C][%^{Title}]]  %^G\nAdded: %U\n%?" :prepend t)
+
+	;; Notes
+	("n" "Note" entry (file+headline my/notes-file "Notes")
+	 "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+
+	;; Idea
+	("i" "Idea" entry (file+headline my/notes-file "Someday")
+	 "* IDEA %^{Title}\nAdded: %U\n%?" :prepend t)
+
+	;; Journal
+	("j" "Journal" entry (file+olp+datetree my/diary-file)
+	 "* %^{Enter title}\n%U\n%?" :clock-in t :clock-resume t)
+
+	;; Multiline for watching stuff
+	("f" "Filmtips")
+	("fm" "Movies" entry (file+headline my/notes-file "Film")
+	 "* %^{Titel} :Film:\nAdded on %T\n%?" :prepend t)
+	("ft" "Video" entry (file+headline my/notes-file "Video")
+	 "* %^{Titel} :Video:Info:\nAdded on %T\n%^L\n%?" :prepend t)
+
+	;; Notes for code
+	("c" "Coding stuff")
+	("cc" "note with code" entry (file+headline my/notes-file "Code")
+	 "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n")
+	("cs" "note with code, source" entry (file+headline my/notes-file "Code")
+	 "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n%a\n")
+
+	;; Reports and bugs
+	("r" "Reporting")
+	("rb" "Bug" entry (file+headline my/notes-file "Reports")
+	 "* BUG %^{Description of bug} %^G\nAdded: %U\n%?")
+	("rr" "Report" entry (file+headline my/notes-file "Reports")
+	 "* REPORT %^{Description of report} %^G\nAdded: %U\n#+begin_example\n%^C\n#+end_example\n%?")
+	))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgaf9b84a" class="outline-3">
+<h3 id="orgaf9b84a">Localized calender</h3>
+<div class="outline-text-3" id="text-orgaf9b84a">
+<p>
+Use swedish calendar, from <a href="http://bigwalter.net/daniel/elisp/sv-kalender.el">Sv-kalender</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(load "sv-kalender")
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3365d8a" class="outline-3">
+<h3 id="org3365d8a">Org-Mobile</h3>
+<div class="outline-text-3" id="text-org3365d8a">
+<p>
+This copys files to MobileOrg dir where the MobileOrg app can read/write data.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org-mobile
+  :straight (:type built-in)
+  :init
+  (autoload 'org-mobile-pull "org-mobile" nil t)
+  (autoload 'org-mobile-push "org-mobile" nil t)
+  :config
+  (setq org-mobile-directory (expand-file-name "mobileorg/" my/emacs-shared-dir))
+  (setq org-mobile-inbox-for-pull (expand-file-name "sync.org" my/org-directory))
+  (setq org-mobile-files my/mobile-files)
+  (setq org-mobile-agendas 'default)
+  (setq org-mobile-force-id-on-agenda-items nil))
+</pre>
+</div>
+<p>
+A simple setup <a href="https://nakkaya.com/2010/03/19/org-mode-in-your-pocket-setting-up-mobileorg/">here</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgc757947" class="outline-3">
+<h3 id="orgc757947">Org-projects</h3>
+<div class="outline-text-3" id="text-orgc757947">
+<p>
+Publish my org-files to html-dir. <a href="http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html">Org-publish tutorial</a>
+Use backtick "`" and comma "," to use variable-expansion in the alist. See <a href="https://stackoverflow.com/questions/33353159/use-a-variable-to-define-an-optional-argument">StackoverFlow</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'ox-publish)
+
+(setq org-publish-timestamp-directory (expand-file-name ".org-timestamps/" user-emacs-directory))
+(setq org-publish-project-alist
+`(("org" :components ("org-notes" "org-static"))
+("org-notes"
+:base-directory ,my/org-directory
+:base-extension "org"
+:publishing-directory ,(concat my/onedrive-dir "emacs/html")
+:recursive t
+:publishing-function org-html-publish-to-html
+:headline-levels 4
+:auto-preamble t
+)
+("org-static"
+ :base-directory ,my/org-directory
+ :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+ :publishing-directory ,(concat my/onedrive-dir "emacs/html")
+ :recursive t
+ :publishing-function org-publish-attachment
+ )
+("OL-event"
+:base-directory ,(concat my/repo-dir "OL-Event/")
+:base-extension "org"
+:publishing-directory ,(concat my/repo-dir "OL-Event/")
+:publishing-function org-gfm-export-to-markdown
+:recursive t
+)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org98a0a77" class="outline-3">
+<h3 id="org98a0a77">Org exports</h3>
+<div class="outline-text-3" id="text-org98a0a77">
+</div>
+<div id="outline-container-orgd1ac8c3" class="outline-4">
+<h4 id="orgd1ac8c3">ox-reveal</h4>
+<div class="outline-text-4" id="text-orgd1ac8c3">
+<p>
+For presentations from org-mode. <a href="https://github.com/yjwen/org-reveal">Homepage</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-reveal
+  :load-path "vendor/org-reveal"
+  :after ox
+  :config
+  (setq org-reveal-root (concat "file://" (expand-file-name  "vendor/reveal.js" user-emacs-directory))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1ca6a23" class="outline-4">
+<h4 id="org1ca6a23">ox-hugo</h4>
+<div class="outline-text-4" id="text-org1ca6a23">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-hugo
+  :after ox)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6bd9a8f" class="outline-4">
+<h4 id="org6bd9a8f">Export GHF markdown</h4>
+<div class="outline-text-4" id="text-org6bd9a8f">
+<p>
+Github-flavoured markdown
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-gfm
+  :after ox)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3af6d15" class="outline-4">
+<h4 id="org3af6d15">Export Jira</h4>
+<div class="outline-text-4" id="text-org3af6d15">
+<p>
+Export org as Jira.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-jira
+  :after ox)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org51276af" class="outline-4">
+<h4 id="org51276af">Export Confluence</h4>
+<div class="outline-text-4" id="text-org51276af">
+<p>
+Export to Atlassian Confluence.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-confluence
+  :after ox)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org523d677" class="outline-4">
+<h4 id="org523d677">org2jekyll</h4>
+<div class="outline-text-4" id="text-org523d677">
+<p>
+To make it possible to write in org and publish as jekyll.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package org2jekyll)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0fa3ad8" class="outline-4">
+<h4 id="org0fa3ad8">Export mediawiki</h4>
+<div class="outline-text-4" id="text-org0fa3ad8">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-wk)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf356def" class="outline-4">
+<h4 id="orgf356def">Export Trac-wiki</h4>
+<div class="outline-text-4" id="text-orgf356def">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ox-trac)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc5d2b08" class="outline-4">
+<h4 id="orgc5d2b08">Export markdown</h4>
+<div class="outline-text-4" id="text-orgc5d2b08">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package auto-org-md
+  :after ox)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc3f036a" class="outline-3">
+<h3 id="orgc3f036a">Org tangle init files</h3>
+<div class="outline-text-3" id="text-orgc3f036a">
+<p>
+Untangle init files automatically when save with org-babel.
+From <a href="https://github.com/daviwil/emacs-from-scratch/blob/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1/init.el">Emacs From Scratch: Everything in Babel</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(defun my/org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name) my/emacs-orgfile)
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/org-babel-tangle-config)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org741d264" class="outline-2">
+<h2 id="org741d264">Language support</h2>
+<div class="outline-text-2" id="text-org741d264">
+<p>
+Add support for different programming languages and configuration files.
+</p>
+</div>
+<div id="outline-container-orgadfb5b4" class="outline-3">
+<h3 id="orgadfb5b4">Powershell mode</h3>
+<div class="outline-text-3" id="text-orgadfb5b4">
+<p>
+Powershell-mode is useful.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package powershell
+  :straight (powershell :fork t)
+  :commands powershell
+  :config
+  (setq powershell-eldoc-def-files (list (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
+  (if (eq system-type 'gnu/linux)
+      (setq powershell-location-of-exe "/usr/bin/pwsh")
+    (setq powershell-location-of-exe "pwsh.exe"))
+  (setq explicit-powershell\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-"))
+  (setq explicit-pwsh\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9f8608c" class="outline-3">
+<h3 id="org9f8608c">Dos-mode</h3>
+<div class="outline-text-3" id="text-org9f8608c">
+<p>
+Only in windows.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package bat-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb81da66" class="outline-3">
+<h3 id="orgb81da66">Markdown-mode</h3>
+<div class="outline-text-3" id="text-orgb81da66">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package markdown-mode
+  :commands
+    (markdown-mode gfm-mode)
+  :mode
+    (("README\\.md\\'" . gfm-mode)
+    ("\\.md\\'" . markdown-mode)
+    ("\\.markdown\\'" . markdown-mode))
+  :init
+    (setq markdown-command "multimarkdown")
+  :config
+    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org311387b" class="outline-3">
+<h3 id="org311387b">Markdown preview mode</h3>
+<div class="outline-text-3" id="text-org311387b">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package markdown-preview-mode
+  :commands markdown-preview)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2ceb3ba" class="outline-3">
+<h3 id="org2ceb3ba">Mediawiki</h3>
+<div class="outline-text-3" id="text-org2ceb3ba">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package mediawiki
+  :disabled
+  :config
+  (setq mediawiki-site-alist
+	(append
+	 '(("Charlottendal" "https://www.charlottendal.net/mwiki/" "username" "password" "Main Page"))
+	 mediawiki-site-alist)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc05431e" class="outline-3">
+<h3 id="orgc05431e">SSH-config</h3>
+<div class="outline-text-3" id="text-orgc05431e">
+<p>
+Add mode for configuring .ssh/config and other related to SSH.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ssh-config-mode
+:config
+ (add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
+ (add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
+ (add-to-list 'auto-mode-alist '("/known_hosts\\'"       . ssh-known-hosts-mode))
+ (add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
+ (add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
+)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcb1d78f" class="outline-3">
+<h3 id="orgcb1d78f">Git</h3>
+<div class="outline-text-3" id="text-orgcb1d78f">
+<p>
+Modes for editing git-files
+</p>
+</div>
+<div id="outline-container-org708c2ae" class="outline-4">
+<h4 id="org708c2ae">git-modes</h4>
+<div class="outline-text-4" id="text-org708c2ae">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package git-modes
+  :config
+  (add-to-list 'auto-mode-alist (cons "/.dockerignore\\'" 'gitignore-mode)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orge73b01c" class="outline-3">
+<h3 id="orge73b01c">Autohotkey-mode</h3>
+<div class="outline-text-3" id="text-orge73b01c">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ahk-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgffc3d8e" class="outline-3">
+<h3 id="orgffc3d8e">Yara-files</h3>
+<div class="outline-text-3" id="text-orgffc3d8e">
+<p>
+Mode that supports editing of Yara-files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package yara-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org449794c" class="outline-3">
+<h3 id="org449794c">Elastic search mode</h3>
+<div class="outline-text-3" id="text-org449794c">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package es-mode
+      :config
+  (add-to-list 'auto-mode-alist '("\\.es$" . es-mode)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb9e34c0" class="outline-3">
+<h3 id="orgb9e34c0">Logstash-mode</h3>
+<div class="outline-text-3" id="text-orgb9e34c0">
+<p>
+Use logstash-mode for conf-files in logstash-directories.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package logstash-conf
+  :mode  (("logstash.*\\.conf\\'" . logstash-conf-mode)
+	  ("pipeline.*\\.conf\\'" . logstash-conf-mode)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge04fda3" class="outline-3">
+<h3 id="orge04fda3">ini-mode</h3>
+<div class="outline-text-3" id="text-orge04fda3">
+<p>
+Windows ini-files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package ini-mode
+  :mode "\\.ini\\'")
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge0dfc11" class="outline-3">
+<h3 id="orge0dfc11">CSV</h3>
+<div class="outline-text-3" id="text-orge0dfc11">
+<p>
+Read csv-files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package csv-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org34ea476" class="outline-3">
+<h3 id="org34ea476">Docker file mode</h3>
+<div class="outline-text-3" id="text-org34ea476">
+<p>
+Support Dockerfile.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package dockerfile-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8052bc0" class="outline-3">
+<h3 id="org8052bc0">Docker compose</h3>
+<div class="outline-text-3" id="text-org8052bc0">
+<p>
+Support Docker Compose files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package docker-compose-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org563d9f0" class="outline-3">
+<h3 id="org563d9f0">Toml-Mode</h3>
+<div class="outline-text-3" id="text-org563d9f0">
+<p>
+Support .toml-files, eg for Hugo.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package toml-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1594e42" class="outline-3">
+<h3 id="org1594e42">X509</h3>
+<div class="outline-text-3" id="text-org1594e42">
+<p>
+Support for certificate files, with a hydra to navigate options.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package x509-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.cer\\'" . x509-mode))
+  (add-to-list 'auto-mode-alist '("\\.crt\\'" . x509-mode))
+  (add-to-list 'auto-mode-alist '("\\.crl\\'" . x509-mode))
+  (add-to-list 'auto-mode-alist '("\\.csr\\'" . x509-mode))
+  (add-to-list 'auto-mode-alist '("\\.pem\\'" . x509-mode))
+  (add-to-list 'auto-mode-alist '("\\.key\\'" . x509-mode))
+  (defhydra hydra-x509 (:color blue :columns 2)
+    "X509 commands"
+    ("a" x509-viewasn1 "View ASN1")
+    ("c" x509-viewcert "View certificate")
+    ("d" x509-viewdh "View DH")
+    ("k" x509-viewkey "View key")
+    ("r" x509-viewcrl "View CRL")
+    ("q" nil "cancel"))
+  :bind (:map x509-mode-map
+	      ("h" . hydra-x509/body))
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1866404" class="outline-3">
+<h3 id="org1866404">JSON-mode</h3>
+<div class="outline-text-3" id="text-org1866404">
+<p>
+Edit JSON-files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package json-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org53addf4" class="outline-3">
+<h3 id="org53addf4">javascript</h3>
+<div class="outline-text-3" id="text-org53addf4">
+<p>
+Add proxy .pac-files to javascript-mode.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '("\\.pac\\'" . javascript-mode))
+(add-to-list 'auto-mode-alist '("wpad\\.dat\\'" . javascript-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd6382de" class="outline-3">
+<h3 id="orgd6382de">C# and .NET</h3>
+<div class="outline-text-3" id="text-orgd6382de">
+</div>
+<div id="outline-container-orgc30cc5f" class="outline-4">
+<h4 id="orgc30cc5f">C#</h4>
+<div class="outline-text-4" id="text-orgc30cc5f">
+<p>
+Support for C#, C-sharp.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package csharp-mode
+  :config
+  (defun my/csharp-hook()
+    (electric-pair-local-mode 1))
+  :hook (csharp-mode . my/csharp-hook))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org095d437" class="outline-4">
+<h4 id="org095d437">Dotnet</h4>
+<div class="outline-text-4" id="text-org095d437">
+<p>
+Interface to dotnet.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package dotnet
+  :hook (csharp-mode . dotnet-mode))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org89468de" class="outline-4">
+<h4 id="org89468de">.NET-files</h4>
+<div class="outline-text-4" id="text-org89468de">
+<p>
+Support for dotnet-files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package csproj-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge4419ce" class="outline-4">
+<h4 id="orge4419ce">Go language</h4>
+<div class="outline-text-4" id="text-orge4419ce">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package go-mode)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf8b673e" class="outline-3">
+<h3 id="orgf8b673e">LISP</h3>
+<div class="outline-text-3" id="text-orgf8b673e">
+</div>
+<div id="outline-container-org427220f" class="outline-4">
+<h4 id="org427220f">Common LISP</h4>
+<div class="outline-text-4" id="text-org427220f">
+<p>
+Install C Lisp helper
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package slime
+  :config
+  (setq inferior-lisp-program "/usr/bin/sbcl"))
+
+(use-package slime-company)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org90bf8f5" class="outline-3">
+<h3 id="org90bf8f5">LUA</h3>
+<div class="outline-text-3" id="text-org90bf8f5">
+<p>
+For nmap script-engine files.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package lua-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+  (add-to-list 'auto-mode-alist '("\\.nse$" . lua-mode))
+  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge9141a9" class="outline-3">
+<h3 id="orge9141a9">Editorconfig</h3>
+<div class="outline-text-3" id="text-orge9141a9">
+<p>
+To get automatic settings for git repositories. <a href="https://editorconfig.org/">https://editorconfig.org/</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package editorconfig
+  :hook (prog-mode . editorconfig-mode))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org36f168c" class="outline-2">
+<h2 id="org36f168c">Help systems</h2>
+<div class="outline-text-2" id="text-org36f168c">
+</div>
+<div id="outline-container-org5a5cf5f" class="outline-3">
+<h3 id="org5a5cf5f">Package-archives</h3>
+<div class="outline-text-3" id="text-org5a5cf5f">
+<p>
+Use Melpa only to list packages and read about them.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(require 'package)
+(add-to-list 'package-archives
+  '("melpa" .		"https://melpa.org/packages/") t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org0d1d25b" class="outline-3">
+<h3 id="org0d1d25b">Cheatsheet</h3>
+<div class="outline-text-3" id="text-org0d1d25b">
+<p>
+My own cheatsheet.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package cheatsheet
+  :bind (("C-h x" . cheatsheet-show)
+	 :map cheatsheet-mode-map
+	 ("C-q" . kill-this-buffer)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9a8eb6d" class="outline-3">
+<h3 id="org9a8eb6d">Cheat.sh</h3>
+<div class="outline-text-3" id="text-org9a8eb6d">
+<p>
+Check out stuff on <a href="https://cheat.sh/">https://cheat.sh/</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package cheat-sh
+  :commands cheat-sh)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga6a664d" class="outline-3">
+<h3 id="orga6a664d">Free keys</h3>
+<div class="outline-text-3" id="text-orga6a664d">
+<p>
+To list what keys are free in different modes. Very useful.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package free-keys
+  :commands free-keys)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3105339" class="outline-3">
+<h3 id="org3105339">Info-colors</h3>
+<div class="outline-text-3" id="text-org3105339">
+<p>
+Colorisation of Info-text.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package info-colors
+  :hook (Info-selection . info-colors-fontify-node)
+  :custom-face
+  (info-colors-lisp-code-block ((t (:foreground "LightSkyBlue" :weight normal))))
+  (info-xref ((t (:foreground "DeepSkyBlue" :weight normal))))
+  (Info-quoted ((t (:foreground "SkyBlue" :weight normal)))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org46d436c" class="outline-3">
+<h3 id="org46d436c">helpful</h3>
+<div class="outline-text-3" id="text-org46d436c">
+<p>
+A more helpful package for Emacs help.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package helpful
+  :commands (counsel-describe-function-function
+	     counsel-describe-variable-function)
+  :custom-face (helpful-heading ((t (:foreground "GreenYellow" :weight bold))))
+  :bind (("C-h C" . #'helpful-command)
+	 ("C-c C-h" . #'helpful-at-point)
+	 ("C-h a" . #'helpful-symbol)
+	 ([remap describe-key] . helpful-key)
+	 ([remap describe-variable] . counsel-describe-variable)
+	 ([remap describe-function] . counsel-describe-function)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgde87323" class="outline-2">
+<h2 id="orgde87323">External utilities</h2>
+<div class="outline-text-2" id="text-orgde87323">
+</div>
+<div id="outline-container-org4e3fd08" class="outline-3">
+<h3 id="org4e3fd08">hackernews</h3>
+<div class="outline-text-3" id="text-org4e3fd08">
+<p>
+Read hackernews in emacs.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package hackernews
+  :commands hackernews
+  :custom-face
+  (hackernews-link ((t (:foreground "gold" :weight normal))))
+  (hackernews-link-visited ((t (:foreground "LimeGreen" :weight normal))))
+  :config
+  (customize-set-variable 'hackernews-visited-links-file (concat my/emacs-shared-dir "shared/visited-links.el"))
+  (customize-set-variable 'hackernews-items-per-page 60)
+  (customize-set-variable 'hackernews-item-format "%-7s%-80t %15c\n"))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org15d6220" class="outline-3">
+<h3 id="org15d6220">StackExchange</h3>
+<div class="outline-text-3" id="text-org15d6220">
+<p>
+Query Stackexchange from emacs.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package sx
+  :config
+  (setq sx-cache-directory (expand-file-name "sx/cache/" no-littering-var-directory))
+
+  (defhydra hydra-sx (:color blue :columns 4)
+    "Stack Exchange"
+    ("t" sx-tab-all-questions "All questions")
+    ("i" sx-inbox "Inbox")
+    ("o" sx-open-link "Open link")
+    ("u" sx-tab-unanswered-my-tags "Unanswered")
+    ("a" sx-ask "Ask")
+    ("s" sx-search "Search")
+    ("q" nil "Cancel"))
+
+  :bind ("C-c x" . hydra-sx/body))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org754544c" class="outline-3">
+<h3 id="org754544c">Twitter</h3>
+<div class="outline-text-3" id="text-org754544c">
+<p>
+Read tweets in emacs, turned out really easy to setup. The <a href="https://www.emacswiki.org/emacs/TwitteringMode">manual</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package twittering-mode
+  :commands twit
+  :config
+  (setq twittering-use-master-password t
+	twittering-private-info-file (expand-file-name ".twittering-mode.gpg" my/emacs-shared-dir)
+	twittering-user-id-db-file (expand-file-name "twitter/userdb.gz" no-littering-var-directory)
+	twittering-icon-storage-file (expand-file-name "twitter/icons.gz" no-littering-var-directory)
+	twittering-use-icon-storage t
+	twittering-icon-storage-limit 1000
+	twittering-icon-mode t
+	twittering-reverse-mode t
+	twittering-display-remaining t
+	twittering-convert-fix-size 48
+	twittering-number-of-tweets-on-retrieval 100
+	twittering-timer-interval 300
+	twittering-url-show-status nil
+	twittering-edit-skeleton 'inherit-any))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbba75e3" class="outline-3">
+<h3 id="orgbba75e3">wiki-summary</h3>
+<div class="outline-text-3" id="text-orgbba75e3">
+<p>
+Use wiki search from emacs
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package wiki-summary
+  :commands wiki-summary)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdc3d82c" class="outline-3">
+<h3 id="orgdc3d82c">XKCD</h3>
+<div class="outline-text-3" id="text-orgdc3d82c">
+<p>
+Show images from xkcd. With hydra.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(use-package xkcd
+  :commands xkcd
+  :config
+  (defhydra hydra-xkcd (:color pink :hint nil)
+    "
+ ^Navigate^              ^Move^             ^Extra^
+ -----------------------------------------------------------
+ _b_: Browse             ^_k_ ↑^            _e_: Explanation
+ _r_: Random         ← _h_    _l_ →         _c_: Copy link
+ _g_: Update             ^_j_ ↓^            _a_: Alternate text
+ _G_: Get                  ^^             ^^_q_: Quit
+ "
+    ("b"       xkcd-open-browser)
+    ("r"       xkcd-rand)
+    ("a"       xkcd-alt-text)
+    ("g"       xkcd-get-latest)
+    ("S-g"     xkcd-get)
+    ("G"       xkcd-get)
+    ("j"       scroll-up-command)
+    ("SPC"     scroll-up-command)
+    ("k"       scroll-down-command)
+    ("S-SPC"   scroll-up-command)
+    ("&lt;left&gt;"  xkcd-prev)
+    ("h"       xkcd-prev)
+    ("&lt;right&gt;" xkcd-next)
+    ("l"       xkcd-next)
+    ("e"       xkcd-open-explanation-browser)
+    ("c"       xkcd-copy-link)
+    ("q"       xkcd-kill-buffer :color blue)
+    )
+  :bind (:map xkcd-mode-map
+	      ("h" . hydra-xkcd/body))
+  :hook (xkcd-mode . hydra-xkcd/body))
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org632e479" class="outline-2">
+<h2 id="org632e479">Server</h2>
+<div class="outline-text-2" id="text-org632e479">
+<p>
+Start emacs as server
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(server-start)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org7ab04ca" class="outline-2">
+<h2 id="org7ab04ca">Links</h2>
+<div class="outline-text-2" id="text-org7ab04ca">
+</div>
+<div id="outline-container-org0b1c304" class="outline-3">
+<h3 id="org0b1c304">Manuals</h3>
+<div class="outline-text-3" id="text-org0b1c304">
+<ul class="org-ul">
+<li><a href="http://orgmode.org/manual/">http://orgmode.org/manual/</a> Org mode manual</li>
+<li><a href="https://www.emacswiki.org/emacs/LoadPath">https://www.emacswiki.org/emacs/LoadPath</a></li>
+<li><a href="https://www.gnu.org/software/emacs/manual/html_node/">https://www.gnu.org/software/emacs/manual/html_node/</a></li>
+</ul>
+</div>
+<div id="outline-container-org4b97f5f" class="outline-4">
+<h4 id="org4b97f5f">Magit manual</h4>
+<div class="outline-text-4" id="text-org4b97f5f">
+<ul class="org-ul">
+<li><a href="https://www.emacswiki.org/emacs/Magit">https://www.emacswiki.org/emacs/Magit</a></li>
+<li><a href="https://magit.vc/manual/magit/Getting-started.html">https://magit.vc/manual/magit/Getting-started.html</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org253435d" class="outline-4">
+<h4 id="org253435d">Use-package</h4>
+<div class="outline-text-4" id="text-org253435d">
+<ul class="org-ul">
+<li><a href="https://github.com/jwiegley/use-package">https://github.com/jwiegley/use-package</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org7951dd2" class="outline-3">
+<h3 id="org7951dd2">Generell info</h3>
+<div class="outline-text-3" id="text-org7951dd2">
+<ul class="org-ul">
+<li><a href="http://dotemacs.de/">http://dotemacs.de/</a></li>
+<li><a href="http://ergoemacs.org/">http://ergoemacs.org/</a></li>
+<li><a href="http://pragmaticemacs.com/">http://pragmaticemacs.com/</a></li>
+<li><a href="http://endlessparentheses.com/">http://endlessparentheses.com/</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1a6fa17" class="outline-3">
+<h3 id="org1a6fa17">Books</h3>
+<div class="outline-text-3" id="text-org1a6fa17">
+<ul class="org-ul">
+<li><a href="https://www.masteringemacs.org/">Mastering emacs</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org668dbfb" class="outline-3">
+<h3 id="org668dbfb">Examples</h3>
+<div class="outline-text-3" id="text-org668dbfb">
+<ul class="org-ul">
+<li><a href="https://github.com/eschulte/emacs24-starter-kit">https://github.com/eschulte/emacs24-starter-kit</a>.</li>
+<li><a href="https://github.com/credmp/emacs-config">https://github.com/credmp/emacs-config</a></li>
+<li><a href="https://gitlab.com/buildfunthings/emacs-config">https://gitlab.com/buildfunthings/emacs-config</a>.</li>
+<li><a href="https://github.com/magnars/.emacs.d">https://github.com/magnars/.emacs.d</a></li>
+<li><a href="https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org">https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org</a></li>
+<li><a href="http://pages.sachachua.com/.emacs.d/Sacha.html#org8fde6ab">http://pages.sachachua.com/.emacs.d/Sacha.html#org8fde6ab</a></li>
+<li><a href="https://coldnew.github.io/coldnew-emacs/init.el.html">https://coldnew.github.io/coldnew-emacs/init.el.html</a></li>
+<li><a href="http://endlessparentheses.com/new-in-package-el-in-emacs-25-1-user-selected-packages.html">http://endlessparentheses.com/new-in-package-el-in-emacs-25-1-user-selected-packages.html</a></li>
+<li><a href="http://ergoemacs.org/emacs/emacs_installing_packages.html">http://ergoemacs.org/emacs/emacs_installing_packages.html</a></li>
+<li><a href="https://github.com/howardabrams/dot-files/blob/master/emacs.org">https://github.com/howardabrams/dot-files/blob/master/emacs.org</a></li>
+<li><a href="http://whattheemacsd.com/">http://whattheemacsd.com/</a></li>
+<li><a href="https://github.com/technomancy/better-defaults">https://github.com/technomancy/better-defaults</a></li>
+<li><a href="http://wenshanren.org/?p=334">http://wenshanren.org/?p=334</a> Org-mode example</li>
+<li><a href="https://ogbe.net/emacsconfig.html">https://ogbe.net/emacsconfig.html</a> Another emacs org-mode example</li>
+<li><a href="http://dotemacs.de/multiemacs.html">http://dotemacs.de/multiemacs.html</a> How to separate config on different systems</li>
+<li><a href="https://www.emacswiki.org/emacs/RobertAdesamConfig">https://www.emacswiki.org/emacs/RobertAdesamConfig</a></li>
+<li><a href="https://caolan.org/dotfiles/emacs.html">https://caolan.org/dotfiles/emacs.html</a></li>
+<li><a href="https://mrblog.nl/emacs/config.html">https://mrblog.nl/emacs/config.html</a></li>
+<li><a href="http://bnbeckwith.com/bnb-emacs/">http://bnbeckwith.com/bnb-emacs/</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgc4b541d" class="outline-3">
+<h3 id="orgc4b541d">Information</h3>
+<div class="outline-text-3" id="text-orgc4b541d">
+<ul class="org-ul">
+<li><a href="https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html">https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html</a></li>
+<li><a href="http://orgmode.org/worg/org-tutorials/orgtutorial_dto.html">http://orgmode.org/worg/org-tutorials/orgtutorial_dto.html</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7b2b96d" class="outline-3">
+<h3 id="org7b2b96d">Performance</h3>
+<div class="outline-text-3" id="text-org7b2b96d">
+<ul class="org-ul">
+<li><a href="https://emacs.stackexchange.com/questions/2286/what-can-i-do-to-speed-up-my-start-up">https://emacs.stackexchange.com/questions/2286/what-can-i-do-to-speed-up-my-start-up</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7d29478" class="outline-3">
+<h3 id="org7d29478">Videos</h3>
+<div class="outline-text-3" id="text-org7d29478">
+<ul class="org-ul">
+<li><a href="https://youtu.be/I28jFkpN5Zk">https://youtu.be/I28jFkpN5Zk</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4191a35" class="outline-2">
+<h2 id="org4191a35">The end</h2>
+<div class="outline-text-2" id="text-org4191a35">
+<p>
+Just record a last message, to know that the whole file has been loaded.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; Garbage collector - decrease threshold
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 5 1024 1024))))
+
+;; Turn of debug
+(setq debug-on-error nil)
+(setq debug-on-quit nil)
+
+;;; Measure the startup time
+(message "*** Finished emacs @ %s in %s" (my/format-time (current-time)) (my/startup-timer))
+(message "*** This is the last line of the config. Startup time=%3.5s ***" (emacs-init-time))
+
+(provide 'init)
+;;; init.el ends here
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2022-03-12 Sat 16:40</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

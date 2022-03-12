@@ -1,0 +1,29 @@
+* emacs.d
+My universal emacs configuration directory.
+- [[./customize.el][customize.el]]
+- [[./emacs.org][emacs.org]]
+- [[./README.org][README]]
+
+Loading /emacs.org/ in emacs and running ~org-babel-tangle~ generates both ~early-init.el~ and ~init.el~. This is based on information from *System Crafters Emacs config, Emacs from scratch*, especially [[https://github.com/daviwil/emacs-from-scratch/tree/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1][Configure everything with Org Babel]].
+** Linux info
+Clone this to a folder, I'm using =~/.config/.emacs.default= nowadays since I also use *Chemacs2*, but default for emacs is =~/.emacs.d= or =~/.config/emacs=.
+The code for my linux setup is in [[https://github.com/sdaaish/dotfiles][dotfiles]].
+#+begin_src sh
+git clone https://github.com/sdaaish/emacs.d ~/.emacs.d
+#+end_src
+** Windows info
+Create symlinks that points to the repo, or clone repo to ~%AppData%\.emacs.d~
+Normally emacs looks in ~%AppData%~, but make a link in ~%UserProfile%~ to be sure. Some programs set the ~HOME~-variable to the same as ~%UserProfile%~.
+You probably need to run these commands as a privileged user.
+
+Nowadays I use *Chemacs2* also in Windows and therefore I install the config in ~%USERPFOFILE%\.config\emacs.default~. This setup is in [[https://github.com/sdaaish/windotfiles][windotfiles]].
+*** Powershell
+#+begin_src powershell
+New-Item -Path ~ -Value <path-to-the-emacs.d> -Name .emacs.d -ItemType SymbolicLink
+New-Item -Path $AppData -Value <path-to-the-emacs.d> -Name .emacs.d -ItemType SymbolicLink
+#+end_src
+*** Cmd
+#+begin_src
+mklink /d %AppData%\.emacs.d path-to-git-repo\emacs.d
+mklink /d %UserProfile%\.emacs.d path-to-git-repo\emacs.d
+#+end_src
