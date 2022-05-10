@@ -15,7 +15,7 @@
 #+HTML_CONTAINER: div
 #+CREATOR: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)
 #+SETUPFILE: vendor/org-html-themes/org/theme-readtheorg-local.setup
-#+HTML_HEAD: <style>pre.src-emacs-lisp{background:#131313;} </style>
+#+HTML_HEAD: <style>pre.src{background:#131313;} </style>
 #+HTML_HEAD: <style> #content{max-width:1800px;}</style>
 #+HTML_HEAD: <style> p{max-width:800px;}</style>
 #+HTML_HEAD: <style> li{max-width:800px;}</style
@@ -128,8 +128,10 @@ Bootstrap straight.
 Install org mode and contrib.
 #+begin_src emacs-lisp
 ;; Install latest version of org and org-plus-contrib
-(use-package org
-  :straight org-contrib)
+(use-package org)
+(use-package org-contrib
+  :straight (org-contrib :type git :includes (ob-arduino ob-clojure-literate ob-csharp ob-eukleides ob-fomus ob-julia ob-mathematica ob-mathomatic ob-oz ob-php ob-redis ob-sclang ob-smiles ob-spice ob-stata ob-tcl ob-vbnet ol-bookmark ol-elisp-symbol ol-git-link ol-man ol-mew ol-notmuch ol-vm ol-wl org-annotate-file org-attach-embedded-images org-bibtex-extras org-checklist org-choose org-collector org-contacts org-contribdir org-depend org-effectiveness org-eldoc org-eval org-eval-light org-expiry org-interactive-query org-invoice org-learn org-license org-mac-iCal org-mac-link org-mairix org-notify org-panel org-passwords org-registry org-screen org-screenshot org-secretary org-static-mathjax org-sudoku orgtbl-sqlinsert org-toc org-track org-velocity org-wikinodes ox-bibtex ox-confluence ox-deck ox-extra ox-freemind ox-groff ox-koma-letter ox-rss ox-s5 ox-taskjuggler) :repo "https://git.sr.ht/~bzg/org-contrib" :files (:defaults "lisp/*.el")
+                         :fork (:host github :repo "sdaaish/org-contrib")))
 #+end_src
 * Variables
 Setting variables and constants for my directories and files.
