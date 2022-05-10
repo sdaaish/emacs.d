@@ -31,6 +31,7 @@
 (require 'ox-publish)
 (setq org-export-html-validation-link nil)
 (setq org-html-inline-images t)
+(setq org-html-head-include-scripts t)
 
 ;; Publish org-files
 (setq org-publish-project-alist
