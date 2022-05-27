@@ -1133,7 +1133,7 @@ No mice!
 Help to keep config clean.
 #+begin_src emacs-lisp
 (use-package ws-butler
-:hook ((prog-mode org-mode) . ws-butler-mode))
+  :hook ((prog-mode org-mode conf-mode) . ws-butler-mode))
 #+end_src
 * Private and local stuff
 ** Load private stuff
@@ -1654,16 +1654,17 @@ Use powerline in the message bar.
 ** Customisations
 *** Initial settings
 #+BEGIN_SRC emacs-lisp
-  (setq-default major-mode 'text-mode)
-  (line-number-mode t)
-  (column-number-mode t)
-  (transient-mark-mode t)
-  (show-paren-mode t)
-  (setq-default line-spacing 1)
-  (setq-default show-trailing-whitespace nil)
-  (setq-default indicate-empty-lines t)
-  (setq apropos-do-all t)
-  (global-subword-mode t)
+(setq-default major-mode 'text-mode)
+(line-number-mode t)
+(column-number-mode t)
+(transient-mark-mode t)
+(show-paren-mode t)
+(customize-set-variable 'show-paren-style 'mixed)
+(setq-default line-spacing 1)
+(setq-default show-trailing-whitespace nil)
+(setq-default indicate-empty-lines t)
+(customize-set-variable 'apropos-do-all t)
+(global-subword-mode t)
 #+END_SRC
 *** Indents and tabs
 #+BEGIN_SRC emacs-lisp
@@ -1825,7 +1826,7 @@ Hippie expands text automagically.
 *** Abbrev mode
 Abbrev autocorrects words.
 #+begin_src emacs-lisp
-(abbrev-mode t)
+(setq-default abbrev-mode t)
 #+end_src
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
