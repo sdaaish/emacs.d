@@ -821,7 +821,7 @@ This was slow before, in emacs 25.1, but seems to work now in version 25.2.
       ("p" better-shell-for-projectile-root "Shell for Projectile root")
       ("q" nil "cancel")
       ("RET" nil))
-    :bind ("C-c s" . hydra-better-shell/body))
+    :bind ("C-c S" . hydra-better-shell/body))
 #+END_SRC
 ** Copy-as-format
 Copy with formatting.
@@ -1050,6 +1050,12 @@ Use ~ag~ to search for stuff. Requires ~silversearcher-ag~ to be installed in th
 #+begin_src emacs-lisp
   (use-package ag
     :commands counsel-ag)
+#+end_src
+** Ripgrep
+Use ripgrep to search for files. See [[https://rgel.readthedocs.io/][Manual]].
+#+begin_src emacs-lisp
+(use-package rg
+  :config (rg-enable-default-bindings))
 #+end_src
 ** Macrostep
 To check the expanded macro. Useful with ~use-package~.
@@ -1344,22 +1350,24 @@ Group buffers based on projectile.
 These are really useful packages. http://oremacs.com/swiper/
 Replaced IDO with Ivy.
 #+BEGIN_SRC emacs-lisp
-  (use-package ivy
-    :diminish
-    :config
-    (ivy-mode 1)
-    (setq	ivy-use-virtual-buffers t
-          ivy-count-format "(%d/%d) "
-          enable-recursive-minibuffers t)
-    :bind
-    ("C-x C-f" . counsel-find-file)
-    ("C-c C-S-F" . counsel-recentf)
-    ("C-c C-S-R" . ivy-resume)
-    ("C-s" . swiper)
-    ("C-r" . swiper)
-    ("C-c g" . counsel-git)
-    ("C-c j" . counsel-git-grep)
-    ("C-c k" . counsel-ag))
+(use-package ivy
+  :diminish
+  :config
+  (ivy-mode 1)
+  (setq	ivy-use-virtual-buffers t
+        ivy-count-format "(%d/%d) "
+        enable-recursive-minibuffers t)
+  :bind
+  ("C-x C-f" . counsel-find-file)
+  ("C-c C-S-F" . counsel-recentf)
+  ("C-c C-S-R" . ivy-resume)
+  ("C-s" . swiper)
+  ("C-r" . swiper)
+  ("C-c g" . counsel-git)
+  ("C-c j" . counsel-git-grep)
+  ("C-c k" . counsel-ag)
+  ("C-c r" . counsel-rg)
+  ("C-c G" . counsel-google))
 #+end_src
 ** Amx
 Use ~amx~ instead of ~smex~ for smart executionlist. But keep the old save-filename for now.
