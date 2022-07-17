@@ -1035,7 +1035,8 @@ Delete whitespace more efficiently.
 #+BEGIN_SRC emacs-lisp
 (use-package hungry-delete
 :config
-(global-hungry-delete-mode t))
+(global-hungry-delete-mode t)
+:custom (hungry-delete-except-modes '(minibuffer-mode)))
 #+END_SRC
 ** avy
 Jump to any character.
@@ -1391,16 +1392,16 @@ Use ~amx~ instead of ~smex~ for smart executionlist. But keep the old save-filen
 #+end_src
 ** Counsel
 #+begin_src emacs-lisp
-  (use-package counsel
-    :diminish
-    :config
-    (setq counsel-describe-function-function #'helpful-callable
-          counsel-describe-variable-function #'helpful-variable)
-    (counsel-mode 1)
-    :bind
-    ("M-x" . counsel-M-x)
-    ("C-h f" . counsel-describe-function)
-    ("C-h v" . counsel-describe-variable))
+(use-package counsel
+  :diminish
+  :config
+  (setq counsel-describe-function-function #'helpful-callable
+        counsel-describe-variable-function #'helpful-variable)
+  (counsel-mode 1)
+  :bind
+  ("M-x" . counsel-M-x)
+  ("C-h f" . counsel-describe-function)
+  ("C-h v" . counsel-describe-variable))
 #+end_src
 ** Ivy hydra
 #+begin_src emacs-lisp
@@ -1755,21 +1756,21 @@ Spellchecking. I use Hunspell.
 *** Dired customizations
 Changes for local keyboard.
 #+begin_src emacs-lisp
-  (use-package dired
-    :straight (:type built-in)
-    :commands dired
-    :bind (:map dired-mode-map
-                ("'" . diredp-up-directory-reuse-dir-buffer)))
+(use-package dired
+  :straight (:type built-in)
+  :hook ( dired-mode . dired-hide-details-mode))
 #+end_src
-*** Dired+
-Use dired+ to not generate more buffers.
-#+BEGIN_SRC emacs-lisp
-  (use-package dired+
-    :straight (:type built-in)
-    :after dired
-    :config
-    (diredp-toggle-find-file-reuse-dir 1))
-#+END_SRC
+*** Dired-single
+Use this package to reuse the dired buffers.
+#+begin_src emacs-lisp
+(use-package dired-single
+  :bind (("C-x d" . dired-single-magic-buffer)
+         ([remap dired-find-file] . dired-single-buffer)
+         ([remap dired-mouse-find-file-other-window] . dired-single-buffer-mouse)
+         ([remap dired-up-directory] . dired-single-up-directory)
+         (:map dired-mode-map
+               ("'" . dired-single-up-directory))))
+#+end_src
 *** No beeps
 #+BEGIN_SRC emacs-lisp
 ;;No beep
