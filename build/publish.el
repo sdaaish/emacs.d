@@ -41,6 +41,9 @@
          :publishing-directory "../"
          :publishing-function org-html-publish-to-html
          :recursive nil
+         :html-link-home "/"
+         :html-head-include-default-style nil
+         :html-head-include-scripts nil
          )))
 (org-publish-project "emacs")
 (kill-emacs)
