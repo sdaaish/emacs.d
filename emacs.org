@@ -1265,49 +1265,63 @@ Set mark-command for Windows env
 Use ibuffer for buffers. Sort them accordingly. ibuffer is a built in command but use use-package for simpler configuration.
 ~projectile-ibuffer~ is also available with projectile.
 #+BEGIN_SRC emacs-lisp
-  (use-package ibuffer
-    :straight (:type built-in)
-    :bind ("C-x C-b" . ibuffer)
-    :config
-    (setq ibuffer-saved-filter-groups
-          (quote (("default"
-                   ("dired" (mode . dired-mode))
-                   ("shell" (or
-                             (mode . eshell-mode)
-                             (mode . shell-mode)))
-                   ("powershell" (mode . powershell-mode))
-                   ("code" (mode . prog-mode))
-                   ("magit" (or
-                             (name . "^magit")
-                             (name . "\\*magithub.*")))
-                   ("emacs" (or
-                             (name . "^\\*scratch\\*$")
-                             (name . "^\\*Messages\\*$")))
-                   ("Tramp" (or (filename . "^\\/scp:")
-                                (name . "^\\*tramp")))
-                   ("iBuffer" (mode . ibuffer-mode))
-                   ("Gists" (name . "^\\*gist.*")))
-                  ("Help"
-                   ("Man" (mode . Man-mode))
-                   ("Help" (or (name . "\\*Help\\*")
-                               (name . "\\*Apropos\\*")
-                               (name . "\\*info\\*")
-                               (mode . help-mode)))
-                   )
-                  ("Org"
-                   ("Org" (or
-                           (mode . org-mode)
-                           (name . "^\\*Org Agenda\\*$")))
-                   ))))
-    (setq ibuffer-show-empty-filter-groups nil)
-    (setq ibuffer-expert t)
-    :hook (ibuffer-mode .
-                        (lambda ()
-                          (ibuffer-auto-mode 1)
-                          (ibuffer-switch-to-saved-filter-groups "default")
-                          (unless (eq ibuffer-sorting-mode 'alphabetic)
-                            (ibuffer-do-sort-by-alphabetic))))
-    )
+(use-package ibuffer
+  :straight (:type built-in)
+  :bind ("C-x C-b" . ibuffer)
+  :config
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("Dired" (mode . dired-mode))
+                 ("Shell" (or
+                           (mode . eshell-mode)
+                           (mode . shell-mode)))
+                 ("PowerShell" (mode . powershell-mode))
+                 ("code" (mode . prog-mode))
+                 ("Magit" (or
+                           (name . "^magit")
+                           (name . "\\*magithub.*")))
+                 ("Emacs" (or
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")
+                           (mode . emacs-lisp-mode)))
+                 ("Errors" (or
+                            (name . ".*error*")
+                            (name . ".*[wW]arning")
+                            (mode . special-mode)))
+                 ("Tramp" (or (filename . "^\\/scp:")
+                              (name . "^\\*tramp")))
+                 ("iBuffer" (mode . ibuffer-mode))
+                 ("Gists" (name . "^\\*gist.*"))
+                 ("Org" (or
+                         (mode . org-mode)
+                         (name . "^\\*Org Agenda\\*$")))
+                 ("Help" (or (name . "\\*Help\\*")
+                             (name . "\\*Apropos\\*")
+                             (name . "\\*info\\*")
+                             (mode . help-mode)
+                             (mode . helpful-mode))))
+                ("Help"
+                 ("Man" (mode . man-mode))
+                 ("Help" (or (name . "\\*Help\\*")
+                             (name . "\\*Apropos\\*")
+                             (name . "\\*info\\*")
+                             (mode . help-mode)
+                             (mode . helpful-mode)))
+                 ("Magit" (name . "^magit"))
+                 ("dired" (mode . dired-mode)))
+                ("Org"
+                 ("Org" (or
+                         (mode . org-mode)
+                         (name . "^\\*Org Agenda\\*$")))))))
+  (customize-set-variable 'ibuffer-show-empty-filter-groups nil)
+  (customize-set-variable 'ibuffer-expert t)
+  (customize-set-variable 'ibuffer-use-other-window t)
+  :hook (ibuffer-mode .
+                      (lambda ()
+                        (ibuffer-auto-mode 1)
+                        (ibuffer-switch-to-saved-filter-groups "default")
+                        (unless (eq ibuffer-sorting-mode 'alphabetic)
+                          (ibuffer-do-sort-by-alphabetic)))))
 #+END_SRC
 ** ibuffer-vc
 Get status by version-control.
@@ -1484,40 +1498,39 @@ Key bindings for scrolling.
 ** Theme
 *** Load themes
 #+BEGIN_SRC emacs-lisp
-  (defun my/load-themes ()
-    "Loads my themes if in windows"
+(defun my/load-themes ()
+  "Loads my themes if in windows"
 
-    (use-package afternoon-theme
-      :config
-      (load-theme 'afternoon t t))
+  (use-package afternoon-theme
+    :config
+    (load-theme 'afternoon t t))
 
-    (use-package base16-theme
-      :config
-      (load-theme 'base16 t t))
+  (use-package base16-theme
+    :config
+    (load-theme 'base16 t t))
 
-    (use-package material-theme
-      :config
-      (load-theme 'material t nil))
-
-    (use-package twilight-bright-theme
-      :config
-      (load-theme 'twilight-bright t t))
-
-    (use-package zenburn-theme
-      :config
-      (load-theme 'zenburn t t))
-
-    (use-package org-beautify-theme
-      :disabled
-      :config
-      (load-theme 'org-beautify t t))
-
-    (use-package gruber-darker-theme
-      :config(load-theme 'gruber-darker t t))
-
+  (use-package material-theme
+    :config
     (load-theme 'material t nil))
-#+END_SRC
 
+  (use-package twilight-bright-theme
+    :config
+    (load-theme 'twilight-bright t t))
+
+  (use-package zenburn-theme
+    :config
+    (load-theme 'zenburn t t))
+
+  (use-package org-beautify-theme
+    :disabled
+    :config
+    (load-theme 'org-beautify t t))
+
+  (use-package gruber-darker-theme
+    :config(load-theme 'gruber-darker t t))
+
+  (load-theme 'material t nil))
+#+END_SRC
 *** Load different theme if in gui or terminal
 #+BEGIN_SRC emacs-lisp
 (unless (not (display-graphic-p))
@@ -1828,6 +1841,7 @@ Hippie expands text automagically.
 Abbrev autocorrects words.
 #+begin_src emacs-lisp
 (setq-default abbrev-mode t)
+(customize-set-variable 'save-abbrevs 'silently)
 #+end_src
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
@@ -1927,6 +1941,7 @@ Save buffers when idle
   (super-save-remote-files nil)
   (super-save-exclude '(".gpg"))
   (auto-save-default nil)
+  (auto-save-no-message t)
   :config (super-save-mode t))
 #+END_SRC
 * Org-mode stuff
