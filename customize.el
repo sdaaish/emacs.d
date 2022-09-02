@@ -49,10 +49,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(Info-quoted ((t (:foreground "SkyBlue" :weight normal))))
  '(Man-overstrike ((t (:inherit bold :foreground "orange"))))
  '(bookmark-face ((t (:background "LightSteelBlue1" :foreground "Black"))))
  '(flycheck-error-list-highlight ((t (:inherit rosy\ brown))))
+ '(hackernews-link ((t (:foreground "gold" :weight normal))))
+ '(hackernews-link-visited ((t (:foreground "LimeGreen" :weight normal))))
+ '(helpful-heading ((t (:foreground "GreenYellow" :weight bold))))
  '(hl-line ((t (:extend t :background "#3d3d3d" :inverse-video nil))))
+ '(info-colors-lisp-code-block ((t (:foreground "LightSkyBlue" :weight normal))))
+ '(info-xref ((t (:foreground "DeepSkyBlue" :weight normal))))
  '(macrostep-expansion-highlight-face ((t (:foreground "light gray"))))
  '(package-status-avail-obso ((t (:inherit package-status-incompat :foreground "magenta"))))
  '(package-status-dependency ((t (:inherit nil :foreground "cyan"))))
