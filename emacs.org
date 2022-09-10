@@ -604,29 +604,16 @@ From https://github.com/abo-abo/hydra/wiki/YASnippet
 ** Projectile
 Find or switch to projects easy, and use ~counsel-projectile~.
 #+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :diminish
-    :init (when (file-directory-p "~/repos")
-            (setq projectile-project-search-path '("~/repos")))
+(defhydra hydra-projectile-other-window (:color teal)
+  "projectile-other-window"
+  ("f"  projectile-find-file-other-window        "file")
+  ("g"  projectile-find-file-dwim-other-window   "file dwim")
+  ("d"  projectile-find-dir-other-window         "dir")
+  ("b"  projectile-switch-to-buffer-other-window "buffer")
+  ("q"  nil                                      "cancel" :color blue))
 
-    :config
-    (projectile-mode t)
-    (setq projectile-completion-system 'ivy)
-    (setq projectile-switch-project-action 'projectile-dired)
-
-    (use-package counsel-projectile
-      :init (counsel-projectile-mode 1))
-
-    (defhydra hydra-projectile-other-window (:color teal)
-      "projectile-other-window"
-      ("f"  projectile-find-file-other-window        "file")
-      ("g"  projectile-find-file-dwim-other-window   "file dwim")
-      ("d"  projectile-find-dir-other-window         "dir")
-      ("b"  projectile-switch-to-buffer-other-window "buffer")
-      ("q"  nil                                      "cancel" :color blue))
-
-    (defhydra hydra-projectile (:color teal :hint nil)
-      "
+(defhydra hydra-projectile (:color teal :hint nil)
+  "
                    PROJECTILE: %(projectile-project-root)
 
                    Find File            Search/Tags          Buffers                Cache
@@ -634,59 +621,53 @@ Find or switch to projects easy, and use ~counsel-projectile~.
                 _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
                _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
                _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
-                _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
+                _r_: recent file                                               ^^^^_z_: cache current
                 _d_: dir
 
               "
-      ("a"   projectile-ag)
-      ("b"   projectile-switch-to-buffer)
-      ("c"   projectile-invalidate-cache)
-      ("d"   projectile-find-dir)
-      ("s-f" projectile-find-file)
-      ("F"   projectile-find-file)
-      ("ff"  projectile-find-file-dwim)
-      ("fd"  projectile-find-file-in-directory)
-      ("g"   ggtags-update-tags)
-      ("i"   projectile-ibuffer)
-      ("k"   projectile-kill-buffers)
-      ("m"   projectile-multi-occur)
-      ("p"   projectile-switch-project "switch project")
-      ("r"   projectile-recentf)
-      ("x"   projectile-remove-known-project)
-      ("X"   projectile-cleanup-known-projects)
-      ("z"   projectile-cache-current-file)
-      ("D"   projectile-discover-projects-in-directory)
-      ("'"   hydra-projectile-other-window/body "open other window")
-      ("q"   nil "cancel" :color blue))
+  ("a"   projectile-ag)
+  ("b"   projectile-switch-to-buffer)
+  ("c"   projectile-invalidate-cache)
+  ("d"   projectile-find-dir)
+  ("s-f" projectile-find-file)
+  ("F"   projectile-find-file)
+  ("ff"  projectile-find-file-dwim)
+  ("fd"  projectile-find-file-in-directory)
+  ("g"   ggtags-update-tags)
+  ("i"   projectile-ibuffer)
+  ("k"   projectile-kill-buffers)
+  ("m"   projectile-multi-occur)
+  ("p"   projectile-switch-project "switch project")
+  ("r"   projectile-recentf)
+  ("x"   projectile-remove-known-project)
+  ("X"   projectile-cleanup-known-projects)
+  ("z"   projectile-cache-current-file)
+  ("'"   hydra-projectile-other-window/body "open other window")
+  ("q"   nil "cancel" :color blue))
 
-    :bind (("C-c p" . hydra-projectile/body)
-           (:map projectile-mode-map
-                 ("C-c P" . projectile-command-map)))) ;; Keep counsel-projectile for now
+(use-package projectile
+  :diminish
+  :init (when (file-directory-p "~/repos")
+          (setq projectile-project-search-path '("~/repos")))
+  :config
+  (projectile-mode t)
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-switch-project-action 'projectile-dired)
+  :bind (("C-c p" . hydra-projectile/body)
+         (:map projectile-mode-map
+               ("C-c P" . projectile-command-map))))
+
+(use-package counsel-projectile
+  :init (counsel-projectile-mode 1))
 #+END_SRC
-*** Fix
-From https://github.com/bbatsov/projectile/issues/1165.
-#+BEGIN_SRC emacs-lisp
-(defun projectile-discover-projects-in-directory (directory)
-  "Discover any projects in DIRECTORY and add them to the projectile cache.
-This function is not recursive and only adds projects with roots
-at the top level of DIRECTORY."
-  (interactive
-   (list (read-directory-name "Starting directory: ")))
-  (let ((subdirs (directory-files directory t)))
-    (mapcar
-     (lambda (dir)
-       (when (and (file-directory-p dir)
-                  (not (member (file-name-nondirectory dir) '(".." "."))))
-         (let ((default-directory dir)
-               (projectile-cached-project-root dir))
-           (when (projectile-project-p)
-             (projectile-add-known-project (projectile-project-root))))))
-     subdirs)))
-#+END_SRC
-** Flycheck
+** Verify code
+*** Flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
     :config (global-flycheck-mode))
+#+end_src
+*** Avy
+#+begin_src emacs-lisp
   (use-package avy-flycheck
     :after avy
     :config (avy-flycheck-setup))
@@ -765,7 +746,7 @@ Add more functions to company
 #+END_SRC
 *** Company-keymapfix
 A fix to enable [tab] to expand yasnippets etc in ~company-mode-map~.
-From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interference-between-company-mode-and-yasnippet][StackOverflow]]. Another tip is in [[https://www.reddit.com/r/emacs/comments/5vhlws/using_tab_for_both_yasnippet_and_company][Reddit]] .
+From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interference-between-company-mode-and-yasnippet][StackOverflow]]. Another tip is in [[https://www.reddit.com/r/emacs/comments/5vhlws/using_tab_for_both_yasnippet_and_company][Reddit]].
 #+BEGIN_SRC emacs-lisp
   (defun company-yasnippet-or-completion ()
     (interactive)
@@ -1132,6 +1113,7 @@ No mice!
 Help to keep config clean.
 #+begin_src emacs-lisp
 (use-package ws-butler
+  :diminish
   :hook ((prog-mode org-mode conf-mode) . ws-butler-mode))
 #+end_src
 * Private and local stuff
@@ -1449,7 +1431,11 @@ Use counsel to navigate hosts.
 Move between windows quickly.
 #+BEGIN_SRC emacs-lisp
 (when (fboundp 'windmove-default-keybindings)
-(windmove-default-keybindings))
+  (windmove-default-keybindings))
+(define-key org-read-date-minibuffer-local-map (kbd "<left>") (lambda () (interactive) (org-eval-in-calendar '(calendar-backward-day 1))))
+(define-key org-read-date-minibuffer-local-map (kbd "<right>") (lambda () (interactive) (org-eval-in-calendar '(calendar-forward-day 1))))
+(define-key org-read-date-minibuffer-local-map (kbd "<up>") (lambda () (interactive) (org-eval-in-calendar '(calendar-backward-week 1))))
+(define-key org-read-date-minibuffer-local-map (kbd "<down>") (lambda () (interactive) (org-eval-in-calendar '(calendar-forward-week 1))))
 #+END_SRC
 ** Orgmode customizations
 Make windmove work in org-mode:
@@ -1458,7 +1444,7 @@ Make windmove work in org-mode:
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
-(setq org-support-shift-select t)
+(setq org-support-shift-select 'always)
 #+END_SRC
 * Own stuff
 ** Toggle truncate lines
@@ -1954,7 +1940,7 @@ Customize org-mode settings.
 (setq org-export-with-sub-superscripts '{})
 (setq org-export-coding-system 'utf-8)
 (setq org-export-backends '(ascii html latex odt org))
-(setq org-export-use-babel nil)
+(setq org-export-use-babel t)
 (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
 (setq org-agenda-skip-scheduled-if-done t)
 (setq org-agenda-skip-scheduled-if-deadline-is-shown "repeated-after-deadline")
@@ -1972,6 +1958,7 @@ Customize org-mode settings.
 (setq org-use-fast-todo-selection t)
 (setq org-enable-priority-commands nil)
 (setq org-src-preserve-indentation t)
+(setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
   #+END_SRC
 *** Refile
 Refiling notes settings.
@@ -1984,7 +1971,7 @@ Refiling notes settings.
 To be able to execute code in org mode these should be loaded.
 #+begin_src emacs-lisp
 (require 'ob-shell)
-(require 'ob-awk)
+(require 'ob-eshell)
 (require 'ob-python)
 (require 'ob-C)
 #+end_src
@@ -2084,14 +2071,11 @@ A few templates to speed up capture.
 #+BEGIN_SRC emacs-lisp
   (setq org-capture-templates
         `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
-           "* TODO %^{Description of todo}\nAdded: %U\n%?" :prepend t)
+           "* TODO %^{Description of todo}\nAdded: %U\n\n%?" :prepend t)
 
-          ;; Multiline for blog-notes
-          ("b" "Blog idea")
-          ("be" "Emacs idea" entry (file+headline my/notes-file "Emacs")
-           "* IDEA %^{Title} :Emacs:\nAdded: %U\n%?" :prepend t)
-          ("bb" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
-           "* IDEA %^{Title} :Blog:\nAdded: %U\n%?" :prepend t)
+          ;; Blog
+          ("b" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
+           "* IDEA %^{Title} :Blog:\nAdded: %U\n\n%?" :prepend t)
 
           ;;Links
           ("l" "Link" entry (file+headline my/notes-file "Links")
@@ -2099,7 +2083,7 @@ A few templates to speed up capture.
 
           ;; Notes
           ("n" "Note" entry (file+headline my/notes-file "Notes")
-           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+           "* %^{Title} :NOTE:\n%U\n%a\n\n%?" :clock-in t :clock-resume t)
 
           ;; Idea
           ("i" "Idea" entry (file+headline my/notes-file "Someday")
@@ -2109,19 +2093,12 @@ A few templates to speed up capture.
           ("j" "Journal" entry (file+olp+datetree my/diary-file)
            "* %^{Enter title}\n%U\n%?" :clock-in t :clock-resume t)
 
-          ;; Multiline for watching stuff
-          ("f" "Filmtips")
-          ("fm" "Movies" entry (file+headline my/notes-file "Film")
-           "* %^{Titel} :Film:\nAdded on %T\n%?" :prepend t)
-          ("ft" "Video" entry (file+headline my/notes-file "Video")
-           "* %^{Titel} :Video:Info:\nAdded on %T\n%^L\n%?" :prepend t)
-
           ;; Notes for code
           ("c" "Coding stuff")
           ("cc" "note with code" entry (file+headline my/notes-file "Code")
-           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n")
+           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|python|html}\n%^C\n#+end_src\n")
           ("cs" "note with code, source" entry (file+headline my/notes-file "Code")
-           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|bat|html}\n%^C\n#+end_src\n%a\n")
+           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|python|html}\n%^C\n#+end_src\n%a\n")
 
           ;; Reports and bugs
           ("r" "Reporting")
@@ -2266,6 +2243,13 @@ If invoked with C-u, toggle the setting"
   (message "Babel evaluation confirmation is %s"
            (if org-confirm-babel-evaluate "on" "off")))
 #+end_src
+*** Custom to disable verification of evaluation.
+From [[https://gitlab.com/spudlyo/dotfiles/-/blob/master/emacs/.config/emacs/init.el][Mike Hamrick, GitLab]].
+#+begin_src emacs-lisp
+(defun my/org-confirm-babel-evaluate (lang body)
+  "Don't confirm code execution for these languages."
+  (not (member lang '("python" "emacs-lisp" "shell" "powershell" "perl" "elisp" "eshell"))))
+#+end_src
 * Language support
 Add support for different programming languages and configuration files.
 ** Powershell mode
@@ -2282,6 +2266,24 @@ Powershell-mode is useful.
     (setq explicit-powershell\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-"))
     (setq explicit-pwsh\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-")))
 #+END_SRC
+** Babel for powershell
+#+begin_src emacs-lisp
+(use-package ob-powershell
+  :config (require 'ob-powershell)
+  :custom (ob-powershell-powershell-command "pwsh -NoProfile -NoLogo"))
+#+end_src
+** Load babel languages
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((shell      . t)
+   (eshell     . t)
+   (python     . t)
+   (lisp       . t)
+   (powershell . t)
+   (perl       . t)
+   (emacs-lisp . t)))
+#+end_src
 ** Dos-mode
 Only in windows.
 #+BEGIN_SRC emacs-lisp
@@ -2470,8 +2472,9 @@ For nmap script-engine files.
 ** Editorconfig
 To get automatic settings for git repositories. https://editorconfig.org/
 #+begin_src emacs-lisp
-  (use-package editorconfig
-    :hook (prog-mode . editorconfig-mode))
+(use-package editorconfig
+  :diminish
+  :hook (prog-mode . editorconfig-mode))
 #+end_src
 * Help systems
 ** Package-archives
