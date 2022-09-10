@@ -621,7 +621,7 @@ Find or switch to projects easy, and use ~counsel-projectile~.
                 _F_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
                _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
                _fd_: file curr dir   _m_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
-                _r_: recent file     _D_: Discover                             ^^^^_z_: cache current
+                _r_: recent file                                               ^^^^_z_: cache current
                 _d_: dir
 
               "
@@ -649,39 +649,18 @@ Find or switch to projects easy, and use ~counsel-projectile~.
   :diminish
   :init (when (file-directory-p "~/repos")
           (setq projectile-project-search-path '("~/repos")))
-
   :config
   (projectile-mode t)
   (setq projectile-completion-system 'ivy)
   (setq projectile-switch-project-action 'projectile-dired)
   :bind (("C-c p" . hydra-projectile/body)
          (:map projectile-mode-map
-               ("C-c P" . projectile-command-map)))) ;; Keep counsel-projectile for now
+               ("C-c P" . projectile-command-map))))
 
 (use-package counsel-projectile
   :init (counsel-projectile-mode 1))
 #+END_SRC
-*** Fix
-From https://github.com/bbatsov/projectile/issues/1165.
-#+BEGIN_SRC emacs-lisp
-(defun projectile-discover-projects-in-directory (directory)
-  "Discover any projects in DIRECTORY and add them to the projectile cache.
-This function is not recursive and only adds projects with roots
-at the top level of DIRECTORY."
-  (interactive
-   (list (read-directory-name "Starting directory: ")))
-  (let ((subdirs (directory-files directory t)))
-    (mapcar
-     (lambda (dir)
-       (when (and (file-directory-p dir)
-                  (not (member (file-name-nondirectory dir) '(".." "."))))
-         (let ((default-directory dir)
-               (projectile-cached-project-root dir))
-           (when (projectile-project-p)
-             (projectile-add-known-project (projectile-project-root))))))
-     subdirs)))
-#+end_src
-Verify code
+** Verify code
 *** Flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -2268,19 +2247,8 @@ If invoked with C-u, toggle the setting"
 From [[https://gitlab.com/spudlyo/dotfiles/-/blob/master/emacs/.config/emacs/init.el][Mike Hamrick, GitLab]].
 #+begin_src emacs-lisp
 (defun my/org-confirm-babel-evaluate (lang body)
-  "Don't confirm code execution for these langauges."
-  (not (member lang '("python" "emacs-lisp" "shell" "perl" "elisp"))))
-#+end_src
-*** Load babel languages
-#+begin_src emacs-lisp
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((shell      . t)
-   (eshell     . t)
-   (python     . t)
-   (lisp       . t)
-   (perl       . t)
-   (emacs-lisp . t)))
+  "Don't confirm code execution for these languages."
+  (not (member lang '("python" "emacs-lisp" "shell" "powershell" "perl" "elisp" "eshell"))))
 #+end_src
 * Language support
 Add support for different programming languages and configuration files.
@@ -2303,6 +2271,18 @@ Powershell-mode is useful.
 (use-package ob-powershell
   :config (require 'ob-powershell)
   :custom (ob-powershell-powershell-command "pwsh -NoProfile -NoLogo"))
+#+end_src
+** Load babel languages
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((shell      . t)
+   (eshell     . t)
+   (python     . t)
+   (lisp       . t)
+   (powershell . t)
+   (perl       . t)
+   (emacs-lisp . t)))
 #+end_src
 ** Dos-mode
 Only in windows.
