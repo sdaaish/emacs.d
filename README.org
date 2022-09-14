@@ -1,3 +1,4 @@
+* Options                                                  :ARCHIVE:noexport:
 #+SETUPFILE: vendor/org-html-themes/org/theme-readtheorg-local.setup
 #+options: num:nil
 [[https://github.com/sdaaish/emacs.d/actions/workflows/main.yml][https://github.com/sdaaish/emacs.d/actions/workflows/main.yml/badge.svg]]
@@ -29,3 +30,17 @@ git -C $env:HOME/.config/emacs.default submodule update --init
 Edit ~$env:HOME/.emacs-profiles.el for chemacs2~
 ** Example file layout
 [[file:images/files.png]]
+* Update submodules
+Run this to update the submodules connected to this repository.
+** Get status
+#+begin_src eshell :results silent
+git submodule status --recursive
+#+end_src
+** Update from remotes
+#+begin_src eshell :results silent
+git submodule update --recursive --remote --rebase
+#+end_src
+** Sync the local git repository
+#+begin_src eshell :results silent
+git submodule sync --recursive
+#+end_src
