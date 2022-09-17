@@ -1,7 +1,7 @@
 * Options                                                  :noexport:ARCHIVE:
 #+TITLE: My GNU Emacs configuration
 #+SUBTITLE: A personal emacs configuration
-#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :results silent
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :results silent :exports code
 #+STARTUP: show2levels indent
 #+OPTIONS: H:5 num:nil tags:nil toc:3 timestamps:t
 #+DESCRIPTION: Loading emacs configuration using org-babel
@@ -19,8 +19,14 @@ Load [[file:emacs.org][emacs.org]] in emacs and run ~org-babel-tangle~ to create
 ** Inspiration
 /All config in one file/ from [[https://github.com/daviwil/emacs-from-scratch/tree/9388cf6ecd9b44c430867a5c3dad5f050fdc0ee1][System Crafters Emacs from Scratch]].
 ** Early init
+:properties:
+:header-args:emacs-lisp: :tangle ./early-init.el
+:end:
+
+Some things go to the =early-init.el= file so they are executed before Emacs initializing process. This is to setup things before the GUI loads and other features.
+*** early-init.el
 The file to load before ~init.el~. This will be created after ~org-babel-tangle~.
-#+begin_src emacs-lisp :tangle ./early-init.el
+#+begin_src emacs-lisp
 ;;; early-init.el --- Startup file before init.el to disable settings.
 
 ;;; Commentary:
@@ -45,10 +51,20 @@ The file to load before ~init.el~. This will be created after ~org-babel-tangle~
             (setq-default inhibit-redisplay nil
                           inhibit-message nil)
             (redisplay)))
-
+#+end_src
+*** Server
+Start emacs as server. This don't work under the current setup with *Emacs 28.1* in windows.
+#+begin_src emacs-lisp
+(server-start)
+(setq server-log t)
+#+end_src
+*** Provide
+Final statements
+#+begin_src emacs-lisp
 (provide 'early-init)
 ;;; early-init.el ends here
 #+end_src
+
 ** init.el
 #+begin_src emacs-lisp
 ;;; init.el --- Configuration of Emacs
@@ -93,7 +109,7 @@ The file to load before ~init.el~. This will be created after ~org-babel-tangle~
 (message "*** Started emacs @ %s" (my/format-time start-time))
 (message "*** Reading configuration from init.el...")
 #+end_src
-*** Straight
+** Straight
 Bootstrap straight.
 #+begin_src emacs-lisp
 ;; install straight package manager
@@ -117,7 +133,17 @@ Bootstrap straight.
       '((github . "sdaaish")
         (gitlab . "sdaaish")))
 #+end_src
-*** Org mode
+** Garbage collection
+Try new package for GC.
+#+begin_src emacs-lisp
+(use-package gcmh
+  :diminish gcmh-mode
+  :custom
+  (gcmh-idle-delay 3)
+  :config
+  (gcmh-mode 1))
+#+end_src
+** Org mode
 Install org mode and contrib.
 #+begin_src emacs-lisp
 ;; Install latest version of org and org-plus-contrib
@@ -233,10 +259,11 @@ Hydras is keyboard mapping through menus.
 *** Toggle stuff
 Use "C-c v" to toggle values.
 #+BEGIN_SRC emacs-lisp
-  (require 'whitespace)
-  (defhydra hydra-toggle (:color pink :timeout 3)
-    "
+(require 'whitespace)
+(defhydra hydra-toggle (:color pink :timeout 3)
+  "
         _a_ abbrev-mode:       %`abbrev-mode
+        _c_ flycheck-mode:     %`flycheck-mode
         _d_ debug-on-error:    %`debug-on-error
         _f_ auto-fill-mode:    %`auto-fill-function
         _t_ truncate-lines:    %`truncate-lines
@@ -246,17 +273,18 @@ Use "C-c v" to toggle values.
         _R_ rainbow-delimiters %`rainbow-delimiters-mode
         _C_ rainbow-mode       %`rainbow-mode
   "
-    ("a" abbrev-mode nil)
-    ("C" rainbow-mode nil)
-    ("d" toggle-debug-on-error nil)
-    ("f" auto-fill-mode nil)
-    ("l" linum-mode nil)
-    ("r" linum-relative-mode nil)
-    ("R" rainbow-delimiters-mode nil)
-    ("t" toggle-truncate-lines nil)
-    ("w" whitespace-mode nil)
-    ("q" nil "cancel" :color blue))
-  (bind-key "C-c v" 'hydra-toggle/body)
+  ("a" abbrev-mode nil)
+  ("c" flycheck-mode nil)
+  ("C" rainbow-mode nil)
+  ("d" toggle-debug-on-error nil)
+  ("f" auto-fill-mode nil)
+  ("l" linum-mode nil)
+  ("r" linum-relative-mode nil)
+  ("R" rainbow-delimiters-mode nil)
+  ("t" toggle-truncate-lines nil)
+  ("w" whitespace-mode nil)
+  ("q" nil "cancel" :color blue))
+(bind-key "C-c v" 'hydra-toggle/body)
 #+END_SRC
 *** Zoom font
 Use <F2> to zoom in or out of fonts
@@ -662,15 +690,16 @@ Find or switch to projects easy, and use ~counsel-projectile~.
 #+END_SRC
 ** Verify code
 *** Flycheck
+Use *flycheck* to check code.
 #+begin_src emacs-lisp
-  (use-package flycheck
-    :config (global-flycheck-mode))
+(use-package flycheck
+  :custom (flycheck-checker-error-threshold 3000)
+  :hook ((emacs-lisp-mode powershell-mode sh-mode) . (lambda () (flycheck-mode 1))))
 #+end_src
 *** Avy
 #+begin_src emacs-lisp
-  (use-package avy-flycheck
-    :after avy
-    :config (avy-flycheck-setup))
+(use-package avy-flycheck
+  :after avy)
 #+end_src
 * Packages
 ** Use-package chords
@@ -719,11 +748,12 @@ Use aggressive mode for indentation. Use to be auto-indent, but aggressive seems
 #+END_SRC
 ** which-key
 #+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :diminish
-    :config
-    (which-key-mode t)
-    (setq which-key-idle-delay 0))
+(use-package which-key
+  :diminish which-key-mode
+  :init (which-key-mode t)
+  :custom
+  (which-key-idle-delay 0.2)
+  (which-key-sort-order 'which-key-key-order-alpha))
 #+END_SRC
 ** Company
 Auto completion.
@@ -1341,7 +1371,8 @@ These are really useful packages. http://oremacs.com/swiper/
 Replaced IDO with Ivy.
 #+BEGIN_SRC emacs-lisp
 (use-package ivy
-  :diminish
+  :diminish ivy-mode
+  :custom (ivy-initial-inputs-alist nil)
   :config
   (ivy-mode 1)
   (setq	ivy-use-virtual-buffers t
@@ -1720,30 +1751,24 @@ Save bookmarks all the time.
 (customize-set-variable 'bookmark-version-control t)
 #+END_SRC
 *** Language
-Spellchecking. I use Hunspell.
+Spellchecking, use Flycheck with aspell.
+Need to load some other dictionaries. And to fix the *flycheck* setup.
+Read more at [[https://github.com/leotaku/flycheck-aspell/blob/master/README-FLYCHECK.md][Flycheck-aspell]].
 #+BEGIN_SRC emacs-lisp
-  (use-package ispell
-    :straight (:type built-in)
-    :config
-    (add-to-list 'ispell-local-dictionary-alist '("swedish-hunspell"
-                                                  "[[:alpha:]]"
-                                                  "[^[:alpha:]]"
-                                                  "[']"
-                                                  t
-                                                  ("-d" "sv_SE"); Dictionary file name
-                                                  nil
-                                                  iso-8859-1))
-
-    (add-to-list 'ispell-local-dictionary-alist '("english-hunspell"
-                                                  "[[:alpha:]]"
-                                                  "[^[:alpha:]]"
-                                                  "[']"
-                                                  t
-                                                  ("-d" "en_US")
-                                                  nil
-                                                  iso-8859-1))
-    (setq ispell-program-name "hunspell"
-          ispell-dictionary "swedish-hunspell"))
+(use-package flycheck-aspell
+  :custom
+  (cond
+   ((executable-find "aspell")
+    (ispell-program-name (executable-find "aspell"))
+    (ispell-extra-args '("--sug-mode=ultra" "--lang=en_GB" "--add-extra-dicts=sv")))
+   (t (setq ispell-program-name nil)))
+  (ispell-dictionary "en_GB")
+  (ispell-alternate-dictionary "sv")
+  (ispell-silently-savep t)
+  :config (flycheck-aspell-define-checker "org"
+            "Org" ("--add-filter" "url")
+            (org-mode))
+  (add-to-list 'flycheck-checkers 'org-aspell-dynamic))
 #+END_SRC
 *** Dired customizations
 Changes for local keyboard.
@@ -1892,11 +1917,11 @@ Saves backup of files in emacs-homedir. Keeps several versions of the files.
 ** Save current position
 Go back to where you last were in the file.
 #+BEGIN_SRC emacs-lisp
-  ;; Save point position between sessions
-  (use-package saveplace
-    :config
-    (save-place-mode 1)
-    (setq save-place-file (expand-file-name ".places" no-littering-var-directory)))
+;; Save point position between sessions
+(use-package saveplace
+  :config
+  (save-place-mode 1)
+  (setq save-place-file (expand-file-name ".places" no-littering-var-directory)))
 #+END_SRC
 ** Save history
 Save a history of edited files.
@@ -1918,17 +1943,18 @@ Save buffers when idle
 #+BEGIN_SRC emacs-lisp
 (use-package super-save
   :diminish super-save-mode
-  :custom
+  :init
   (add-to-list 'super-save-triggers 'ace-window)
   (add-to-list 'super-save-triggers 'magit-status)
   (add-to-list 'super-save-hook-triggers 'find-file-hook)
+  :custom
   (super-save-auto-save-when-idle t)
   (super-save-idle-duration 8)
   (super-save-remote-files nil)
   (super-save-exclude '(".gpg"))
   (auto-save-default nil)
   (auto-save-no-message t)
-  :config (super-save-mode t))
+  :config (super-save-mode 1))
 #+END_SRC
 * Org-mode stuff
 Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Beginners Customization Guide]] for info about this.
@@ -2635,11 +2661,6 @@ An ebook reader.
 (use-package nov
   :config (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
   :hook (nov-mode . my-nov-font-setup))
-#+end_src
-* Server
-Start emacs as server
-#+begin_src emacs-lisp
-(server-start)
 #+end_src
 * Links
 ** Manuals
