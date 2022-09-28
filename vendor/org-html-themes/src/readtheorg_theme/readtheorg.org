@@ -78,6 +78,7 @@ html{
     -webkit-text-size-adjust:100%;
     font-size:100%;
     height:100%;
+    overflow-x:hidden;
 }
 
 body{
@@ -87,10 +88,12 @@ body{
     font-weight:normal;
     margin:0;
     min-height:100%;
+    overflow-x:hidden;
 }
 
 #content{
     background:#fcfcfc;
+    height:100%;
     margin-left:300px;
     /* margin:auto; */
     max-width:800px;
@@ -1491,9 +1494,10 @@ $( document ).ready(function() {
 
 $(function() {
     function replace_admonition (tag, readable) {
-        $(`span.${tag}:not(#table-of-contents *)`) .parent().parent()
-            .replaceWith(`<p id='${this.id}' class='admonition-title ${tag}'>${readable}</p>`);
-        $(`div.${tag}`).before(`<p class='admonition-title ${tag}'>${readable}</p>`)
+        $(`.${tag}:not(#table-of-contents *)`)
+            .parent().parent().replaceWith(function() {
+                return `<p id='${this.id}' class='admonition-title ${tag}'>${readable}</p>`
+            });
     }
     replace_admonition('note', 'Note');
     replace_admonition('seealso', 'See also');

@@ -20,9 +20,10 @@ $( document ).ready(function() {
 
 $(function() {
     function replace_admonition (tag, readable) {
-        $(`span.${tag}:not(#table-of-contents *)`) .parent().parent()
-            .replaceWith(`<p id='${this.id}' class='admonition-title ${tag}'>${readable}</p>`);
-        $(`div.${tag}`).before(`<p class='admonition-title ${tag}'>${readable}</p>`)
+        $(`.${tag}:not(#table-of-contents *)`)
+            .parent().parent().replaceWith(function() {
+                return `<p id='${this.id}' class='admonition-title ${tag}'>${readable}</p>`
+            });
     }
     replace_admonition('note', 'Note');
     replace_admonition('seealso', 'See also');
