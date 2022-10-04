@@ -1943,10 +1943,6 @@ Save buffers when idle
 #+BEGIN_SRC emacs-lisp
 (use-package super-save
   :diminish super-save-mode
-  :init
-  (add-to-list 'super-save-triggers 'ace-window)
-  (add-to-list 'super-save-triggers 'magit-status)
-  (add-to-list 'super-save-hook-triggers 'find-file-hook)
   :custom
   (super-save-auto-save-when-idle t)
   (super-save-idle-duration 8)
@@ -1954,7 +1950,12 @@ Save buffers when idle
   (super-save-exclude '(".gpg"))
   (auto-save-default nil)
   (auto-save-no-message t)
-  :config (super-save-mode 1))
+  :config
+  (add-to-list 'super-save-triggers 'ace-window)
+  (add-to-list 'super-save-triggers 'magit-status)
+  (add-to-list 'super-save-hook-triggers 'find-file-hook)
+  :hook (prog-mode . (lambda ()
+                       (super-save-mode 1))))
 #+END_SRC
 * Org-mode stuff
 Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Beginners Customization Guide]] for info about this.
