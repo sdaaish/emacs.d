@@ -702,12 +702,6 @@ Use *flycheck* to check code.
   :after avy)
 #+end_src
 * Packages
-** Use-package chords
-Use chords as keyboard shortcuts.
-#+begin_src emacs-lisp
-  (use-package use-package-chords
-        :config (key-chord-mode 1))
-#+end_src
 ** Diminish
 #+begin_src emacs-lisp
 (use-package diminish)
@@ -905,15 +899,14 @@ Check urls in an file.
 ** Undo-tree
 Make undo more intuitive.
 #+BEGIN_SRC emacs-lisp
-  (use-package undo-tree
-    :diminish
-    :demand
-    :config
-    (global-undo-tree-mode 1)
-    (setq undo-tree-visualizer-diff t)
-    :bind (("C-z" . undo)
-           ("C-S-z" . undo-tree-redo))
-    :chords ("uu" . undo-tree-visualize))
+(use-package undo-tree
+  :diminish
+  :demand
+  :config
+  (global-undo-tree-mode 1)
+  (setq undo-tree-visualizer-diff t)
+  :bind (("C-z" . undo)
+         ("C-S-z" . undo-tree-redo)))
 #+END_SRC
 ** RSS stuff
 Use elfeed ass RSS-reader, plus extras.
@@ -1045,10 +1038,9 @@ Delete whitespace more efficiently.
 ** avy
 Jump to any character.
 #+BEGIN_SRC emacs-lisp
-  (use-package avy
-    :bind (("C-." . avy-goto-char)
-           ("C-:" . avy-goto-char-2))
-    :chords ("kk" . avy-goto-line))
+(use-package avy
+  :bind (("C-." . avy-goto-char)
+         ("C-:" . avy-goto-char-2)))
 #+END_SRC
 ** Silversearcher
 Use ~ag~ to search for stuff. Requires ~silversearcher-ag~ to be installed in the system.
@@ -1077,19 +1069,6 @@ To check the expanded macro. Useful with ~use-package~.
 Support files in apib format, [[https://apiblueprint.org/][API Blueprint]]
 #+begin_src emacs-lisp
   (use-package apib-mode)
-#+end_src
-** json-navigator
-Navigate JSON-files. Also use tree-mode for navigation.
-#+begin_src emacs-lisp
-  (use-package json-navigator
-    :config
-    (use-package tree-mode
-      :bind (:map tree-minor-mode
-                  ("q" . quit-window)))
-    :chords
-    ("jj" . json-navigator-navigate-region)
-    ("jp" . json-navigator-navigate-after-point)
-    )
 #+end_src
 ** Rainbows
 Use different colors for delimeters to increase readability.
