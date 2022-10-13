@@ -133,6 +133,10 @@ Bootstrap straight.
       '((github . "sdaaish")
         (gitlab . "sdaaish")))
 #+end_src
+** Diminish
+#+begin_src emacs-lisp
+(use-package diminish)
+#+end_src
 ** Garbage collection
 Try new package for GC.
 #+begin_src emacs-lisp
@@ -674,7 +678,7 @@ Find or switch to projects easy, and use ~counsel-projectile~.
   ("q"   nil "cancel" :color blue))
 
 (use-package projectile
-  :diminish
+  :diminish projectile-mode
   :init (when (file-directory-p "~/repos")
           (setq projectile-project-search-path '("~/repos")))
   :config
@@ -702,10 +706,6 @@ Use *flycheck* to check code.
   :after avy)
 #+end_src
 * Packages
-** Diminish
-#+begin_src emacs-lisp
-(use-package diminish)
-#+end_src
 ** Winner-mode
 Winner is used to restore windows.
 #+BEGIN_SRC emacs-lisp
@@ -1031,9 +1031,10 @@ A ~hydra~ for elfeed.
 Delete whitespace more efficiently.
 #+BEGIN_SRC emacs-lisp
 (use-package hungry-delete
-:config
-(global-hungry-delete-mode t)
-:custom (hungry-delete-except-modes '(minibuffer-mode)))
+  :diminish hungry-delete-mode
+  :config
+  (global-hungry-delete-mode t)
+  :custom (hungry-delete-except-modes '(minibuffer-mode)))
 #+END_SRC
 ** avy
 Jump to any character.
@@ -1080,7 +1081,8 @@ Use different colors for delimeters to increase readability.
 ** Rainbow colors
 Colorize numbers and text.
 #+begin_src emacs-lisp
-(use-package rainbow-mode)
+(use-package rainbow-mode
+  :diminish rainbow-mode)
 #+end_src
 ** Restclient
 A client to make REST-calls from emacs and Org-mode.
@@ -1659,9 +1661,9 @@ Things that we dont want during or after startup
 ** Powerline-mode
 Use powerline in the message bar.
 #+BEGIN_SRC emacs-lisp
-  (use-package powerline
-    :config
-    (powerline-default-theme))
+(use-package powerline
+  :config
+  (powerline-default-theme))
 #+END_SRC
 ** Customisations
 *** Initial settings
@@ -1677,6 +1679,7 @@ Use powerline in the message bar.
 (setq-default indicate-empty-lines t)
 (customize-set-variable 'apropos-do-all t)
 (global-subword-mode t)
+(diminish 'subword-mode)
 #+END_SRC
 *** Indents and tabs
 #+BEGIN_SRC emacs-lisp
@@ -1835,13 +1838,19 @@ Abbrev autocorrects words.
 (setq-default abbrev-mode t)
 (customize-set-variable 'save-abbrevs 'silently)
 #+end_src
+*** Diminish stuff
+#+begin_src emacs-lisp
+(diminish 'org-indent-mode)
+(diminish 'abbrev-mode)
+(diminish 'visual-line-mode)
+#+end_src
 ** Change yes-or-no to y-n
 #+BEGIN_SRC emacs-lisp
 ;; Press y or n for yes or no
 (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 ** Eshell
-Use axtended shell.
+Use the Emacs Lisp extended shell.
 #+BEGIN_SRC emacs-lisp
 (setenv "PAGER" "cat")
 (bind-key "C-c RET" 'eshell)
@@ -1855,6 +1864,11 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
   (setq password-cache t) ; enable password caching
   (setq password-cache-expiry 3600) ; for one hour (time in secs)
 #+END_SRC
+** Eshell prompt
+#+begin_src emacs-lisp
+(use-package eshell-git-prompt
+  :config (eshell-git-prompt-use-theme 'robbyrussell))
+#+end_src
 ** TRAMP
 Use fakecygpty to login from Windows using openssh. See https://www.emacswiki.org/emacs/SshWithNTEmacs and https://github.com/d5884/fakecygpty.
 You must compile fakecygpty from *Cygwin*. Won't work in MSYS2, MINGW32/64. Copy ~fakecygpty.exe~ to ~f_ssh.exe~ and ~f_scp.exe~.
@@ -2598,16 +2612,17 @@ Colorisation of Info-text.
 ** helpful
 A more helpful package for Emacs help.
 #+begin_src emacs-lisp
-  (use-package helpful
-    :commands (counsel-describe-function-function
-               counsel-describe-variable-function)
-    :custom-face (helpful-heading ((t (:foreground "GreenYellow" :weight bold))))
-    :bind (("C-h C" . #'helpful-command)
-           ("C-c C-h" . #'helpful-at-point)
-           ("C-h a" . #'helpful-symbol)
-           ([remap describe-key] . helpful-key)
-           ([remap describe-variable] . counsel-describe-variable)
-           ([remap describe-function] . counsel-describe-function)))
+(use-package helpful
+  :diminish helpful-mode
+  :commands (counsel-describe-function-function
+             counsel-describe-variable-function)
+  :custom-face (helpful-heading ((t (:foreground "GreenYellow" :weight bold))))
+  :bind (("C-h C" . #'helpful-command)
+         ("C-c C-h" . #'helpful-at-point)
+         ("C-h a" . #'helpful-symbol)
+         ([remap describe-key] . helpful-key)
+         ([remap describe-variable] . counsel-describe-variable)
+         ([remap describe-function] . counsel-describe-function)))
 #+end_src
 * External utilities
 ** hackernews
