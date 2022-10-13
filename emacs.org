@@ -1850,7 +1850,7 @@ Abbrev autocorrects words.
 (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 ** Eshell
-Use axtended shell.
+Use the Emacs Lisp extended shell.
 #+BEGIN_SRC emacs-lisp
 (setenv "PAGER" "cat")
 (bind-key "C-c RET" 'eshell)
@@ -1864,6 +1864,11 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
   (setq password-cache t) ; enable password caching
   (setq password-cache-expiry 3600) ; for one hour (time in secs)
 #+END_SRC
+** Eshell prompt
+#+begin_src emacs-lisp
+(use-package eshell-git-prompt
+  :config (eshell-git-prompt-use-theme 'robbyrussell))
+#+end_src
 ** TRAMP
 Use fakecygpty to login from Windows using openssh. See https://www.emacswiki.org/emacs/SshWithNTEmacs and https://github.com/d5884/fakecygpty.
 You must compile fakecygpty from *Cygwin*. Won't work in MSYS2, MINGW32/64. Copy ~fakecygpty.exe~ to ~f_ssh.exe~ and ~f_scp.exe~.
