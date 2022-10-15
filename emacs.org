@@ -531,13 +531,14 @@ Hydra for ~straight~, from [[https://github.com/abo-abo/hydra/wiki/straight.el][
 ** Magit
 Magit is a Git-tool, probably the best porcelain in the world!
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :bind ("C-x g" . magit-status)
-    :config
-    (setq magit-completing-read-function 'ivy-completing-read)
-    (if (eq system-type 'windows-nt)
-        (setq-default with-editor-emacsclient-executable "emacsclientw.exe")
-      (setq-default with-editor-emacsclient-executable "emacsclient")))
+(use-package magit
+  :diminish magit-status
+  :bind ("C-x g" . magit-status)
+  :config
+  (setq magit-completing-read-function 'ivy-completing-read)
+  (if (eq system-type 'windows-nt)
+      (setq-default with-editor-emacsclient-executable "emacsclientw.exe")
+    (setq-default with-editor-emacsclient-executable "emacsclient")))
 #+END_SRC
 ** Magit Forge
 Manage github things from emacs.
@@ -1867,7 +1868,12 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
 ** Eshell prompt
 #+begin_src emacs-lisp
 (use-package eshell-git-prompt
-  :config (eshell-git-prompt-use-theme 'robbyrussell))
+  :config (eshell-git-prompt-use-theme 'robbyrussell)
+  :custom-face
+  (eshell-git-prompt-directory-face ((t (:foreground "cornflower blue"))))
+  (eshell-git-prompt-robyrussell-git-face ((t (:foreground "cyan"))))
+  (eshell-git-prompt-robyrussell-branch-face ((t (:foreground "deepskyblue"))))
+  (eshell-git-prompt-robyrussell-git-dirty-face ((t (:foreground "orange")))))
 #+end_src
 ** TRAMP
 Use fakecygpty to login from Windows using openssh. See https://www.emacswiki.org/emacs/SshWithNTEmacs and https://github.com/d5884/fakecygpty.
