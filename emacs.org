@@ -2031,6 +2031,20 @@ Inside an org-file, split the header and move it to a denote file instead.
     (denote heading tags 'org)
     (insert text)))
 #+end_src
+** Create denote from region
+Create a denote from the active region.
+#+begin_src emacs-lisp
+(defun my/denote-create-new-note-from-region (beg end)
+  "Create note whose contents include the text between BEG and END.
+Prompt for title and keywords of the new note."
+  (interactive "r")
+  (if-let (((region-active-p))
+           (text (buffer-substring-no-properties beg end)))
+      (progn
+        (denote (denote--title-prompt) (denote--keywords-prompt))
+        (insert text))
+    (user-error "No region is available")))
+#+end_src
 * Org-mode stuff
 Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Beginners Customization Guide]] for info about this.
 ** Org-mode variables
