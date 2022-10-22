@@ -1574,57 +1574,6 @@ Use Cascadia Code Nerd Font
   (interactive)
   (set-frame-font "CaskaydiaCove Nerd Font-11" nil t))
 #+END_SRC
-*** Cycle through fonts
-From Xah [[http://www.wilkesley.org/~ian/xah/emacs/emacs_switching_fonts.html][Xah Lee switch fonts]]
-#+BEGIN_SRC emacs-lisp
-  (defcustom my/font-list nil "A list of fonts for `my/cycle-font' to cycle from." :group 'font)
-  (set-default 'my/font-list
-               (cond
-                ((string-equal system-type "windows-nt")
-                 '(
-                   "Source Sans Pro-12"
-                   "Source Code Pro-10"
-                   "Inconsolata-10"
-                   "Courier New-10"
-                   "DejaVu Sans Mono-9"
-                   "Lucida Console-10"
-                   "Segoe UI Symbol-10"
-                   "Lucida Sans Unicode-10"
-                   ))
-                ((string-equal system-type "gnu/linux")
-                 '(
-                   "Source Code Pro for powerline-10"
-                   "DejaVu Sans Mono-9"
-                   "DejaVu Sans-9"
-                   "Fira Mono for Powerline-10"
-                   "Roboto Mono for Powerline-10"
-                   ))))
-
-  (defun my/cycle-font (*n)
-    "Change font in current frame.
-    Each time this is called, font cycles thru a predefined list of fonts in the variable `my/font-list'."
-    (interactive "p")
-    ;; this function sets a property “state”. It is a integer. Possible values are any index to the fontList.
-    (let (-fontToUse -stateBefore -stateAfter )
-      (setq -stateBefore (if (get 'my/cycle-font 'state) (get 'my/cycle-font 'state) 0))
-      (setq -stateAfter (% (+ -stateBefore (length my/font-list) *n) (length my/font-list)))
-      (setq -fontToUse (nth -stateAfter my/font-list))
-      (set-frame-font -fontToUse t)
-      (message "Current font is: %s" -fontToUse )
-      (put 'my/cycle-font 'state -stateAfter)))
-
-  (defun my/cycle-font-next ()
-    "Switch to the next font, in current window.
-    See `my/cycle-font'."
-    (interactive)
-    (my/cycle-font 1))
-
-  (defun my/cycle-font-previous ()
-    "Switch to the previous font, in current window.
-    See `my/cycle-font'."
-    (interactive)
-    (my/cycle-font -1))
-#+END_SRC
 ** Startup settings
 Things that we dont want during or after startup
 #+BEGIN_SRC emacs-lisp
