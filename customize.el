@@ -67,6 +67,7 @@
  '(info-colors-lisp-code-block ((t (:foreground "LightSkyBlue" :weight normal))))
  '(info-xref ((t (:foreground "DeepSkyBlue" :weight normal))))
  '(macrostep-expansion-highlight-face ((t (:foreground "light gray"))))
+ '(mode-line ((t (:background "#232635" :foreground "light sky blue" :box nil))))
  '(package-status-avail-obso ((t (:inherit package-status-incompat :foreground "magenta"))))
  '(package-status-dependency ((t (:inherit nil :foreground "cyan"))))
  '(package-status-incompat ((t (:inherit error :foreground "gold"))))
