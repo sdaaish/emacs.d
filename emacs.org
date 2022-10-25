@@ -271,6 +271,7 @@ Use "C-c v" to toggle values.
         _d_ debug-on-error:    %`debug-on-error
         _f_ auto-fill-mode:    %`auto-fill-function
         _t_ truncate-lines:    %`truncate-lines
+        _v_ visual-lines:      %`visual-line-mode
         _w_ whitespace-mode:   %`whitespace-mode
         _l_ linum-mode:        %`linum-mode
         _r_ relative-mode      %`linum-relative-mode
@@ -286,6 +287,7 @@ Use "C-c v" to toggle values.
   ("r" linum-relative-mode nil)
   ("R" rainbow-delimiters-mode nil)
   ("t" toggle-truncate-lines nil)
+  ("v" visual-line-mode nil)
   ("w" whitespace-mode nil)
   ("q" nil "cancel" :color blue))
 (bind-key "C-c v" 'hydra-toggle/body)
@@ -293,16 +295,18 @@ Use "C-c v" to toggle values.
 *** Zoom font
 Use <F2> to zoom in or out of fonts
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-zoom (global-map "<f2> z" :hint nil :timeout 3)
-    "
+(defhydra hydra-zoom (global-map "<f2> z" :hint nil :timeout 3)
+  "
     Change text-scale.
     Press _g_ to zoom in, _l_ out.
     _q_ to quit.
     "
-    ("g" text-scale-increase nil)
-    ("l" text-scale-decrease nil)
-    ("q" nil :color blue))
-  (setq text-scale-mode-step 1.1)
+  ("g" text-scale-increase nil)
+  ("l" text-scale-decrease nil)
+  ("q" nil :color blue))
+(setq text-scale-mode-step 1.05)
+(bind-key "C-<kp-add>" 'text-scale-increase)
+(bind-key "C-<kp-subtract>" 'text-scale-decrease)
 #+END_SRC
 *** Font size changes
 Change fonts with C-<f2>.
@@ -787,13 +791,17 @@ From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interfe
 ** ace-window
 Switch windows and frames quickly.
 #+BEGIN_SRC emacs-lisp
-  (use-package ace-window
-    :config
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    (setq aw-background nil)
-    (setq aw-dispatch-always t)
-    :bind (("M-o" . ace-window)
-           ("C-x o" . aw-flip-window)))
+(use-package ace-window
+  :custom
+  (aw-keys . '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (aw-background nil)
+  (aw-dispatch-always t)
+  :bind (("M-o" . ace-window)
+         ("C-x o" . aw-flip-window))
+  :custom-face (aw-leading-char-face
+                ((t (:foreground "light sky blue"
+                                 :background "#434343"
+                                 :weight bold :height 2.0)))))
 #+END_SRC
 ** Resize windows
 Use ~resize-window~ for changing size.
@@ -804,8 +812,9 @@ Use ~resize-window~ for changing size.
 ** Pretty bullets
 This was slow before, in emacs 25.1, but seems to work now in version 25.2.
 #+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode))
+(use-package org-bullets
+  :custom (org-bullets-bullet-list  '("" "" "" "" ""))
+  :hook (org-mode . org-bullets-mode))
 #+END_SRC
 ** Better shell
 #+BEGIN_SRC emacs-lisp
@@ -1457,14 +1466,13 @@ Make windmove work in org-mode:
 * Own stuff
 ** Toggle truncate lines
 #+BEGIN_SRC emacs-lisp
-(set-default 'truncate-lines nil)
-(setq truncate-partial-width-windows 40)
+(setq-default truncate-lines nil)
+(setq truncate-partial-width-windows nil)
 (bind-key "C-c t" 'toggle-truncate-lines)
 #+END_SRC
 ** Wrap long lines
 Visual-line-mode affects the variable word-wrap (toggle-word-wrap).
 #+BEGIN_SRC emacs-lisp
-(set-default 'word-wrap t)
 (setq-default visual-line-mode t)
 #+END_SRC
 ** No case-sensitive for search
@@ -1705,7 +1713,8 @@ Changes for local keyboard.
 #+begin_src emacs-lisp
 (use-package dired
   :straight (:type built-in)
-  :hook ( dired-mode . dired-hide-details-mode))
+  :hook ( dired-mode . dired-hide-details-mode)
+  :bind ("C-x C-d" . dired))
 #+end_src
 *** Dired-single
 Use this package to reuse the dired buffers.
