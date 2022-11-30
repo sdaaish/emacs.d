@@ -67,6 +67,7 @@ Final statements
 
 ** init.el
 #+begin_src emacs-lisp
+;;; -*- mode: emacs-lisp; lexical-binding: t -*-
 ;;; init.el --- Configuration of Emacs
 
 ;;; Commentary:
@@ -1728,10 +1729,15 @@ Use this package to reuse the dired buffers.
                ("'" . dired-single-up-directory))))
 #+end_src
 *** No beeps
+No beep.
 #+BEGIN_SRC emacs-lisp
-;;No beep
 (setq visible-bell t)
 #+END_SRC
+*** No blinking cursor
+Disable the blinking cursor.
+#+begin_src emacs-lisp
+(setq no-blinking-cursor -1)
+#+end_src
 *** Buffer setup
 Unique buffernames with uniquify.
 #+BEGIN_SRC emacs-lisp
@@ -2533,6 +2539,13 @@ Install C Lisp helper
 
   (use-package slime-company)
 #+end_src
+*** IELM
+An Interactive mode for Emacs LISP.
+#+begin_src emacs-lisp
+(use-package ielm
+  :straight (:type built-in)
+  :custom (ielm-noisy nil))
+#+end_src
 ** LUA
 For nmap script-engine files.
 #+begin_src emacs-lisp
@@ -2543,6 +2556,12 @@ For nmap script-engine files.
     (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
 #+end_src
 ** Editorconfig
+** Elpy
+A python helper.
+#+begin_src emacs-lisp
+(use-package elpy
+  :custom (python-indent-offset 4))
+#+end_src
 To get automatic settings for git repositories. https://editorconfig.org/
 #+begin_src emacs-lisp
 (use-package editorconfig
