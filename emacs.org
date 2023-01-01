@@ -1499,49 +1499,24 @@ Key bindings for scrolling.
 #+end_src
 * Theme and settings
 ** Theme
-*** Load themes
-#+BEGIN_SRC emacs-lisp
+Load custom themes.
+#+begin_src emacs-lisp
+(use-package doom-themes
+  :config (load-theme 'doom-vibrant t nil))
+#+end_src
+
+Define function to load theme in server mode.
+#+begin_src emacs-lisp
 (defun my/load-themes ()
-  "Loads my themes if in windows"
-
-  (use-package afternoon-theme
-    :config
-    (load-theme 'afternoon t t))
-
-  (use-package base16-theme
-    :config
-    (load-theme 'base16 t t))
-
-  (use-package material-theme
-    :config
-    (load-theme 'material t t))
-
-  (use-package twilight-bright-theme
-    :config
-    (load-theme 'twilight-bright t t))
-
-  (use-package zenburn-theme
-    :config
-    (load-theme 'zenburn t t))
-
-  (use-package org-beautify-theme
-    :disabled
-    :config
-    (load-theme 'org-beautify t t))
-
-  (use-package gruber-darker-theme
-    :config(load-theme 'gruber-darker t t))
-
-  (use-package doom-themes
-    :config(load-theme 'doom-palenight t t))
-
-  (load-theme 'doom-palenight t nil))
-#+END_SRC
+  "Loads my themes."
+  (interactive)
+  (load-theme 'doom-vibrant t nil))
+#+end_src
 *** Load different theme if in gui or terminal
 #+BEGIN_SRC emacs-lisp
 (unless (not (display-graphic-p))
-(load-theme 'tango-dark)
-(my/load-themes))
+  (load-theme 'tango-dark t)
+  (my/load-themes))
 #+END_SRC
 *** Theme when emacs run as daemon.
 This loads theme when emacs starts up as a daemon
@@ -1555,20 +1530,16 @@ This loads theme when emacs starts up as a daemon
 Switch betweens selected themes with "C-<".
 #+BEGIN_SRC emacs-lisp
 (use-package theme-looper
-  :config
-  (theme-looper-set-theme-set '(afternoon twilight-bright tango-dark zenburn material gruber-darker))
-  :bind
-  ("C-<" . theme-looper-enable-next-theme)
-  ("C->" . theme-looper-enable-random-theme))
+  :bind (("C-<" . theme-looper-select-theme-from-all)))
 #+END_SRC
 ** Fonts
 Use Cascadia Code Nerd Font
 #+BEGIN_SRC emacs-lisp
 (set-face-attribute 'default nil
                     :font "CaskaydiaCove Nerd Font-12")
-(set-face-attribute 'fixed-pitch nil :family "CaskaydiaCove Nerd Font Mono")
-(set-face-attribute 'fixed-pitch-serif nil :family "CaskaydiaCove Nerd Font Mono")
-(set-face-attribute 'variable-pitch nil :family "CaskaydiaCove Nerd Font")
+(set-face-attribute 'fixed-pitch nil :family "CaskaydiaCove Nerd Font Mono-12")
+(set-face-attribute 'fixed-pitch-serif nil :family "CaskaydiaCove Nerd Font Mono-12")
+(set-face-attribute 'variable-pitch nil :family "CaskaydiaCove Nerd Font-12")
 (add-to-list 'default-frame-alist '(font . "CaskaydiaCove Nerd Font-12"))
 (set-frame-font "CaskaydiaCove Nerd Font-11" nil t)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -1583,6 +1554,11 @@ Use Cascadia Code Nerd Font
   (interactive)
   (set-frame-font "CaskaydiaCove Nerd Font-11" nil t))
 #+END_SRC
+*** All the icons
+All the icons is a standard set of icons used by doom modeline et al.
+#+begin_src emacs-lisp
+(use-package all-the-icons)
+#+end_src
 ** Startup settings
 Things that we dont want during or after startup
 #+BEGIN_SRC emacs-lisp
