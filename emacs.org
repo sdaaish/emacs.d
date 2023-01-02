@@ -248,9 +248,13 @@ Apparently som error with TLS 1.3 for Elpa and older versions of emacs.
 *** Certificates
 Add some extra CA's for Emacs that are missing on Windows et al.
 [[https://letsencrypt.org/certificates/][Let's Encrypt]] as an example.
+
+=customCA.pem= is a file with open CA-issuers and =localCA.pem= is a file that contain private or local issuers.
 #+begin_src emacs-lisp
-  (require 'gnutls)
-  (add-to-list 'gnutls-trustfiles (expand-file-name "SSL/customCA.pem" user-emacs-directory))
+(require 'gnutls)
+(add-to-list 'gnutls-trustfiles (expand-file-name "SSL/customCA.pem" user-emacs-directory))
+(when (file-exists-p (expand-file-name "SSL/localCA.pem" user-emacs-directory))
+  (add-to-list 'gnutls-trustfiles (expand-file-name "SSL/localCA.pem" user-emacs-directory)))
 #+end_src
 * Hydra config
 Hydras is keyboard mapping through menus.
