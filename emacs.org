@@ -2564,6 +2564,19 @@ To get automatic settings for git repositories. https://editorconfig.org/
   :diminish
   :hook (prog-mode . editorconfig-mode))
 #+end_src
+** Chezmoi
+Starting to use chezmoi for my dotfiles. Install the package to interact with that.
+#+begin_src emacs-lisp
+(use-package chezmoi
+  :config (setq-default chezmoi-template-display-p t)
+  :bind
+  ("C-c C f" .  #'chezmoi-find)
+  ("C-c C s" .  #'chezmoi-write)
+  :hook (chezmoi-mode-hook . (lambda ()
+                               (if chezmoi-mode
+                                   (add-to-list 'company-backends 'chezmoi-company-backend)
+                                 (delete 'chezmoi-company-backend 'company-backends)))))
+#+end_src
 * Help systems
 ** Package-archives
 Use Melpa only to list packages and read about them.
