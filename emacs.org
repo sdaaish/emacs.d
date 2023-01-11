@@ -1222,6 +1222,17 @@ My own Lisp-files
       (make-directory (concat user-emacs-directory "lisp") t))
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 #+END_SRC
+
+More files
+#+begin_src emacs-lisp
+(let (lispdir) (cond ((eq system-type 'windows-nt)
+        (expand-file-name ".config/lisp/" (getenv "USERPROFILE")))
+      ((eq system-type 'gnu/linux)
+       (expand-file-name ".config/lisp/" (getenv "HOME")))))
+
+(when (file-exists-p lispdir)
+  (add-to-list 'load-path lispdir))
+#+end_src
 * Tuning
 ** Garbage collection
 Tries to change the variable dynamic.
