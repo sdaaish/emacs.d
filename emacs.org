@@ -1225,10 +1225,10 @@ My own Lisp-files
 
 More files
 #+begin_src emacs-lisp
-(let (lispdir) (cond ((eq system-type 'windows-nt)
+(setq lispdir (let (lispdir) (cond ((eq system-type 'windows-nt)
         (expand-file-name ".config/lisp/" (getenv "USERPROFILE")))
       ((eq system-type 'gnu/linux)
-       (expand-file-name ".config/lisp/" (getenv "HOME")))))
+       (expand-file-name ".config/lisp/" (getenv "HOME"))))))
 
 (when (file-exists-p lispdir)
   (add-to-list 'load-path lispdir))
