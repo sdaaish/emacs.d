@@ -1813,13 +1813,21 @@ Use the Emacs Lisp extended shell.
 Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes][this discussion]] for details.
 #+BEGIN_SRC emacs-lisp
 (require 'em-tramp) ; to load eshell’s sudo
-  (require 'password-cache) ;Load password-cache
-  (setq eshell-prefer-lisp-functions t)
-  (setq eshell-prefer-lisp-variables t)
-  (setq password-cache t) ; enable password caching
-  (setq password-cache-expiry 3600) ; for one hour (time in secs)
+(require 'password-cache) ;Load password-cache
+(setq eshell-prefer-lisp-functions t
+      eshell-prefer-lisp-variables t
+      password-cache t
+      password-cache-expiry 3600
+      eshell-history-size 10000
+      eshell-buffer-maximum-lines 10000
+      eshell-hist-ignoredups t
+      eshell-scroll-to-bottom-on-input t)
+(with-eval-after-load 'esh-opt
+  (setq eshell-destroy-buffer-when-process-dies t)
+  (setq eshell-visual-commands '("htop" "zsh" "vim")))
 #+END_SRC
 ** Eshell prompt
+Use a more estetic prompt even in =eshell=.
 #+begin_src emacs-lisp
 (use-package eshell-git-prompt
   :straight (eshell-git-prompt :fork t)
