@@ -1831,6 +1831,13 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
   (eshell-git-prompt-robyrussell-git-dirty-face ((t (:foreground "orange"))))
   (eshell-git-prompt-exit-fail-face ((t (:foreground "red")))))
 #+end_src
+** Shell
+Settings for the inferior shell. Replace =cmd.exe= with =pwsh.exe= on Windows.
+#+begin_src emacs-lisp
+(cond ((eq system-type 'windows-nt)
+       (lambda()((setq explicit-shell-file-name "pwsh.exe")
+                 (setq explicit-pwsh.exe-args '())))))
+#+end_src
 ** TRAMP
 Use fakecygpty to login from Windows using openssh. See https://www.emacswiki.org/emacs/SshWithNTEmacs and https://github.com/d5884/fakecygpty.
 You must compile fakecygpty from *Cygwin*. Won't work in MSYS2, MINGW32/64. Copy ~fakecygpty.exe~ to ~f_ssh.exe~ and ~f_scp.exe~.
@@ -2347,16 +2354,17 @@ Add support for different programming languages and configuration files.
 ** Powershell mode
 Powershell-mode is useful.
 #+BEGIN_SRC emacs-lisp
-  (use-package powershell
-    :straight (powershell :fork t)
-    :commands powershell
-    :config
-    (setq powershell-eldoc-def-files (list (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
-    (if (eq system-type 'gnu/linux)
-        (setq powershell-location-of-exe "/usr/bin/pwsh")
-      (setq powershell-location-of-exe "pwsh.exe"))
-    (setq explicit-powershell\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-"))
-    (setq explicit-pwsh\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-")))
+(use-package powershell
+  :straight (powershell :fork t)
+  :commands powershell
+  :config
+  (setq powershell-eldoc-def-files (list (expand-file-name "eldoc/powershell-eldoc.el" my/init-dir)))
+  (if (eq system-type 'gnu/linux)
+      (setq powershell-location-of-exe "/usr/bin/pwsh")
+    (setq powershell-location-of-exe "pwsh.exe")))
+;; Comment these out while troubleshooting.
+;;    (setq explicit-powershell\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-"))
+;;    (setq explicit-pwsh\.exe-args '("-NoLogo" "-NoProfile" "-Command" "-")))
 #+END_SRC
 ** Babel for powershell
 #+begin_src emacs-lisp
