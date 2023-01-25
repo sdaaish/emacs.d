@@ -1568,6 +1568,20 @@ Use Cascadia Code Nerd Font
   (interactive)
   (set-frame-font "CaskaydiaCove Nerd Font-11" nil t))
 #+END_SRC
+*** Minibuffer and echo area
+Change font for the =echo= area (messages from Emacs) and also for the =minibuffer=, input text.
+From Emacs Wiki.
+#+begin_src emacs-lisp
+(with-current-buffer (get-buffer " *Echo Area 0*")
+  (setq-local face-remapping-alist '((default (:height 1.2) fixed-pitch))))
+
+(custom-set-faces
+ '(minibuffer-prompt ((t (:foreground "#51afef" :height 1.2)))))
+
+(defun my-minibuffer-setup-hook ()
+      (setq-local face-remapping-alist '((default (:height 1.2)))))
+(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
+#+end_src
 *** All the icons
 All the icons is a standard set of icons used by doom modeline et al.
 #+begin_src emacs-lisp
