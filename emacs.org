@@ -333,7 +333,7 @@ Hydra for quick access to emacs files, "<f8> i".
   ("k" my/server-shutdown "Save&kill")
   ("p" (find-file my/private-orgfile) "private.org")
   ("r" (load-file user-init-file) "Reload emacs")
-  ("s" (find-file (expand-file-name "my-cheats.el" (concat my/init-dir "lisp"))) "Cheat sheet")
+  ("s" (find-file (expand-file-name "my-cheats.el" (expand-file-name "lisp/" "~/.config/"))) "Cheat sheet")
   ("q" nil "cancel"))
 (bind-key "<f8> i" 'hydra-config-files/body)
 (defun my/server-shutdown ()
@@ -2249,7 +2249,7 @@ Use backtick "`" and comma "," to use variable-expansion in the alist. See [[htt
 #+BEGIN_SRC emacs-lisp
 (require 'ox-publish)
 
-(setq org-publish-timestamp-directory (expand-file-name ".org-timestamps/" user-emacs-directory))
+(setq org-publish-timestamp-directory (expand-file-name ".org-timestamps/" no-littering-var-directory))
 (setq org-publish-project-alist
 `(("org" :components ("org-notes" "org-static"))
 ("org-notes"
