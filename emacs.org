@@ -773,10 +773,13 @@ Complete anything
 *** Company-shell
 Add more functions to company
 #+BEGIN_SRC emacs-lisp
-  (use-package company-shell
-    :config
-    (add-to-list 'company-backends '(company-shell company-shell-env))
-    (add-to-list 'company-shell-modes '(bat-mode powershell-mode)))
+(use-package company-shell
+  :config
+  (add-to-list 'company-shell-modes '(bat-mode powershell-mode))
+  :hook (shell-mode . (lambda ()
+                             (if shell-mode
+                                 (add-to-list 'company-backends '(company-shell company-shell-env)))
+                             (delete '(company-shell company-shell-env) 'company-backends))))
 #+END_SRC
 *** Company-keymapfix
 A fix to enable [tab] to expand yasnippets etc in ~company-mode-map~.
@@ -793,6 +796,19 @@ From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interfe
                                                             'company-yasnippet-or-completion
                                                             company-active-map)))
 #+END_SRC
+*** Company backends
+#+begin_src emacs-lisp
+
+(defun company-emacs-lisp-mode ()
+  "Set up `company-mode' for `emacs-lisp-mode'."
+  (set (make-local-variable 'company-backends)
+       '((company-yasnippet
+          :with
+          company-elisp
+          company-dabbrev-code
+          company-files))))
+(add-hook 'emacs-lisp-mode-hook 'company-emacs-lisp-mode)
+#+end_src
 ** ace-window
 Switch windows and frames quickly.
 #+BEGIN_SRC emacs-lisp
@@ -1125,9 +1141,9 @@ Automatically insert parenthesis.
 ** Disable-mouse
 No mice!
 #+begin_src emacs-lisp
-  (use-package disable-mouse
-  :diminish
-  :hook (after-init-hook)
+(use-package disable-mouse
+  :hook (after-init)
+  :custom (disable-mouse-mode-global-lighter nil)
   :config (global-disable-mouse-mode t))
 #+end_src
 ** Whitespace butler
@@ -1443,7 +1459,7 @@ Use counsel to navigate hosts.
   (use-package counsel-tramp
     :commands counsel-tramp
     :hook
-    (counsel-tramp-pre-command-hook .
+    (counsel-tramp-pre-command .
                                     (lambda ()
                                       (global-aggressive-indent-mode 0)
                                       (projectile-mode 0)
@@ -1451,7 +1467,7 @@ Use counsel to navigate hosts.
                                       (yas-minor-mode 0)
                                       (setq make-backup-files nil)
                                       (setq create-lockfiles nil)))
-    (counsel-tramp-quit-hook .
+    (counsel-tramp-quit .
                              (lambda ()
                                (global-aggressive-indent-mode 1)
                                (projectile-mode 1)
@@ -1961,8 +1977,8 @@ This is mostly copied from the sample config.
   (denote-date-prompt-use-org-read-date t)
   (denote-known-keywords '("emacs" "project" "powershell"))
   :hook
-  (dired-mode-hook . #'denote-dired-mode-in-directories)
-  (find-file-hook . #'denote-link-buttonize-buffer)
+  ((dired-mode . denote-dired-mode-in-directories)
+  (find-file . denote-link-buttonize-buffer))
   :bind
   ("C-c n a" . my/denote-create-new-note-from-region)
   ("C-c n j" . my/denote-journal)
@@ -2625,7 +2641,7 @@ Starting to use chezmoi for my dotfiles. Install the package to interact with th
   :bind
   ("C-c C f" .  #'chezmoi-find)
   ("C-c C s" .  #'chezmoi-write)
-  :hook (chezmoi-mode-hook . (lambda ()
+  :hook (chezmoi-mode . (lambda ()
                                (if chezmoi-mode
                                    (add-to-list 'company-backends 'chezmoi-company-backend)
                                  (delete 'chezmoi-company-backend 'company-backends)))))
