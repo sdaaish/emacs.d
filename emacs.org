@@ -773,10 +773,13 @@ Complete anything
 *** Company-shell
 Add more functions to company
 #+BEGIN_SRC emacs-lisp
-  (use-package company-shell
-    :config
-    (add-to-list 'company-backends '(company-shell company-shell-env))
-    (add-to-list 'company-shell-modes '(bat-mode powershell-mode)))
+(use-package company-shell
+  :config
+  (add-to-list 'company-shell-modes '(bat-mode powershell-mode))
+  :hook (shell-mode . (lambda ()
+                             (if shell-mode
+                                 (add-to-list 'company-backends '(company-shell company-shell-env)))
+                             (delete '(company-shell company-shell-env) 'company-backends))))
 #+END_SRC
 *** Company-keymapfix
 A fix to enable [tab] to expand yasnippets etc in ~company-mode-map~.
@@ -793,6 +796,19 @@ From [[https://stackoverflow.com/questions/2087225/about-the-fix-for-the-interfe
                                                             'company-yasnippet-or-completion
                                                             company-active-map)))
 #+END_SRC
+*** Company backends
+#+begin_src emacs-lisp
+
+(defun company-emacs-lisp-mode ()
+  "Set up `company-mode' for `emacs-lisp-mode'."
+  (set (make-local-variable 'company-backends)
+       '((company-yasnippet
+          :with
+          company-elisp
+          company-dabbrev-code
+          company-files))))
+(add-hook 'emacs-lisp-mode-hook 'company-emacs-lisp-mode)
+#+end_src
 ** ace-window
 Switch windows and frames quickly.
 #+BEGIN_SRC emacs-lisp
