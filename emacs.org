@@ -1241,12 +1241,9 @@ My own Lisp-files
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 #+END_SRC
 
-More files
+Use a shared LISP-directory between installed Emacsen. Emacs for Windows have the =HOME= variable defined as default.
 #+begin_src emacs-lisp
-(setq lispdir (let (lispdir) (cond ((eq system-type 'windows-nt)
-        (expand-file-name ".config/lisp/" (getenv "USERPROFILE")))
-      ((eq system-type 'gnu/linux)
-       (expand-file-name ".config/lisp/" (getenv "HOME"))))))
+(setq lispdir (let (lispdir) (expand-file-name ".config/lisp/" (getenv "HOME"))))
 
 (when (file-exists-p lispdir)
   (add-to-list 'load-path lispdir))
@@ -1973,7 +1970,7 @@ This is mostly copied from the sample config.
 (use-package denote
   :custom
   (denote-directory (expand-file-name "notes/denote" my/onedrive-dir))
-  (denote-dired-directories (expand-file-name "notes/denote" my/onedrive-dir))
+  (denote-dired-directories (list denote-directory))
   (denote-date-prompt-use-org-read-date t)
   (denote-known-keywords '("emacs" "project" "powershell"))
   :hook
