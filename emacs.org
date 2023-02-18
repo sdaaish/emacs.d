@@ -1967,6 +1967,37 @@ Save buffers when idle
 Try out *Denote* to take notes. For more info see the [[https://protesilaos.com/emacs/denote][Denote Manual]].
 This is mostly copied from the sample config.
 #+begin_src emacs-lisp
+(defhydra hydra-denote (:color teal :hint nil)
+  "
+           Note                         Type                       Rename
+           -------------------------------------------------------------------------------
+           _n_: New                     _i_: Link                  _r_: Rename file
+           _a_: New from region         _I_: Add links             _R_: Rename using Front Matter
+           _j_: Journal                 _m_: Add missing links     _x_: Split Org subtree
+           _s_: Subdirectory            _b_: Backlink              ^
+           _N_: Choose type            _ff_: Find File             _q_: Quit
+           _d_: Date                   _fb_: Find backlink
+           _t_: Template                _F_: Open Denote directory
+  "
+  ("a"  my/denote-create-new-note-from-region)
+  ("j"  my/denote-journal)
+  ("n"  #'denote)
+  ("N"  #'denote-type)
+  ("d"  #'denote-date)
+  ("s"  #'denote-subdirectory)
+  ("t"  #'denote-template)
+  ("i"  #'denote-link)
+  ("I"  #'denote-link-add-links)
+  ("m"  #'denote-link-add-missing-links)
+  ("b"  #'denote-link-backlinks)
+  ("ff"  #'denote-link-find-file)
+  ("fb"  #'denote-link-find-backlink)
+  ("F"  (find-file denote-directory))
+  ("r"  #'denote-rename-file)
+  ("R"  #'denote-rename-file-using-front-matter)
+  ("x"  my/denote-split-org-subtree :base-map org-mode-map)
+  ("q"  nil "cancel" :color blue))
+
 (use-package denote
   :custom
   (denote-directory (expand-file-name "notes/denote/" my/onedrive-dir))
@@ -1975,29 +2006,12 @@ This is mostly copied from the sample config.
   (denote-known-keywords '("emacs" "project" "powershell"))
   :hook
   ((dired-mode . denote-dired-mode-in-directories)
-  (find-file . denote-link-buttonize-buffer))
-  :bind
-  ("C-c n a" . my/denote-create-new-note-from-region)
-  ("C-c n j" . my/denote-journal)
-  ("C-c n n" . #'denote)
-  ("C-c n N" . #'denote-type)
-  ("C-c n d" . #'denote-date)
-  ("C-c n s" . #'denote-subdirectory)
-  ("C-c n t" . #'denote-template)
-  ("C-c n i" . #'denote-link)
-  ("C-c n I" . #'denote-link-add-links)
-  ("C-c n m" . #'denote-link-add-missing-links)
-  ("C-c n b" . #'denote-link-backlinks)
-  ("C-c n f f" . #'denote-link-find-file)
-  ("C-c n f b" . #'denote-link-find-backlink)
-  ("C-c n r" . #'denote-rename-file)
-  ("C-c n R" . #'denote-rename-file-using-front-matter)
-  (:map dired-mode-map
-        ("C-c C-d C-i" . #'denote-link-dired-marked-notes)
-        ("C-c C-d C-r" . #'denote-dired-rename-marked-files)
-        ("C-c C-d C-R" . #'denote-dired-rename-marked-files-using-front-matter))
-  (:map org-mode-map
-        ("C-c n x" . my/denote-split-org-subtree)))
+   (find-file . denote-link-buttonize-buffer))
+  :bind (("C-c n" . hydra-denote/body)
+         (:map dired-mode-map
+               ("C-c C-d C-i" . #'denote-link-dired-marked-notes)
+               ("C-c C-d C-r" . #'denote-dired-rename-marked-files)
+               ("C-c C-d C-R" . #'denote-dired-rename-marked-files-using-front-matter))))
 #+end_src
 ** Denote journal
 Create a journal directly with denote.
