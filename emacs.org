@@ -1586,11 +1586,11 @@ Use Cascadia Code Nerd Font
 Change font for the =echo= area (messages from Emacs) and also for the =minibuffer=, input text.
 From Emacs Wiki.
 #+begin_src emacs-lisp
-(custom-set-faces
- '(minibuffer-prompt ((t (:foreground "#51afef" :height 1.2)))))
-
 (defun my-minibuffer-setup-hook ()
-      (setq-local face-remapping-alist '((default (:height 1.2)))))
+  (setq-local face-remapping-alist '((minibuffer-prompt (:foreground "#51afef" :height 1.2)))))
+(defun my-minibuffer-setup-hook ()
+  (setq-local face-remapping-alist '((default (:foreground "#51afef" :height 1.2)))))
+
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
 #+end_src
 *** All the icons
