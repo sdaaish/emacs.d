@@ -195,38 +195,37 @@ File with personal stuff.
 ** Org-mode variables
 Set the variables for org-mode files. Use separate files to store agenda and refiling targets, to improve performance.
 #+BEGIN_SRC emacs-lisp
-  (defun my/read-lines (filePath)
-    "Return a list of lines of a file at filePath."
-    (if (file-exists-p filePath)
-        (with-temp-buffer
-          (insert-file-contents filePath)
-          (split-string (buffer-string) "\n" t))))
+(defun my/read-lines (filePath)
+  "Return a list of lines of a file at filePath."
+  (if (file-exists-p filePath)
+      (with-temp-buffer
+        (insert-file-contents filePath)
+        (split-string (buffer-string) "\n" t))))
 
-  (defun my/fullpath (filepath directory)
-    "Concatenate directory to names in filepath and return as list."
-    (let (value)
-      (setq list (my/read-lines filepath))
-      (dolist (shortfile list value)
-        (setq fullpath (concat directory shortfile))
-        (setq value (cons fullpath value)))))
+(defun my/fullpath (filepath directory)
+  "Concatenate directory to names in filepath and return as list."
+  (let (value)
+    (setq list (my/read-lines filepath))
+    (dolist (shortfile list value)
+      (setq fullpath (concat directory shortfile))
+      (setq value (cons fullpath value)))))
 
-  ;; Define constants
-  (defconst my/org-directory (expand-file-name "emacs/org/" my/onedrive-dir))
-  (defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
-  (defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
-  (defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
-  (defvar my/refile-targets (my/read-lines (expand-file-name ".target-files"  my/org-directory)))
-  (defvar my/mobile-target-file (expand-file-name  ".mobile-files" my/org-directory))
-  ;; My org-files directory
-  (setq org-directory my/org-directory)
-  ;; Org-agenda can read from a file
-  (setq org-agenda-files my/org-agenda-files)
-  ;; Store notes here
-  (setq org-default-notes-file my/notes-file)
-  ;; Choose targets for refile from this file
-  (setq org-refile-targets '((my/refile-targets :maxlevel . 3)))
-  ;; Files for mobile sync
-  (defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
+;; Define constants
+(defconst my/org-directory (expand-file-name "emacs/org/" my/onedrive-dir))
+(defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
+(defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
+(defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
+(defvar my/mobile-target-file (expand-file-name  ".mobile-files" my/org-directory))
+;; My org-files directory
+(setq org-directory my/org-directory)
+;; Org-agenda can read from a file
+(setq org-agenda-files my/org-agenda-files)
+;; Store notes here
+(setq org-default-notes-file my/notes-file)
+;; Choose targets to refile to.
+(customize-set-variable 'org-refile-targets '((nil :maxlevel . 3)(org-agenda-files :maxlevel . 3)))
+;; Files for mobile sync
+(defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
 #+END_SRC
 * Initializing
 ** Message-buffer
