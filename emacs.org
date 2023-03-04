@@ -149,8 +149,26 @@ Install org mode and contrib.
 ;; Install latest version of org and org-plus-contrib
 (use-package org
   :bind (:map org-mode-map
-              ("C-c C-<tab>" . org-force-cycle-archived)))
+              ("C-c C-<tab>" . org-force-cycle-archived)
+              ("C-c C-h" . org-tags-view))
+  :custom
+  (org-use-speed-commands t)
+  (org-speed-commands (cons '("S" . widen) org-speed-commands)))
+
 (use-package org-contrib)
+#+end_src
+
+*** Shortcut key
+Add a keybinding for =org-speed-commands=.
+From https://github.com/revrari/emacs_elements_chapter_2/blob/main/org-speed-commands.org
+#+begin_src emacs-lisp
+(defun org-jump-to-heading-beginning ()
+  "Jump to the beginning of the line of the previous Org heading."
+  (interactive)
+  (org-back-to-heading)
+  (beginning-of-line))
+
+(define-key org-mode-map (kbd "C-*") 'org-jump-to-heading-beginning)
 #+end_src
 * Variables
 Setting variables and constants for my directories and files.
@@ -195,38 +213,37 @@ File with personal stuff.
 ** Org-mode variables
 Set the variables for org-mode files. Use separate files to store agenda and refiling targets, to improve performance.
 #+BEGIN_SRC emacs-lisp
-  (defun my/read-lines (filePath)
-    "Return a list of lines of a file at filePath."
-    (if (file-exists-p filePath)
-        (with-temp-buffer
-          (insert-file-contents filePath)
-          (split-string (buffer-string) "\n" t))))
+(defun my/read-lines (filePath)
+  "Return a list of lines of a file at filePath."
+  (if (file-exists-p filePath)
+      (with-temp-buffer
+        (insert-file-contents filePath)
+        (split-string (buffer-string) "\n" t))))
 
-  (defun my/fullpath (filepath directory)
-    "Concatenate directory to names in filepath and return as list."
-    (let (value)
-      (setq list (my/read-lines filepath))
-      (dolist (shortfile list value)
-        (setq fullpath (concat directory shortfile))
-        (setq value (cons fullpath value)))))
+(defun my/fullpath (filepath directory)
+  "Concatenate directory to names in filepath and return as list."
+  (let (value)
+    (setq list (my/read-lines filepath))
+    (dolist (shortfile list value)
+      (setq fullpath (concat directory shortfile))
+      (setq value (cons fullpath value)))))
 
-  ;; Define constants
-  (defconst my/org-directory (expand-file-name "emacs/org/" my/onedrive-dir))
-  (defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
-  (defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
-  (defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
-  (defvar my/refile-targets (my/read-lines (expand-file-name ".target-files"  my/org-directory)))
-  (defvar my/mobile-target-file (expand-file-name  ".mobile-files" my/org-directory))
-  ;; My org-files directory
-  (setq org-directory my/org-directory)
-  ;; Org-agenda can read from a file
-  (setq org-agenda-files my/org-agenda-files)
-  ;; Store notes here
-  (setq org-default-notes-file my/notes-file)
-  ;; Choose targets for refile from this file
-  (setq org-refile-targets '((my/refile-targets :maxlevel . 3)))
-  ;; Files for mobile sync
-  (defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
+;; Define constants
+(defconst my/org-directory (expand-file-name "emacs/org/" my/onedrive-dir))
+(defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
+(defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
+(defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
+(defvar my/mobile-target-file (expand-file-name  ".mobile-files" my/org-directory))
+;; My org-files directory
+(setq org-directory my/org-directory)
+;; Org-agenda can read from a file
+(setq org-agenda-files my/org-agenda-files)
+;; Store notes here
+(setq org-default-notes-file my/notes-file)
+;; Choose targets to refile to.
+(customize-set-variable 'org-refile-targets '((nil :maxlevel . 3)(org-agenda-files :maxlevel . 3)))
+;; Files for mobile sync
+(defvar my/mobile-files (my/fullpath my/mobile-target-file my/org-directory))
 #+END_SRC
 * Initializing
 ** Message-buffer
@@ -331,28 +348,29 @@ Hydra for quick access to emacs files, "<f8> i".
 *** Hydra for org
 Switch between org-buffers, "<f8> o".
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-org-stuff (:color blue :columns 3)
-    "Org mode stuff"
-    ("c" my/org-gcal-sync "Sync Google Calender")
-    ("g" my/org-mobile-sync "Synchronize mobile")
-    ("P" org-publish-project "org-publish-project")
-    ("o" org-iswitchb "Switch org-buffer")
-    ("r" org-revert-all-org-buffers "Refresh all org-buffers")
-    ("s" org-save-all-org-buffers "Save Org buffers")
-    ("q" nil "cancel"))
-  (bind-key "<f8> o" 'hydra-org-stuff/body)
-  (defun my/org-gcal-sync()
-    "Synchronizes Google calendar with Org"
-    (interactive)
-    (org-save-all-org-buffers)
-    (org-gcal-sync))
-  (defun my/org-mobile-sync()
-    "Synchronizes agenda files with mobile app."
-    (interactive)
-    (org-save-all-org-buffers)
-    (org-mobile-pull)
-    (org-mobile-push)
-    (message "Synced mobile agendas."))
+(defhydra hydra-org-stuff (:color blue :columns 3)
+  "Org mode stuff"
+  ("c" my/org-gcal-sync "Sync Google Calender")
+  ("g" my/org-mobile-sync "Synchronize mobile")
+  ("P" org-publish-project "org-publish-project")
+  ("o" org-iswitchb "Switch org-buffer")
+  ("r" org-revert-all-org-buffers "Refresh all org-buffers")
+  ("s" org-save-all-org-buffers "Save Org buffers")
+  ("v" org-tags-view)
+  ("q" nil "cancel"))
+(bind-key "<f8> o" 'hydra-org-stuff/body)
+(defun my/org-gcal-sync()
+  "Synchronizes Google calendar with Org"
+  (interactive)
+  (org-save-all-org-buffers)
+  (org-gcal-sync))
+(defun my/org-mobile-sync()
+  "Synchronizes agenda files with mobile app."
+  (interactive)
+  (org-save-all-org-buffers)
+  (org-mobile-pull)
+  (org-mobile-push)
+  (message "Synced mobile agendas."))
 #+END_SRC
 *** Launcher
 Launch various programs, "C-c b"
