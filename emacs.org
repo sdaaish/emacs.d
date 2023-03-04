@@ -149,8 +149,26 @@ Install org mode and contrib.
 ;; Install latest version of org and org-plus-contrib
 (use-package org
   :bind (:map org-mode-map
-              ("C-c C-<tab>" . org-force-cycle-archived)))
+              ("C-c C-<tab>" . org-force-cycle-archived)
+              ("C-c C-h" . org-tags-view))
+  :custom
+  (org-use-speed-commands t)
+  (org-speed-commands (cons '("S" . widen) org-speed-commands)))
+
 (use-package org-contrib)
+#+end_src
+
+*** Shortcut key
+Add a keybinding for =org-speed-commands=.
+From https://github.com/revrari/emacs_elements_chapter_2/blob/main/org-speed-commands.org
+#+begin_src emacs-lisp
+(defun org-jump-to-heading-beginning ()
+  "Jump to the beginning of the line of the previous Org heading."
+  (interactive)
+  (org-back-to-heading)
+  (beginning-of-line))
+
+(define-key org-mode-map (kbd "C-*") 'org-jump-to-heading-beginning)
 #+end_src
 * Variables
 Setting variables and constants for my directories and files.
@@ -330,28 +348,29 @@ Hydra for quick access to emacs files, "<f8> i".
 *** Hydra for org
 Switch between org-buffers, "<f8> o".
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-org-stuff (:color blue :columns 3)
-    "Org mode stuff"
-    ("c" my/org-gcal-sync "Sync Google Calender")
-    ("g" my/org-mobile-sync "Synchronize mobile")
-    ("P" org-publish-project "org-publish-project")
-    ("o" org-iswitchb "Switch org-buffer")
-    ("r" org-revert-all-org-buffers "Refresh all org-buffers")
-    ("s" org-save-all-org-buffers "Save Org buffers")
-    ("q" nil "cancel"))
-  (bind-key "<f8> o" 'hydra-org-stuff/body)
-  (defun my/org-gcal-sync()
-    "Synchronizes Google calendar with Org"
-    (interactive)
-    (org-save-all-org-buffers)
-    (org-gcal-sync))
-  (defun my/org-mobile-sync()
-    "Synchronizes agenda files with mobile app."
-    (interactive)
-    (org-save-all-org-buffers)
-    (org-mobile-pull)
-    (org-mobile-push)
-    (message "Synced mobile agendas."))
+(defhydra hydra-org-stuff (:color blue :columns 3)
+  "Org mode stuff"
+  ("c" my/org-gcal-sync "Sync Google Calender")
+  ("g" my/org-mobile-sync "Synchronize mobile")
+  ("P" org-publish-project "org-publish-project")
+  ("o" org-iswitchb "Switch org-buffer")
+  ("r" org-revert-all-org-buffers "Refresh all org-buffers")
+  ("s" org-save-all-org-buffers "Save Org buffers")
+  ("v" org-tags-view)
+  ("q" nil "cancel"))
+(bind-key "<f8> o" 'hydra-org-stuff/body)
+(defun my/org-gcal-sync()
+  "Synchronizes Google calendar with Org"
+  (interactive)
+  (org-save-all-org-buffers)
+  (org-gcal-sync))
+(defun my/org-mobile-sync()
+  "Synchronizes agenda files with mobile app."
+  (interactive)
+  (org-save-all-org-buffers)
+  (org-mobile-pull)
+  (org-mobile-push)
+  (message "Synced mobile agendas."))
 #+END_SRC
 *** Launcher
 Launch various programs, "C-c b"
