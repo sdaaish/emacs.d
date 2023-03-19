@@ -150,10 +150,11 @@ Install org mode and contrib.
 (use-package org
   :bind (:map org-mode-map
               ("C-c C-<tab>" . org-force-cycle-archived)
-              ("C-c C-h" . org-tags-view))
-  :custom
-  (org-use-speed-commands t)
-  (org-speed-commands (cons '("S" . widen) org-speed-commands)))
+              ("C-c C-h" . org-tags-view)
+              ("C-*" . org-jump-to-heading-beginning))
+  :hook (org-mode . (lambda ()
+                           (customize-set-variable 'org-use-speed-commands t)
+                           (customize-set-variable 'org-speed-commands (cons '("S" . widen) org-speed-commands)))))
 
 (use-package org-contrib)
 #+end_src
@@ -168,7 +169,6 @@ From https://github.com/revrari/emacs_elements_chapter_2/blob/main/org-speed-com
   (org-back-to-heading)
   (beginning-of-line))
 
-(define-key org-mode-map (kbd "C-*") 'org-jump-to-heading-beginning)
 #+end_src
 * Variables
 Setting variables and constants for my directories and files.
@@ -229,7 +229,7 @@ Set the variables for org-mode files. Use separate files to store agenda and ref
       (setq value (cons fullpath value)))))
 
 ;; Define constants
-(defconst my/org-directory (expand-file-name "org/" my/onedrive-dir))
+(defconst my/org-directory (expand-file-name "Org/" my/onedrive-dir))
 (defconst my/notes-file (expand-file-name "notes.org" my/org-directory))
 (defconst my/diary-file (expand-file-name "diary.org" my/org-directory))
 (defconst my/org-agenda-files (expand-file-name ".agenda-files" my/org-directory))
