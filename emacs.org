@@ -1777,6 +1777,7 @@ Use eshell built in functions for sudo. See [[https://emacs.stackexchange.com/qu
       eshell-buffer-maximum-lines 10000
       eshell-hist-ignoredups t
       eshell-scroll-to-bottom-on-input t)
+(customize-set-variable 'eshell-aliases-file (expand-file-name ".config/eshell/aliases" (getenv "HOME")))
 (with-eval-after-load 'esh-opt
   (setq eshell-destroy-buffer-when-process-dies t)
   (setq eshell-visual-commands '("htop" "zsh" "vim")))
@@ -2336,7 +2337,7 @@ Powershell-mode is useful.
   :straight (powershell :fork t)
   :commands powershell
   :config
-  (setq powershell-eldoc-def-files (list (expand-file-name "etc/eldoc/powershell-eldoc.el" my/init-dir)))
+  (setq powershell-eldoc-def-files (list (expand-file-name ".config/eldoc/powershell-eldoc.el" (getenv "HOME"))))
   (if (eq system-type 'gnu/linux)
       (setq powershell-location-of-exe "/usr/bin/pwsh")
     (setq powershell-location-of-exe "pwsh.exe")))
