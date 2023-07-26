@@ -1738,10 +1738,19 @@ Hippie expands text automagically.
 (global-set-key [remap dabbrev-expand] 'hippie-expand)
 #+end_src
 *** Abbrev mode
-Abbrev autocorrects words.
+Abbrev autocorrects words. And load common abbreviations.
 #+begin_src emacs-lisp
 (setq-default abbrev-mode t)
 (customize-set-variable 'save-abbrevs 'silently)
+(setq abbrev-files (directory-files lispdir t "abbrev.*"))
+(defun load-abbrev-files (list)
+  "Load abbrev files."
+  (let (value)
+    (dolist (file list value)
+      (if (file-readable-p file)
+          (read-abbrev-file file)))))
+
+(load-abbrev-files abbrev-files)
 #+end_src
 *** Diminish stuff
 #+begin_src emacs-lisp
