@@ -628,8 +628,19 @@ Find or switch to projects easy, and use ~counsel-projectile~.
 Use *flycheck* to check code.
 #+begin_src emacs-lisp
 (use-package flycheck
-  :custom (flycheck-checker-error-threshold 3000)
-  :hook ((emacs-lisp-mode powershell-mode sh-mode) . (lambda () (flycheck-mode 1))))
+  :custom ((flycheck-checker-error-threshold 3000)
+           (flycheck-display-errors-delay 1.4))
+  :hook (((emacs-lisp-mode powershell-mode sh-mode) .
+          (lambda () (flycheck-mode 1)))
+
+         ((flycheck-after-syntax-check) .
+          (lambda ()
+            (if flycheck-current-errors
+                (flycheck-list-errors)
+              (when (get-buffer "*Flycheck errors*")
+                (switch-to-buffer "*Flycheck errors*")
+                (kill-buffer (current-buffer))
+                (delete-window)))))))
 #+end_src
 *** Avy
 #+begin_src emacs-lisp
