@@ -1086,6 +1086,15 @@ Help to keep config clean.
   :diminish
   :hook ((prog-mode org-mode conf-mode) . ws-butler-mode))
 #+end_src
+** Dumb Jump
+Jump to definition support. Requires =ag= or =rg= to work efficiently. (Install with =scoop= on Windows.)
+#+begin_src emacs-lisp
+(use-package dumb-jump
+  :custom
+  (xref-show-definitions-function #'xref-show-definitions-completing-read)
+  :init
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+#+end_src
 * Private and local stuff
 ** Load private stuff
 This load a local file with private info.
