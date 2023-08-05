@@ -104,6 +104,12 @@ Final statements
 (message "*** Started emacs @ %s" (my/format-time start-time))
 (message "*** Reading configuration from init.el...")
 #+end_src
+** Server
+Start Emacs as server.
+#+begin_src emacs-lisp
+(when (eq system-type 'gnu/linux)
+  (server-start))
+#+end_src
 ** Straight
 Bootstrap straight.
 #+begin_src emacs-lisp
@@ -1779,6 +1785,16 @@ Abbrev autocorrects words. And load common abbreviations.
           (read-abbrev-file file)))))
 
 (load-abbrev-files abbrev-files)
+
+;; From https://stackoverflow.com/questions/17557186/turn-off-abbrev-mode-in-emacs-minibuffer
+;; Disable abbrev in minibuffer.
+(defun conditionally-disable-abbrev ()
+  ""
+  (abbrev-mode -1))
+
+(add-hook 'minibuffer-setup-hook 'conditionally-disable-abbrev)
+(add-hook 'minibuffer-exit-hook (lambda () (abbrev-mode 1)))
+
 #+end_src
 *** Diminish stuff
 #+begin_src emacs-lisp
