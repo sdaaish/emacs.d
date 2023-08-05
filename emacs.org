@@ -1925,16 +1925,16 @@ This is mostly copied from the sample config.
 #+begin_src emacs-lisp
 (defhydra hydra-denote (:color teal :hint nil)
   "
-           Note                         Type                       Rename
-           -------------------------------------------------------------------------------
-           _n_: New                     _i_: Link                  _r_: Rename file
-           _a_: New from region         _I_: Add links             _R_: Rename using Front Matter
-           _j_: Journal                 _m_: Add missing links     _x_: Split Org subtree
-           _s_: Subdirectory            _b_: Backlink              ^
-           _N_: Choose type            _ff_: Find File             _q_: Quit
-           _d_: Date                   _fb_: Find backlink
-           _t_: Template                _F_: Open Denote directory
-  "
+             Note                         Type                       Rename
+             -------------------------------------------------------------------------------
+             _n_: New                     _i_: Link                  _r_: Rename file
+             _a_: New from region         _I_: Add links             _R_: Rename using Front Matter
+             _j_: Journal                 _m_: Add missing links     _x_: Split Org subtree
+             _s_: Subdirectory            _b_: Backlink              ^
+             _N_: Choose type            _ff_: Find File             _q_: Quit
+             _d_: Date                   _fb_: Find backlink
+             _t_: Template                _F_: Open Denote directory
+    "
   ("a"  my/denote-create-new-note-from-region)
   ("j"  my/denote-journal)
   ("n"  #'denote)
@@ -2022,13 +2022,15 @@ Prompt for title and keywords of the new note."
     (user-error "No region is available")))
 #+end_src
 ** Denote templates
-Add templates to denote
+Add templates to denote.
 #+begin_src emacs-lisp
 
-(add-to-list 'denote-templates `(memo . ,(concat "* Content"
-                                                 "\n\n"
-                                                 "* Topics"
-                                                 "\n\n")))
+(with-eval-after-load 'denote
+  (add-to-list 'denote-templates `((memo . ,(concat "* Content"
+                                                    "\n\n"
+                                                    "* Topics"
+                                                    "\n\n")))))
+
 #+end_src
 * Org-mode stuff
 Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Beginners Customization Guide]] for info about this.
