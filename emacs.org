@@ -107,8 +107,9 @@ Final statements
 ** Server
 Start Emacs as server.
 #+begin_src emacs-lisp
-(when (eq system-type 'gnu/linux)
-  (server-start))
+(require 'server)
+(unless (server-running-p)
+    (server-start))
 #+end_src
 ** Straight
 Bootstrap straight.
@@ -120,8 +121,7 @@ Bootstrap straight.
       (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+        (url-retrieve-synchronously "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
@@ -295,7 +295,7 @@ Use "C-c v" to toggle values.
         _v_ visual-lines:      %`visual-line-mode
         _w_ whitespace-mode:   %`whitespace-mode
         _l_ linenumber:        %`display-line-numbers-mode
-        _r_ relative-mode      %`linum-relative-mode
+        _r_ relative-lines:    %`display-line-numbers-type
         _R_ rainbow-delimiters %`rainbow-delimiters-mode
         _C_ rainbow-mode       %`rainbow-mode
   "
@@ -304,8 +304,8 @@ Use "C-c v" to toggle values.
   ("C" rainbow-mode nil)
   ("d" toggle-debug-on-error nil)
   ("f" auto-fill-mode nil)
-  ("l" display-line-numbers-mode nil)
-  ("r" linum-relative-mode nil)
+  ("l" my/line-number-t nil)
+  ("r" my/line-number-relative nil)
   ("R" rainbow-delimiters-mode nil)
   ("t" toggle-truncate-lines nil)
   ("v" visual-line-mode nil)
@@ -384,7 +384,7 @@ Launch various programs, "C-c b"
   (defhydra hydra-launcher (:color blue :columns 4)
     "Launch programs"
     ("b" hydra-better-shell/body "Better Shell")
-    ("c" cheat-sh "Cheat sheet")
+    ("c" cheat-sh "Cheat sheet online")
     ("e" eshell "Eshell")
     ("E" eww "EWW")
     ("f" free-keys "Free keys")
@@ -657,7 +657,8 @@ Use *flycheck* to check code.
 ** Winner-mode
 Winner is used to restore windows.
 #+BEGIN_SRC emacs-lisp
-(use-package winner)
+(use-package winner
+  :config (winner-mode 1))
 #+END_SRC
 ** Bind-key
 Use the bind-key package (used by use-package).
@@ -674,13 +675,17 @@ Highlight differences with diff-hl, which works better than git-gutter.
 ** line-numbers
 Use relative linenumbers.
 #+BEGIN_SRC emacs-lisp
-(use-package linum-relative
-:config
-  (setq linum-relative-current-symbol ""))
-#+END_SRC
-Turn off line-numbers in minor mode.
-#+BEGIN_SRC emacs-lisp
-(use-package linum-off)
+(defun my/line-number-relative ()
+  "Display relative line numbers."
+  (interactive)
+  (setq-local display-line-numbers-type 'visual)
+  (display-line-numbers-mode 'toggle))
+
+(defun my/line-number-t ()
+  "Display absolute line numbers."
+  (interactive )
+  (setq-local display-line-numbers-type t)
+  (display-line-numbers-mode 'toggle))
 #+END_SRC
 ** Indentation
 Use aggressive mode for indentation. Use to be auto-indent, but aggressive seems better.
@@ -1599,7 +1604,7 @@ Use powerline in the message bar.
 *** Initial settings
 #+BEGIN_SRC emacs-lisp
 (setq-default major-mode 'text-mode)
-(line-number-mode t)
+(display-line-numbers-mode -1)
 (column-number-mode t)
 (transient-mark-mode t)
 (show-paren-mode t)
