@@ -117,11 +117,11 @@ Bootstrap straight.
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
@@ -1511,8 +1511,7 @@ Switch betweens selected themes with "C-<".
 ** Fonts
 Use Cascadia Code Nerd Font
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil
-                    :font "CaskaydiaCove Nerd Font-12")
+(set-face-attribute 'default nil :font "CaskaydiaCove Nerd Font-12")
 (set-face-attribute 'fixed-pitch nil :family "CaskaydiaCove Nerd Font Mono-12")
 (set-face-attribute 'fixed-pitch-serif nil :family "CaskaydiaCove Nerd Font Mono-12")
 (set-face-attribute 'variable-pitch nil :family "CaskaydiaCove Nerd Font-12")
@@ -1531,12 +1530,17 @@ Use Cascadia Code Nerd Font
   (set-frame-font "CaskaydiaCove Nerd Font-11" nil t))
 #+END_SRC
 *** Emojis
+Emojis need a special font, setup based on what exists on the system.
+https://unicode.org/emoji/charts/full-emoji-list.html
 #+begin_src emacs-lisp
-(when (member "Segoe UI Emoji" (font-family-list))
-  (set-fontset-font
-   t 'symbol (font-spec :family "Segoe UI Emoji") nil 'prepend)
-  (set-fontset-font
-   t 'unicode (font-spec :family "Segoe UI Emoji") nil 'prepend))
+(set-fontset-font
+ t 'emoji
+ (cond
+  ((member "Apple Color Emoji" (font-family-list)) "Apple Color Emoji")
+  ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
+  ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
+  ((member "Segoe UI Emoji" (font-family-list)) "Segoe UI Emoji")
+  ((member "Symbola" (font-family-list)) "Symbola")))
 #+end_src
 *** Minibuffer and echo area
 Change font for the =echo= area (messages from Emacs) and also for the =minibuffer=, input text.
