@@ -2416,11 +2416,6 @@ Powershell-mode is useful.
    (perl       . t)
    (emacs-lisp . t)))
 #+end_src
-** Dos-mode
-Only in windows.
-#+BEGIN_SRC emacs-lisp
-  (use-package bat-mode)
-#+END_SRC
 ** Markdown-mode
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
@@ -2441,16 +2436,6 @@ Only in windows.
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-preview-mode
     :commands markdown-preview)
-#+END_SRC
-** Mediawiki
-#+BEGIN_SRC emacs-lisp
-  (use-package mediawiki
-    :disabled
-    :config
-    (setq mediawiki-site-alist
-          (append
-           '(("Charlottendal" "https://www.charlottendal.net/mwiki/" "username" "password" "Main Page"))
-           mediawiki-site-alist)))
 #+END_SRC
 ** SSH-config
 Add mode for configuring .ssh/config and other related to SSH.
@@ -2642,14 +2627,6 @@ Use Melpa only to list packages and read about them.
 (add-to-list 'package-archives
   '("melpa" .		"https://melpa.org/packages/") t)
 #+end_src
-** Cheatsheet
-My own cheatsheet.
-#+BEGIN_SRC emacs-lisp
-  (use-package cheatsheet
-    :bind (("C-h x" . cheatsheet-show)
-           :map cheatsheet-mode-map
-           ("C-q" . kill-this-buffer)))
-#+END_SRC
 ** Cheat.sh
 Check out stuff on https://cheat.sh/
 #+BEGIN_SRC emacs-lisp
@@ -2720,27 +2697,6 @@ Query Stackexchange from emacs.
 
     :bind ("C-c x" . hydra-sx/body))
 #+end_src
-** Twitter
-Read tweets in emacs, turned out really easy to setup. The [[https://www.emacswiki.org/emacs/TwitteringMode][manual]]
-#+BEGIN_SRC emacs-lisp
-  (use-package twittering-mode
-    :commands twit
-    :config
-    (setq twittering-use-master-password t
-          twittering-private-info-file (expand-file-name ".twittering-mode.gpg" my/emacs-shared-dir)
-          twittering-user-id-db-file (expand-file-name "twitter/userdb.gz" no-littering-var-directory)
-          twittering-icon-storage-file (expand-file-name "twitter/icons.gz" no-littering-var-directory)
-          twittering-use-icon-storage t
-          twittering-icon-storage-limit 1000
-          twittering-icon-mode t
-          twittering-reverse-mode t
-          twittering-display-remaining t
-          twittering-convert-fix-size 48
-          twittering-number-of-tweets-on-retrieval 100
-          twittering-timer-interval 300
-          twittering-url-show-status nil
-          twittering-edit-skeleton 'inherit-any))
-#+END_SRC
 ** wiki-summary
 Use wiki search from emacs
 #+BEGIN_SRC emacs-lisp
