@@ -159,8 +159,7 @@ Install org mode and contrib.
               ("C-c C-h" . org-tags-view)
               ("C-*" . org-jump-to-heading-beginning))
   :hook (org-mode . (lambda ()
-                           (customize-set-variable 'org-use-speed-commands t)
-                           (customize-set-variable 'org-speed-commands (cons '("S" . widen) org-speed-commands)))))
+                           (customize-set-variable 'org-use-speed-commands t))))
 
 (use-package org-contrib)
 #+end_src
@@ -2033,13 +2032,18 @@ Prompt for title and keywords of the new note."
 ** Denote templates
 Add templates to denote.
 #+begin_src emacs-lisp
-
 (with-eval-after-load 'denote
-  (add-to-list 'denote-templates `((memo . ,(concat "* Content"
-                                                    "\n\n"
-                                                    "* Topics"
-                                                    "\n\n")))))
-
+  (customize-set-variable 'denote-templates
+                          `((memo . ,(concat "* Content"
+                                             "\n\n"
+                                             "* Topics"
+                                             "\n\n"))
+                            (meeting-notes . ,(concat "* Notes\n"
+                                                      "- Subject:\n"
+                                                      "- Date:\n"
+                                                      "- Attendees:\n"))))
+  (when (file-readable-p (expand-file-name "denote-templates.el" user-emacs-directory))
+    (load-file (expand-file-name "denote-templates.el" user-emacs-directory))))
 #+end_src
 * Org-mode stuff
 Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Beginners Customization Guide]] for info about this.
@@ -2653,16 +2657,18 @@ Colorisation of Info-text.
 A more helpful package for Emacs help.
 #+begin_src emacs-lisp
 (use-package helpful
-  :diminish helpful-mode
-  :commands (counsel-describe-function-function
-             counsel-describe-variable-function)
+  :custom (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
   :custom-face (helpful-heading ((t (:foreground "GreenYellow" :weight bold))))
-  :bind (("C-h C" . #'helpful-command)
-         ("C-c C-h" . #'helpful-at-point)
-         ("C-h a" . #'helpful-symbol)
+  :bind (("C-h h" . #'helpful-at-point)
+         ("C-h C" . #'helpful-command)
+         ("C-h F" . #'helpful-function)
+         ("C-h M" . #'helpful-macro)
          ([remap describe-key] . helpful-key)
-         ([remap describe-variable] . counsel-describe-variable)
-         ([remap describe-function] . counsel-describe-function)))
+         ([remap describe-variable] . helpful-variable)
+         ([remap describe-function] . helpful-callable)
+         ([remap describe-symbol] . helpful-callable)
+         ([remap describe-command] . helpful-command)))
 #+end_src
 * External utilities
 ** hackernews
