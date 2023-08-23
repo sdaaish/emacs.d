@@ -2071,31 +2071,36 @@ Read [[https://orgmode.org/worg/org-configs/org-customization-guide.html][Org Be
 *** Other variables
 Customize org-mode settings.
 #+BEGIN_SRC emacs-lisp
-(setq org-use-sub-superscripts '{})
-(setq org-export-with-sub-superscripts '{})
-(setq org-export-coding-system 'utf-8)
-(setq org-export-backends '(ascii html latex odt org))
-(setq org-export-use-babel t)
-(setq org-html-validation-link nil)
-(setq org-agenda-skip-deadline-prewarning-if-scheduled t)
-(setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-skip-scheduled-if-deadline-is-shown "repeated-after-deadline")
-(setq org-agenda-include-diary nil)
-(setq org-agenda-span 14)
-(setq org-log-done 'time)
-(setq org-log-redeadline 'time)
-(setq org-log-reschedule 'time)
-(setq org-log-refile 'time)
-(setq org-log-into-drawer t)
-(setq org-enforce-todo-checkbox-dependencies t)
-(setq org-enforce-todo-dependencies t)
-(setq org-agenda-dim-blocked-tasks t)
-(setq org-fast-tag-selection-single-key t)
-(setq org-use-fast-todo-selection t)
-(setq org-enable-priority-commands nil)
-(setq org-src-preserve-indentation t)
-(setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
-(setq org-ellipsis "  ")
+(custom-set-variables
+ '(org-use-sub-superscripts '{})
+ '(org-export-with-sub-superscripts '{})
+ '(org-export-coding-system 'utf-8)
+ '(org-export-backends '(ascii html latex odt org))
+ '(org-export-use-babel t)
+ '(org-html-validation-link nil)
+ '(org-agenda-skip-deadline-prewarning-if-scheduled t)
+ '(org-agenda-skip-scheduled-if-done t)
+ '(org-agenda-skip-scheduled-if-deadline-is-shown "repeated-after-deadline")
+ '(org-agenda-include-diary nil)
+ '(org-agenda-span 14)
+ '(org-log-done 'time)
+ '(org-log-redeadline 'time)
+ '(org-log-reschedule 'time)
+ '(org-log-refile 'time)
+ '(org-log-into-drawer t)
+ '(org-enforce-todo-checkbox-dependencies t)
+ '(org-enforce-todo-dependencies t)
+ '(org-agenda-dim-blocked-tasks t)
+ '(org-fast-tag-selection-single-key t)
+ '(org-use-fast-todo-selection t)
+ '(org-enable-priority-commands nil)
+ '(org-src-preserve-indentation t)
+ '(org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
+ '(org-ellipsis "  ")
+ '(org-clock-clocked-in-display 'both)
+ '(org-hide-emphasis-markers t)
+ '(org-habit-graph-column 60)
+ '(org-habit-show-habits-only-for-today t))
   #+END_SRC
 *** Refile
 Refiling notes settings.
@@ -2111,6 +2116,11 @@ To be able to execute code in org mode these should be loaded.
 (require 'ob-eshell)
 (require 'ob-python)
 (require 'ob-C)
+#+end_src
+** Habits
+#+begin_src emacs-lisp
+(with-eval-after-load 'org
+  (add-to-list 'org-modules 'org-habit t))
 #+end_src
 ** Org-files
 My org-files for Todo-list and agenda. Store the filenames to use for agenda in a separate file.
@@ -2206,44 +2216,49 @@ For more info about this, see [[http://orgmode.org/worg/org-tutorials/org-custom
 ** Org-templates
 A few templates to speed up capture.
 #+BEGIN_SRC emacs-lisp
-  (setq org-capture-templates
-        `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
-           "* TODO %^{Description of todo}\nAdded: %U\n\n%?" :prepend t)
+(setq org-capture-templates
+      `(("t" "To do items" entry (file+headline my/notes-file "To Do Items")
+         "* TODO %^{Description of todo}\nAdded: %U\n\n%?" :prepend t)
 
-          ;; Blog
-          ("b" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
-           "* IDEA %^{Title} :Blog:\nAdded: %U\n\n%?" :prepend t)
+        ;; Blog
+        ("b" "Blog idea" entry (file+headline my/notes-file "Blog Topics")
+         "* IDEA %^{Title} :Blog:\nAdded: %U\n\n%?" :prepend t)
 
-          ;;Links
-          ("l" "Link" entry (file+headline my/notes-file "Links")
-           "* [[%^C][%^{Title}]]  %^G\nAdded: %U\n%?" :prepend t)
+        ;;Links
+        ("l" "Link" entry (file+headline my/notes-file "Links")
+         "* [[%^C][%^{Title}]]  %^G\nAdded: %U\n%?" :prepend t)
 
-          ;; Notes
-          ("n" "Note" entry (file+headline my/notes-file "Notes")
-           "* %^{Title} :NOTE:\n%U\n%a\n\n%?" :clock-in t :clock-resume t)
+        ;; Notes
+        ("n" "Note" entry (file+headline my/notes-file "Notes")
+         "* %^{Title} :NOTE:\n%U\n%a\n\n%?" :clock-in t :clock-resume t)
 
-          ;; Idea
-          ("i" "Idea" entry (file+headline my/notes-file "Someday")
-           "* IDEA %^{Title}\nAdded: %U\n%?" :prepend t)
+        ;; Idea
+        ("i" "Idea" entry (file+headline my/notes-file "Someday")
+         "* IDEA %^{Title}\nAdded: %U\n%?" :prepend t)
 
-          ;; Journal
-          ("j" "Journal" entry (file+olp+datetree my/diary-file)
-           "* %^{Enter title}\n%U\n%?" :clock-in t :clock-resume t)
+        ;; Journal
+        ("j" "Journal" entry (file+olp+datetree my/diary-file)
+         "* %^{Enter title}\n%U\n%?" :clock-in t :clock-resume t)
 
-          ;; Notes for code
-          ("c" "Coding stuff")
-          ("cc" "note with code" entry (file+headline my/notes-file "Code")
-           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|python|html}\n%^C\n#+end_src\n")
-          ("cs" "note with code, source" entry (file+headline my/notes-file "Code")
-           "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|python|html}\n%^C\n#+end_src\n%a\n")
+        ;; Habit
+        ("h" "Habit" entry (file+headline my/notes-file "To Do Items")
+         ,(concat "* TODO %^{Description of todo}\n"
+                  ":PROPERTIES:\n:STYLE: habit\n:ADDED: %U\n:END:\n\n%?") :prepend t)
 
-          ;; Reports and bugs
-          ("r" "Reporting")
-          ("rb" "Bug" entry (file+headline my/notes-file "Reports")
-           "* BUG %^{Description of bug} %^G\nAdded: %U\n%?")
-          ("rr" "Report" entry (file+headline my/notes-file "Reports")
-           "* REPORT %^{Description of report} %^G\nAdded: %U\n#+begin_example\n%^C\n#+end_example\n%?")
-          ))
+        ;; Notes for code
+        ("c" "Coding stuff")
+        ("cc" "note with code" entry (file+headline my/notes-file "Code")
+         "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|python|html}\n%^C\n#+end_src\n")
+        ("cs" "note with code, source" entry (file+headline my/notes-file "Code")
+         "* %? \nAdded: %U\n#+begin_src %^{Language?|emacs-lisp|sh|powershell|python|html}\n%^C\n#+end_src\n%a\n")
+
+        ;; Reports and bugs
+        ("r" "Reporting")
+        ("rb" "Bug" entry (file+headline my/notes-file "Reports")
+         "* BUG %^{Description of bug} %^G\nAdded: %U\n%?")
+        ("rr" "Report" entry (file+headline my/notes-file "Reports")
+         "* REPORT %^{Description of report} %^G\nAdded: %U\n#+begin_example\n%^C\n#+end_example\n%?")
+        ))
 #+END_SRC
 ** Localized calender
 Use swedish calendar, from [[http://bigwalter.net/daniel/elisp/sv-kalender.el][sv-kalender]].
